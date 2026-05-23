@@ -1,0 +1,63 @@
+<aside class="bg-zinc-900 text-white lg:sticky lg:top-0 lg:h-screen lg:w-72">
+  <div class="flex h-full flex-col">
+
+    <!-- LOGO -->
+    <div class="flex items-center gap-3 border-b border-white/10 px-6 py-6">
+
+      <div class="grid h-11 w-11 place-items-center rounded bg-red-500 font-black">
+        AP
+      </div>
+
+      <div>
+        <p class="text-lg font-bold leading-tight">
+          Auto Ponto
+        </p>
+
+        <p class="text-sm text-white/60">
+          Gestão de oficina
+        </p>
+      </div>
+
+    </div>
+
+    <!-- MENU -->
+    <nav class="flex-1 space-y-2 px-4 py-6">
+
+      <a
+        *ngFor="let item of menuItems"
+        [routerLink]="item.route"
+        routerLinkActive="bg-white text-ink"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="flex items-center gap-3 rounded px-4 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
+      >
+
+        <span
+          class="h-2.5 w-2.5 rounded-full"
+          [ngClass]="item.colorClass"
+        ></span>
+
+        {{ item.label }}
+
+      </a>
+
+    </nav>
+
+    <!-- CARD FINAL -->
+    <div class="m-4 rounded bg-white/10 p-4">
+
+      <p class="text-sm font-semibold">
+        Atendimento hoje
+      </p>
+
+      <p class="mt-1 text-3xl font-black">
+        92%
+      </p>
+
+      <p class="mt-1 text-xs text-white/60">
+        Índice médio de satisfação dos clientes.
+      </p>
+
+    </div>
+
+  </div>
+</aside>
