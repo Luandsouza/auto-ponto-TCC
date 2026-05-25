@@ -10,32 +10,34 @@ import { RouterModule } from '@angular/router';
   styleUrl: './sidebar.css',
 })
 export class Sidebar {
-
   menuItems = [
     {
       label: 'Home',
       route: '/',
-      colorClass: 'bg-fuel',
-      active: true
+      icon: 'home',
+      colorClass: 'bg-auto-blue',
+      active: true,
     },
     {
       label: 'Agenda de Serviço',
       route: '/agenda',
-      colorClass: 'bg-mint',
-      active: false
+      icon: 'calendar',
+      colorClass: 'bg-auto-orange',
+      active: false,
     },
     {
       label: 'Histórico',
       route: '/historico',
+      icon: 'history',
       colorClass: 'bg-sky-500',
-      active: false
+      active: false,
     },
     {
       label: 'Status dos Serviços',
       route: '/status',
+      icon: 'wrench',
       colorClass: 'bg-yellow-400',
-      active: false
-    }
+      active: false,
+    },
   ];
-
 }

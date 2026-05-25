@@ -1,32 +1,26 @@
-<header
-  class="sticky top-0 z-50 border-b border-slate-200 bg-white/90 backdrop-blur"
->
-  <div
-    class="flex flex-col gap-4 px-5 py-4 md:flex-row md:items-center md:justify-between lg:px-8"
-  >
+<header class="sticky top-0 z-50 border-b border-slate-200 bg-white/95 shadow-sm backdrop-blur">
+  <div class="flex flex-col gap-4 px-5 py-4 md:flex-row md:items-center md:justify-between lg:px-8">
+    <div class="flex min-w-0 items-center gap-4">
+      <img
+        src="/logo4.jpg"
+        alt="Auto Ponto"
+        class="h-14 w-40 shrink-0 object-contain sm:h-16 sm:w-48"
+      />
 
-    <!-- TITULO -->
-    <div>
-      <p class="text-sm font-semibold uppercase tracking-wide text-red-500">
-        Painel geral
-      </p>
-
-      <h1 class="text-2xl font-black text-ink md:text-3xl">
-        Dashboard da Oficina
-      </h1>
+      <div class="min-w-0 border-l border-slate-200 pl-4">
+        <p class="text-xs font-bold uppercase text-auto-orange">Painel geral</p>
+        <h1 class="truncate text-xl font-black text-auto-navy md:text-2xl">Dashboard da Oficina</h1>
+      </div>
     </div>
 
-    <!-- DIREITA -->
-    <div class="flex items-center gap-4">
-
-      <!-- NOTIFICAÇÃO -->
+    <div class="flex items-center gap-3">
       <button
-        class="relative flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white transition hover:border-red-500 hover:bg-slate-50"
+        aria-label="Notificações"
+        class="relative flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-auto-navy transition hover:border-auto-blue hover:bg-auto-sky"
       >
-
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          class="h-5 w-5 text-slate-700"
+          class="h-5 w-5"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -43,21 +37,16 @@
             11-6 0v-1m6 0H9"
           />
         </svg>
-
-        <!-- BOLINHA -->
         <span
-          class="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-[10px] font-black text-white"
+          class="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-auto-orange text-[10px] font-black text-white"
         >
           3
         </span>
-
       </button>
 
-      <!-- USUARIO -->
       <div
-        class="flex items-center gap-3 rounded-full border border-slate-200 bg-white px-3 py-2"
+        class="flex items-center gap-3 rounded-full border border-slate-200 bg-white px-3 py-2 shadow-sm"
       >
-
         <img
           src="https://i.pravatar.cc/150?img=12"
           alt="Luan"
@@ -65,25 +54,16 @@
         />
 
         <div class="hidden sm:block">
-          <p class="text-sm font-black text-ink">
-            Luan
-          </p>
-
-          <p class="text-xs text-slate-500">
-            cliente01@gmail.com
-          </p>
+          <p class="text-sm font-black text-auto-navy">Luan</p>
+          <p class="text-xs text-slate-500">cliente01@gmail.com</p>
         </div>
-
       </div>
 
-      <!-- SAIR -->
       <button
-        class="rounded bg-red-500 px-4 py-2 text-sm font-bold text-white transition hover:bg-red-600"
+        class="rounded-md bg-auto-navy px-4 py-2 text-sm font-bold text-white transition hover:bg-auto-blue"
       >
         Sair
       </button>
-
     </div>
-
   </div>
 </header>

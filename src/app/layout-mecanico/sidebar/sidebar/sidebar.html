@@ -1,1 +1,92 @@
-<p>sidebar works!</p>
+<aside
+  class="border-r border-slate-200 bg-white text-auto-navy lg:sticky lg:top-0 lg:h-screen lg:w-72"
+>
+  <div class="flex h-full flex-col">
+    <div class="flex items-center gap-3 border-b border-slate-200 px-6 py-6">
+      <img src="/logo4.jpg" alt="Auto Ponto" class="h-16 w-44 object-contain" />
+    </div>
+
+    <nav class="flex-1 space-y-2 px-4 py-6">
+      <a
+        *ngFor="let item of menuItems"
+        [routerLink]="item.route"
+        routerLinkActive="border-auto-blue bg-auto-sky text-auto-navy shadow-sm"
+        class="flex items-center gap-3 rounded-md border border-transparent px-4 py-3 text-sm font-bold text-slate-600 transition hover:border-auto-orange hover:bg-auto-amber hover:text-auto-navy"
+      >
+        <span
+          class="grid h-9 w-9 shrink-0 place-items-center rounded-md text-white"
+          [ngClass]="item.colorClass"
+        >
+          <svg
+            *ngIf="item.icon === 'clipboard'"
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M9 5h6M9 3h6a1 1 0 011 1v2H8V4a1 1 0 011-1zM6 6h12a1 1 0 011 1v13a1 1 0 01-1 1H6a1 1 0 01-1-1V7a1 1 0 011-1zM8 12h8M8 16h5"
+            />
+          </svg>
+          <svg
+            *ngIf="item.icon === 'box'"
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M21 8l-9-5-9 5 9 5 9-5zM3 8v8l9 5 9-5V8M12 13v8"
+            />
+          </svg>
+          <svg
+            *ngIf="item.icon === 'wallet'"
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M4 7h14a2 2 0 012 2v9a2 2 0 01-2 2H4a2 2 0 01-2-2V9a2 2 0 012-2zM16 12h5M17.5 15a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM6 7V5a2 2 0 012-2h8"
+            />
+          </svg>
+          <svg
+            *ngIf="item.icon === 'chart'"
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M4 19V5M4 19h16M8 16V9M12 16V7M16 16v-4"
+            />
+          </svg>
+        </span>
+
+        {{ item.label }}
+      </a>
+    </nav>
+
+    <div class="m-4 rounded-md border border-auto-orange/25 bg-auto-amber p-4">
+      <p class="text-sm font-bold text-auto-navy">Serviços ativos</p>
+      <p class="mt-1 text-3xl font-black text-auto-orange">12</p>
+      <p class="mt-1 text-xs text-muted">Ordens abertas para acompanhamento.</p>
+    </div>
+  </div>
+</aside>

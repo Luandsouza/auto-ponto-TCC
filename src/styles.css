@@ -1,3 +1,20 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import 'tailwindcss';
+
+@theme {
+  --color-auto-blue: #1aa7f2;
+  --color-auto-orange: #ff7418;
+  --color-auto-navy: #15146f;
+  --color-auto-sky: #eaf7ff;
+  --color-auto-amber: #fff3e9;
+  --color-ink: #11124a;
+  --color-muted: #64748b;
+}
+
+@layer base {
+  body {
+    background: #ffffff;
+    color: var(--color-ink);
+  }
+}

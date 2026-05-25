@@ -1,1 +1,55 @@
-<p>topbar works!</p>
+<header class="sticky top-0 z-50 border-b border-slate-200 bg-white/95 shadow-sm backdrop-blur">
+  <div class="flex flex-col gap-4 px-5 py-4 md:flex-row md:items-center md:justify-between lg:px-8">
+    <div class="flex min-w-0 items-center gap-4">
+      <img
+        src="/logo4.jpg"
+        alt="Auto Ponto"
+        class="h-14 w-40 shrink-0 object-contain sm:h-16 sm:w-48"
+      />
+
+      <div class="min-w-0 border-l border-slate-200 pl-4">
+        <p class="text-xs font-bold uppercase text-auto-orange">Área do mecânico</p>
+        <h1 class="truncate text-xl font-black text-auto-navy md:text-2xl">Serviços e oficina</h1>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <button
+        aria-label="Notificações"
+        class="relative flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-auto-navy transition hover:border-auto-blue hover:bg-auto-sky"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M15 17h5l-1.4-1.4A2 2 0 0118 14.2V11a6 6 0 00-4-5.7V4a2 2 0 10-4 0v1.3A6 6 0 006 11v3.2a2 2 0 01-.6 1.4L4 17h11zM9 17a3 3 0 006 0"
+          />
+        </svg>
+        <span
+          class="absolute -right-1 -top-1 h-3.5 w-3.5 rounded-full border-2 border-white bg-auto-orange"
+        ></span>
+      </button>
+
+      <div
+        class="hidden items-center gap-3 rounded-full border border-slate-200 bg-white px-3 py-2 shadow-sm sm:flex"
+      >
+        <div
+          class="grid h-10 w-10 place-items-center rounded-full bg-auto-sky font-black text-auto-blue"
+        >
+          M
+        </div>
+        <div>
+          <p class="text-sm font-black text-auto-navy">Mecânico</p>
+          <p class="text-xs text-muted">Oficina Auto Ponto</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
