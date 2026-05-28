@@ -3,17 +3,17 @@ import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 @Component({
-  selector: 'app-sidebar',
+  selector: 'app-sidebar-cliente',
   standalone: true,
   imports: [CommonModule, RouterModule],
-  templateUrl: './sidebar.html',
-  styleUrl: './sidebar.css',
+  templateUrl: './sidebar-cliente.html',
+  styleUrl: './sidebar-cliente.css',
 })
-export class Sidebar {
+export class SidebarCliente {
   menuItems = [
     {
       label: 'Home',
-      route: '/',
+      route: 'home',
       icon: 'home',
       colorClass: 'bg-auto-blue',
       active: true,
