@@ -1,0 +1,79 @@
+.chart-track {
+  height: 12px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e2e8f0;
+}
+
+.chart-bar {
+  height: 100%;
+  min-width: 4px;
+  border-radius: inherit;
+}
+
+.status-row,
+.category-row {
+  color: #11124a;
+  font-size: 0.875rem;
+  font-weight: 800;
+}
+
+.finance-row {
+  display: grid;
+  grid-template-columns: 84px minmax(0, 1fr) 120px;
+  align-items: center;
+  gap: 12px;
+  color: #11124a;
+  font-size: 0.875rem;
+  font-weight: 800;
+}
+
+.finance-row strong {
+  text-align: right;
+  font-size: 0.8125rem;
+}
+
+.status-bar {
+  background: linear-gradient(90deg, #1aa7f2, #15146f);
+}
+
+.income-bar {
+  background: linear-gradient(90deg, #10b981, #34d399);
+}
+
+.expense-bar {
+  background: linear-gradient(90deg, #ef4444, #fb7185);
+}
+
+.balance-bar {
+  background: linear-gradient(90deg, #ff7418, #fbbf24);
+}
+
+.category-bar {
+  background: linear-gradient(90deg, #15146f, #1aa7f2);
+}
+
+.inventory-meter {
+  height: 18px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e2e8f0;
+}
+
+.inventory-fill {
+  height: 100%;
+  min-width: 4px;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #10b981, #1aa7f2);
+}
+
+@media (max-width: 640px) {
+  .finance-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .finance-row strong {
+    text-align: left;
+  }
+}

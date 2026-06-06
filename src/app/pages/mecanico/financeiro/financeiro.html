@@ -1,0 +1,165 @@
+<section class="space-y-6">
+  <div class="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
+    <div>
+      <p class="text-sm font-bold uppercase text-auto-orange">Controle financeiro</p>
+      <h2 class="mt-1 text-3xl font-black text-auto-navy">Financeiro</h2>
+      <p class="mt-2 max-w-3xl text-sm leading-6 text-muted">Gerencie receitas, despesas, pendências e fluxo realizado da oficina.</p>
+    </div>
+
+    <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <input type="date" [(ngModel)]="dataInicial" class="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-auto-blue" />
+      <input type="date" [(ngModel)]="dataFinal" class="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-auto-blue" />
+      <select [(ngModel)]="filtroTipo" class="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-auto-blue">
+        <option value="todos">Todos os tipos</option>
+        <option value="receita">Receitas</option>
+        <option value="despesa">Despesas</option>
+      </select>
+      <select [(ngModel)]="filtroStatus" class="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-auto-blue">
+        <option value="todos">Todos os status</option>
+        <option *ngFor="let status of statusDisponiveis" [value]="status">{{ status }}</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+    <article class="rounded-md border border-slate-200 bg-white p-5 shadow-sm">
+      <p class="text-sm font-bold text-muted">Receitas previstas</p>
+      <p class="mt-2 text-3xl font-black text-emerald-600">{{ formatarMoeda(resumo.totalReceitas) }}</p>
+    </article>
+    <article class="rounded-md border border-slate-200 bg-white p-5 shadow-sm">
+      <p class="text-sm font-bold text-muted">Despesas previstas</p>
+      <p class="mt-2 text-3xl font-black text-red-600">{{ formatarMoeda(resumo.totalDespesas) }}</p>
+    </article>
+    <article class="rounded-md border border-slate-200 bg-white p-5 shadow-sm">
+      <p class="text-sm font-bold text-muted">Saldo previsto</p>
+      <p class="mt-2 text-3xl font-black" [ngClass]="resumo.saldo >= 0 ? 'text-auto-blue' : 'text-red-600'">{{ formatarMoeda(resumo.saldo) }}</p>
+    </article>
+    <article class="rounded-md border border-slate-200 bg-white p-5 shadow-sm">
+      <p class="text-sm font-bold text-muted">Saldo realizado</p>
+      <p class="mt-2 text-3xl font-black text-auto-navy">{{ formatarMoeda(resumo.saldoRealizado) }}</p>
+    </article>
+  </div>
+
+  <div class="grid gap-6 xl:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
+    <div class="min-w-0 space-y-6">
+      <form class="finance-form rounded-md border border-slate-200 bg-white p-5 shadow-sm" (ngSubmit)="salvar()">
+        <h3 class="text-lg font-black text-auto-navy">{{ editandoId ? 'Editar lançamento' : 'Novo lançamento' }}</h3>
+
+        <div class="mt-5 grid gap-4">
+          <div class="grid min-w-0 gap-4 sm:grid-cols-2">
+            <label class="grid gap-2 text-sm font-bold text-auto-navy">Tipo
+              <select name="tipo" [(ngModel)]="formulario.tipo" class="rounded-md border border-slate-300 px-3 py-2 font-normal outline-none focus:border-auto-blue">
+                <option *ngFor="let tipo of tipos" [value]="tipo">{{ tipo }}</option>
+              </select>
+            </label>
+            <label class="grid gap-2 text-sm font-bold text-auto-navy">Categoria
+              <select name="categoria" [(ngModel)]="formulario.categoria" class="rounded-md border border-slate-300 px-3 py-2 font-normal outline-none focus:border-auto-blue">
+                <option *ngFor="let categoria of categorias" [value]="categoria">{{ categoria }}</option>
+              </select>
+            </label>
+          </div>
+
+          <label class="grid gap-2 text-sm font-bold text-auto-navy">Descrição
+            <input required name="descricao" [(ngModel)]="formulario.descricao" class="rounded-md border border-slate-300 px-3 py-2 font-normal outline-none focus:border-auto-blue" />
+          </label>
+
+          <div class="grid min-w-0 gap-4 sm:grid-cols-2 2xl:grid-cols-3">
+            <label class="grid gap-2 text-sm font-bold text-auto-navy">Valor
+              <input type="number" min="0" required name="valor" [(ngModel)]="formulario.valor" class="rounded-md border border-slate-300 px-3 py-2 font-normal outline-none focus:border-auto-blue" />
+            </label>
+            <label class="grid gap-2 text-sm font-bold text-auto-navy">Status
+              <select name="status" [(ngModel)]="formulario.status" class="rounded-md border border-slate-300 px-3 py-2 font-normal outline-none focus:border-auto-blue">
+                <option *ngFor="let status of statusDisponiveis" [value]="status">{{ status }}</option>
+              </select>
+            </label>
+            <label class="grid gap-2 text-sm font-bold text-auto-navy">Vencimento
+              <input type="date" name="dataVencimento" [(ngModel)]="formulario.dataVencimento" class="rounded-md border border-slate-300 px-3 py-2 font-normal outline-none focus:border-auto-blue" />
+            </label>
+          </div>
+
+          <label class="grid gap-2 text-sm font-bold text-auto-navy">Data de pagamento
+            <input type="date" name="dataPagamento" [(ngModel)]="formulario.dataPagamento" class="rounded-md border border-slate-300 px-3 py-2 font-normal outline-none focus:border-auto-blue" />
+          </label>
+
+          <label class="grid gap-2 text-sm font-bold text-auto-navy">Observações
+            <textarea name="observacoes" [(ngModel)]="formulario.observacoes" rows="2" class="rounded-md border border-slate-300 px-3 py-2 font-normal outline-none focus:border-auto-blue"></textarea>
+          </label>
+        </div>
+
+        <div class="mt-5 flex flex-wrap gap-3">
+          <button class="rounded-md bg-auto-blue px-4 py-2 text-sm font-black text-white transition hover:bg-auto-navy">{{ editandoId ? 'Salvar alterações' : 'Cadastrar lançamento' }}</button>
+          <button *ngIf="editandoId" type="button" (click)="cancelarEdicao()" class="rounded-md border border-slate-300 px-4 py-2 text-sm font-black text-auto-navy hover:bg-slate-100">Cancelar</button>
+        </div>
+      </form>
+
+      <section class="rounded-md border border-slate-200 bg-white p-5 shadow-sm">
+        <h3 class="text-lg font-black text-auto-navy">Comparativo financeiro</h3>
+        <div class="mt-5 space-y-4">
+          <div class="chart-row">
+            <span>Receitas</span>
+            <div class="chart-track"><div class="chart-bar chart-income" [style.width.%]="percentual(resumo.totalReceitas)"></div></div>
+            <strong>{{ formatarMoeda(resumo.totalReceitas) }}</strong>
+          </div>
+          <div class="chart-row">
+            <span>Despesas</span>
+            <div class="chart-track"><div class="chart-bar chart-expense" [style.width.%]="percentual(resumo.totalDespesas)"></div></div>
+            <strong>{{ formatarMoeda(resumo.totalDespesas) }}</strong>
+          </div>
+          <div class="chart-row">
+            <span>A receber</span>
+            <div class="chart-track"><div class="chart-bar chart-pending-income" [style.width.%]="percentual(resumo.pendenteReceber)"></div></div>
+            <strong>{{ formatarMoeda(resumo.pendenteReceber) }}</strong>
+          </div>
+          <div class="chart-row">
+            <span>A pagar</span>
+            <div class="chart-track"><div class="chart-bar chart-pending-expense" [style.width.%]="percentual(resumo.pendentePagar)"></div></div>
+            <strong>{{ formatarMoeda(resumo.pendentePagar) }}</strong>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <section class="min-w-0 rounded-md border border-slate-200 bg-white p-5 shadow-sm">
+      <h3 class="text-lg font-black text-auto-navy">Lançamentos</h3>
+      <div class="mt-4 overflow-x-auto">
+        <table class="w-full min-w-[780px] text-left text-sm">
+          <thead class="border-b border-slate-200 text-xs uppercase text-muted">
+            <tr>
+              <th class="py-3">Descrição</th>
+              <th class="py-3">Tipo</th>
+              <th class="py-3">Status</th>
+              <th class="py-3">Vencimento</th>
+              <th class="py-3 text-right">Valor</th>
+              <th class="py-3 text-right">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let lancamento of lancamentos" class="border-b border-slate-100">
+              <td class="py-3">
+                <p class="font-black text-auto-navy">{{ lancamento.descricao }}</p>
+                <p class="text-xs text-muted">{{ lancamento.categoria }}</p>
+              </td>
+              <td class="py-3">
+                <span class="rounded-md px-2 py-1 text-xs font-black" [ngClass]="lancamento.tipo === 'receita' ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-700'">{{ lancamento.tipo }}</span>
+              </td>
+              <td class="py-3">
+                <span class="rounded-md bg-auto-sky px-2 py-1 text-xs font-black text-auto-blue">{{ lancamento.status }}</span>
+              </td>
+              <td class="py-3 text-muted">{{ formatarData(lancamento.dataVencimento) }}</td>
+              <td class="py-3 text-right font-black text-auto-navy">{{ formatarMoeda(lancamento.valor) }}</td>
+              <td class="py-3">
+                <div class="flex justify-end gap-2">
+                  <button type="button" (click)="editar(lancamento)" class="rounded-md border border-slate-300 px-3 py-2 text-xs font-black text-auto-navy hover:bg-slate-100">Editar</button>
+                  <button type="button" (click)="marcarPago(lancamento)" class="rounded-md border border-emerald-200 px-3 py-2 text-xs font-black text-emerald-700 hover:bg-emerald-50">Pago</button>
+                  <button type="button" (click)="remover(lancamento.id)" class="rounded-md border border-red-200 px-3 py-2 text-xs font-black text-red-600 hover:bg-red-50">Excluir</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p *ngIf="!lancamentos.length" class="mt-4 rounded-md border border-dashed border-slate-300 p-6 text-center text-sm text-muted">Nenhum lançamento encontrado para os filtros atuais.</p>
+    </section>
+  </div>
+</section>
