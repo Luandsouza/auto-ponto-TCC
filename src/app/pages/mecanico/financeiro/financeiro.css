@@ -1,3 +1,23 @@
+.finance-form,
+.finance-form label,
+.finance-form input,
+.finance-form select,
+.finance-form textarea {
+  min-width: 0;
+}
+
+.finance-form input,
+.finance-form select,
+.finance-form textarea {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+}
+
+.finance-form textarea {
+  resize: vertical;
+}
+
 .chart-row {
   display: grid;
   grid-template-columns: 96px minmax(0, 1fr) 120px;
