@@ -10,7 +10,7 @@ import { CalendarComponent, CalendarEvent } from './layouts/layout-mecanico/side
 
 @Component({
   selector: 'app-root',
-  imports: [CommonModule, RouterOutlet, SidebarCliente, TopbarCliente, Sidebar, Topbar],
+  imports: [CommonModule, RouterOutlet, SidebarCliente, TopbarCliente, Sidebar, Topbar, RouterOutlet, SidebarCliente, TopbarCliente, CalendarComponent],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
@@ -63,6 +63,7 @@ export class App {
   selectedDateInfo: Date | null = null;
   newEventTitle: string = '';
   newEventDate: string = '';
+  
   
   onDateSelected(date: Date): void {
     this.selectedDateInfo = date;
