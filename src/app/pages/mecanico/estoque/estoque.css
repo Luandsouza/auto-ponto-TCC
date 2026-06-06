@@ -1,1 +1,19 @@
+.estoque-form,
+.estoque-form label,
+.estoque-form input,
+.estoque-form select,
+.estoque-form textarea {
+  min-width: 0;
+}
 
+.estoque-form input,
+.estoque-form select,
+.estoque-form textarea {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+}
+
+.estoque-form select {
+  text-overflow: ellipsis;
+}
