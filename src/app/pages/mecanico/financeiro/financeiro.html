@@ -65,7 +65,7 @@
 
           <div class="grid min-w-0 gap-4 sm:grid-cols-2 2xl:grid-cols-3">
             <label class="grid gap-2 text-sm font-bold text-auto-navy">Valor
-              <input type="number" min="0" required name="valor" [(ngModel)]="formulario.valor" class="rounded-md border border-slate-300 px-3 py-2 font-normal outline-none focus:border-auto-blue" />
+              <input type="text" inputmode="decimal" required name="valor" [(ngModel)]="formulario.valor" placeholder="Ex.: 4.500,00" class="rounded-md border border-slate-300 px-3 py-2 font-normal outline-none focus:border-auto-blue" />
             </label>
             <label class="grid gap-2 text-sm font-bold text-auto-navy">Status
               <select name="status" [(ngModel)]="formulario.status" class="rounded-md border border-slate-300 px-3 py-2 font-normal outline-none focus:border-auto-blue">

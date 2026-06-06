@@ -68,7 +68,7 @@ export class Financeiro {
   salvar(): void {
     const dados = {
       ...this.formulario,
-      valor: Number(this.formulario.valor),
+      valor: this.converterValorMonetario(this.formulario.valor),
       dataPagamento: this.formulario.status === 'pago' ? this.formulario.dataPagamento || new Date().toISOString().slice(0, 10) : undefined,
     };
 
@@ -87,7 +87,7 @@ export class Financeiro {
       tipo: lancamento.tipo,
       categoria: lancamento.categoria,
       descricao: lancamento.descricao,
-      valor: lancamento.valor,
+      valor: this.formatarValorFormulario(lancamento.valor),
       status: lancamento.status,
       dataVencimento: this.formatarDataInput(lancamento.dataVencimento),
       dataPagamento: this.formatarDataInput(lancamento.dataPagamento),
@@ -129,12 +129,44 @@ export class Financeiro {
       tipo: 'receita' as TipoLancamentoFinanceiro,
       categoria: 'servico' as CategoriaFinanceira,
       descricao: '',
-      valor: 0,
+      valor: '' as string | number,
       status: 'pendente' as StatusLancamentoFinanceiro,
       dataVencimento: new Date().toISOString().slice(0, 10),
       dataPagamento: '',
       observacoes: '',
     };
+  }
+
+  private converterValorMonetario(valor: string | number): number {
+    if (typeof valor === 'number') {
+      return valor;
+    }
+
+    const valorLimpo = valor.trim();
+
+    if (!valorLimpo) {
+      return 0;
+    }
+
+    if (valorLimpo.includes(',')) {
+      return Number(valorLimpo.replace(/\./g, '').replace(',', '.')) || 0;
+    }
+
+    const partes = valorLimpo.split('.');
+    const ultimoGrupo = partes[partes.length - 1];
+
+    if (partes.length > 1 && ultimoGrupo.length === 3) {
+      return Number(partes.join('')) || 0;
+    }
+
+    return Number(valorLimpo) || 0;
+  }
+
+  private formatarValorFormulario(valor: number): string {
+    return new Intl.NumberFormat('pt-BR', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(valor);
   }
 
   private formatarDataInput(data?: string): string {
