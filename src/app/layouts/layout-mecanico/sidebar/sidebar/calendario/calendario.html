@@ -1,0 +1,40 @@
+<div class="calendar-container">
+  <!-- Calendar Header -->
+  <div class="calendar-header">
+    <button class="nav-btn" (click)="previousMonth()">‹</button>
+    <h2>{{ currentMonthName | titlecase }} {{ currentYear }}</h2>
+    <button class="nav-btn" (click)="nextMonth()">›</button>
+  </div>
+
+  <!-- Weekday Headers -->
+  <div class="calendar-weekdays">
+    <div *ngFor="let day of weekDays" class="weekday">
+      {{ day }}
+    </div>
+  </div>
+
+  <!-- Calendar Grid -->
+  <div class="calendar-grid">
+    <div
+      *ngFor="let day of calendarDays"
+      class="calendar-day"
+      [class.other-month]="day.isOtherMonth"
+      [class.today]="day.isToday"
+      [class.selected]="selectedDate && isSameDate(day.date, selectedDate)"
+      (click)="selectDate(day.date)"
+    >
+      <span class="day-number">{{ day.date.getDate() }}</span>
+      <div class="events">
+        <div
+          *ngFor="let event of getEventsForDate(day.date)"
+          class="event"
+          [style.backgroundColor]="event.color || '#4CAF50'"
+          [title]="event.title + (event.description ? ': ' + event.description : '')"
+          (click)="onEventClick(event, $event)"
+        >
+          {{ event.title }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

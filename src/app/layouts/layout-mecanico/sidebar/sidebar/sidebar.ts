@@ -34,5 +34,35 @@ export class Sidebar {
       icon: 'chart',
       colorClass: 'bg-sky-500',
     },
+     {
+      label: 'Calendário',
+      route: 'calendario',
+      icon: 'chart',
+      colorClass: 'bg-sky-500',
+    },
+     {
+      label: 'Ordens de serviço',
+      route: '/ordern-de-servico',
+      icon: 'chart',
+      colorClass: 'bg-sky-500',
+    },
+      {
+      label: 'Checklist da OS',
+      route: '/checklist-da-os',
+      icon: 'chart',
+      colorClass: 'bg-sky-500',
+    },
+      {
+      label: 'Kanban de serviços',
+      route: '/kaban-de-servicos',
+      icon: 'chart',
+      colorClass: 'bg-sky-500',
+    },
+      {
+      label: 'Cadastro de veículos',
+      route: '/cadastro-de-veiculos',
+      icon: 'chart',
+      colorClass: 'bg-sky-500',
+    },
   ];
 }
