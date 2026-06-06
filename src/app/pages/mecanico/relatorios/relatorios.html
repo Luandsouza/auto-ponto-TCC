@@ -1,0 +1,151 @@
+<section class="space-y-6">
+  <div class="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
+    <div>
+      <p class="text-sm font-bold uppercase text-auto-orange">Relatórios gerenciais</p>
+      <h2 class="mt-1 text-3xl font-black text-auto-navy">Relatórios e gráficos</h2>
+      <p class="mt-2 max-w-3xl text-sm leading-6 text-muted">Acompanhe desempenho dos serviços, saúde financeira e situação do estoque.</p>
+    </div>
+
+    <div class="grid gap-3 sm:grid-cols-2">
+      <input type="date" [(ngModel)]="dataInicial" class="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-auto-blue" />
+      <input type="date" [(ngModel)]="dataFinal" class="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-auto-blue" />
+    </div>
+  </div>
+
+  <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+    <article class="rounded-md border border-slate-200 bg-white p-5 shadow-sm">
+      <p class="text-sm font-bold text-muted">Serviços no período</p>
+      <p class="mt-2 text-3xl font-black text-auto-blue">{{ relatorioServicos.totalServicos }}</p>
+    </article>
+    <article class="rounded-md border border-slate-200 bg-white p-5 shadow-sm">
+      <p class="text-sm font-bold text-muted">Faturamento concluído</p>
+      <p class="mt-2 text-3xl font-black text-emerald-600">{{ formatarMoeda(relatorioServicos.totalFaturado) }}</p>
+    </article>
+    <article class="rounded-md border border-slate-200 bg-white p-5 shadow-sm">
+      <p class="text-sm font-bold text-muted">Peças críticas</p>
+      <p class="mt-2 text-3xl font-black text-auto-orange">{{ relatorioEstoque.pecasAbaixoMinimo.length }}</p>
+    </article>
+    <article class="rounded-md border border-slate-200 bg-white p-5 shadow-sm">
+      <p class="text-sm font-bold text-muted">Saldo realizado</p>
+      <p class="mt-2 text-3xl font-black text-auto-navy">{{ formatarMoeda(relatorioFinanceiro.resumo.saldoRealizado) }}</p>
+    </article>
+  </div>
+
+  <div class="grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
+    <section class="rounded-md border border-slate-200 bg-white p-5 shadow-sm">
+      <div class="flex items-center justify-between gap-3">
+        <h3 class="text-lg font-black text-auto-navy">Serviços por status</h3>
+        <span class="rounded-md bg-auto-sky px-3 py-1 text-xs font-black text-auto-blue">Operação</span>
+      </div>
+
+      <div class="mt-6 space-y-4">
+        <div *ngFor="let item of statusGrafico" class="status-row">
+          <div class="flex items-center justify-between gap-3">
+            <span>{{ item.label }}</span>
+            <strong>{{ item.total }}</strong>
+          </div>
+          <div class="chart-track">
+            <div class="chart-bar status-bar" [style.width.%]="item.percentual"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="rounded-md border border-slate-200 bg-white p-5 shadow-sm">
+      <div class="flex items-center justify-between gap-3">
+        <h3 class="text-lg font-black text-auto-navy">Resumo financeiro</h3>
+        <span class="rounded-md bg-auto-amber px-3 py-1 text-xs font-black text-auto-orange">Caixa</span>
+      </div>
+
+      <div class="mt-6 space-y-4">
+        <div class="finance-row">
+          <span>Receitas</span>
+          <div class="chart-track"><div class="chart-bar income-bar" [style.width.%]="percentualFinanceiro(relatorioFinanceiro.resumo.totalReceitas)"></div></div>
+          <strong>{{ formatarMoeda(relatorioFinanceiro.resumo.totalReceitas) }}</strong>
+        </div>
+        <div class="finance-row">
+          <span>Despesas</span>
+          <div class="chart-track"><div class="chart-bar expense-bar" [style.width.%]="percentualFinanceiro(relatorioFinanceiro.resumo.totalDespesas)"></div></div>
+          <strong>{{ formatarMoeda(relatorioFinanceiro.resumo.totalDespesas) }}</strong>
+        </div>
+        <div class="finance-row">
+          <span>Realizado</span>
+          <div class="chart-track"><div class="chart-bar balance-bar" [style.width.%]="percentualFinanceiro(relatorioFinanceiro.resumo.saldoRealizado)"></div></div>
+          <strong>{{ formatarMoeda(relatorioFinanceiro.resumo.saldoRealizado) }}</strong>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="grid gap-6 xl:grid-cols-[0.9fr_1.1fr]">
+    <section class="rounded-md border border-slate-200 bg-white p-5 shadow-sm">
+      <h3 class="text-lg font-black text-auto-navy">Estoque valorizado</h3>
+
+      <div class="mt-5 grid gap-4 sm:grid-cols-3">
+        <div class="rounded-md bg-slate-50 p-4">
+          <p class="text-xs font-bold uppercase text-muted">Custo</p>
+          <p class="mt-2 text-xl font-black text-auto-navy">{{ formatarMoeda(relatorioEstoque.valorTotalCusto) }}</p>
+        </div>
+        <div class="rounded-md bg-slate-50 p-4">
+          <p class="text-xs font-bold uppercase text-muted">Venda</p>
+          <p class="mt-2 text-xl font-black text-auto-blue">{{ formatarMoeda(relatorioEstoque.valorTotalVenda) }}</p>
+        </div>
+        <div class="rounded-md bg-slate-50 p-4">
+          <p class="text-xs font-bold uppercase text-muted">Margem</p>
+          <p class="mt-2 text-xl font-black text-emerald-600">{{ margemEstoque }}%</p>
+        </div>
+      </div>
+
+      <div class="mt-6">
+        <div class="inventory-meter">
+          <div class="inventory-fill" [style.width.%]="margemEstoque"></div>
+        </div>
+        <p class="mt-2 text-xs text-muted">Estimativa baseada na diferença entre valor de venda e custo das peças em estoque.</p>
+      </div>
+    </section>
+
+    <section class="rounded-md border border-slate-200 bg-white p-5 shadow-sm">
+      <h3 class="text-lg font-black text-auto-navy">Categorias financeiras</h3>
+
+      <div class="mt-5 space-y-4">
+        <div *ngFor="let item of categoriasFinanceiras" class="category-row">
+          <div class="flex items-center justify-between gap-3">
+            <span>{{ item.categoria }}</span>
+            <strong>{{ formatarMoeda(item.valor) }}</strong>
+          </div>
+          <div class="chart-track">
+            <div class="chart-bar category-bar" [style.width.%]="item.percentual"></div>
+          </div>
+        </div>
+        <p *ngIf="!categoriasFinanceiras.length" class="rounded-md border border-dashed border-slate-300 p-6 text-center text-sm text-muted">Sem lançamentos financeiros para compor o gráfico.</p>
+      </div>
+    </section>
+  </div>
+
+  <section class="rounded-md border border-slate-200 bg-white p-5 shadow-sm">
+    <h3 class="text-lg font-black text-auto-navy">Peças abaixo do mínimo</h3>
+    <div class="mt-4 overflow-x-auto">
+      <table class="w-full min-w-[640px] text-left text-sm">
+        <thead class="border-b border-slate-200 text-xs uppercase text-muted">
+          <tr>
+            <th class="py-3">Peça</th>
+            <th class="py-3">Categoria</th>
+            <th class="py-3 text-right">Atual</th>
+            <th class="py-3 text-right">Mínimo</th>
+            <th class="py-3 text-right">Venda</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let peca of relatorioEstoque.pecasAbaixoMinimo" class="border-b border-slate-100">
+            <td class="py-3 font-black text-auto-navy">{{ peca.nome }}</td>
+            <td class="py-3 text-muted">{{ peca.categoria }}</td>
+            <td class="py-3 text-right font-black text-auto-orange">{{ peca.quantidadeAtual }}</td>
+            <td class="py-3 text-right text-muted">{{ peca.quantidadeMinima }}</td>
+            <td class="py-3 text-right font-black text-auto-navy">{{ formatarMoeda(peca.valorVenda) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p *ngIf="!relatorioEstoque.pecasAbaixoMinimo.length" class="mt-4 rounded-md border border-dashed border-slate-300 p-6 text-center text-sm text-muted">Nenhuma peça abaixo do mínimo.</p>
+  </section>
+</section>
