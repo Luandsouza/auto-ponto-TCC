@@ -1,1 +1,95 @@
-<p>cadastro-agenda-cliente works!</p>
+<main class="min-h-screen bg-slate-50 flex items-center justify-center p-6">
+  <section class="w-full max-w-3xl rounded-lg bg-white shadow-lg border border-slate-200 overflow-hidden">
+
+    
+    <div class="bg-auto-navy p-6 text-white">
+      <h1 class="text-3xl font-black">Agendamento</h1>
+      <p class="mt-2 text-sm text-slate-200">
+        Preencha os dados abaixo para agendar um serviço na oficina.
+      </p>
+    </div>
+
+    
+    <div class="p-6 sm:p-8 grid gap-6">
+
+      
+      <div>
+        <label for="automovel" class="block text-sm font-bold text-auto-navy mb-2">
+          Automóvel
+        </label>
+        <select
+          name="automovel"
+          id="automovel"
+          class="w-full rounded-md border border-slate-300 p-3 focus:border-auto-blue focus:outline-none focus:ring-2 focus:ring-auto-sky"
+        >
+          <option value="">Selecione</option>
+          <option value="hb20">HB20</option>
+          <option value="corsa">Corsa</option>
+        </select>
+      </div>
+
+      
+      <div>
+        <label for="servico" class="block text-sm font-bold text-auto-navy mb-2">
+          Tipo de Serviço
+        </label>
+        <input
+          type="text"
+          placeholder="Ex: Troca de óleo"
+          class="w-full rounded-md border border-slate-300 p-3 focus:border-auto-blue focus:outline-none focus:ring-2 focus:ring-auto-sky"
+        />
+      </div>
+
+      
+      <div class="grid sm:grid-cols-2 gap-4">
+        <div>
+          <label for="data" class="block text-sm font-bold text-auto-navy mb-2">
+            Data disponível
+          </label>
+          <input
+            type="date"
+            class="w-full rounded-md border border-slate-300 p-3 focus:border-auto-blue focus:outline-none focus:ring-2 focus:ring-auto-sky"
+          />
+        </div>
+
+        <div>
+          <label for="hora" class="block text-sm font-bold text-auto-navy mb-2">
+            Horário
+          </label>
+          <input
+            type="time"
+            class="w-full rounded-md border border-slate-300 p-3 focus:border-auto-blue focus:outline-none focus:ring-2 focus:ring-auto-sky"
+          />
+        </div>
+      </div>
+
+      <!-- Observação -->
+      <div>
+        <label for="observacao" class="block text-sm font-bold text-auto-navy mb-2">
+          Observação
+        </label>
+        <input
+          type="text"
+          placeholder="Ex: Carro faz barulho ao frear"
+          class="w-full rounded-md border border-slate-300 p-3 focus:border-auto-blue focus:outline-none focus:ring-2 focus:ring-auto-sky"
+        />
+      </div>
+
+      
+      <div class="flex justify-end gap-3 pt-4">
+        <button
+          class="rounded-md border border-slate-300 px-5 py-2 text-sm font-bold text-slate-600 hover:bg-slate-100 transition"
+        >
+          Cancelar
+        </button>
+
+        <button
+          class="rounded-md bg-auto-orange px-5 py-2 text-sm font-black text-white hover:opacity-90 transition"
+        >
+          Salvar Agendamento
+        </button>
+      </div>
+
+    </div>
+  </section>
+</main>

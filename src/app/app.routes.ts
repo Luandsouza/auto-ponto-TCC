@@ -34,14 +34,14 @@ export const routes: Routes = [
       path: "estoque",
       loadComponent: () => import(`./pages/mecanico/estoque/estoque`).then(x => x.Estoque)
    },
-   {
-      path: "financeiro",
-      loadComponent: () => import(`./pages/mecanico/financeiro/financeiro`).then(x => x.Financeiro)
-   },
-   {
-      path: "relatorios",
-      loadComponent: () => import(`./pages/mecanico/relatorios/relatorios`).then(x => x.Relatorios)
-   },
+   // {
+   //    path: "financeiro",
+   //    loadComponent: () => import(`./pages/mecanico/financeiro/financeiro`).then(x => x.Financeiro)
+   // },
+   // {
+   //    path: "relatorios",
+   //    loadComponent: () => import(`./pages/mecanico/relatorios/relatorios`).then(x => x.Relatorios)
+   // },
    {
       path: "**",
       redirectTo: ""
