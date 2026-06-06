@@ -1,14 +1,14 @@
-<div class="flex min-h-screen bg-white">
-  
-  <app-sidebar-cliente></app-sidebar-cliente>
+<router-outlet *ngIf="telaLogin"></router-outlet>
 
-  
-  <div class="flex-1 flex flex-col">
-    
-    <app-topbar-cliente></app-topbar-cliente>
+<div *ngIf="!telaLogin" class="min-h-screen bg-slate-50 lg:flex">
+  <app-sidebar *ngIf="layoutMecanico"></app-sidebar>
+  <app-sidebar-cliente *ngIf="!layoutMecanico"></app-sidebar-cliente>
 
-    
-    <main class="flex-1 overflow-y-auto bg-white p-6 md:p-8">
+  <div class="flex min-w-0 flex-1 flex-col">
+    <app-topbar *ngIf="layoutMecanico"></app-topbar>
+    <app-topbar-cliente *ngIf="!layoutMecanico"></app-topbar-cliente>
+
+    <main class="flex-1 overflow-y-auto bg-slate-50 p-4 sm:p-6 lg:p-8">
       <router-outlet></router-outlet>
     </main>
   </div>

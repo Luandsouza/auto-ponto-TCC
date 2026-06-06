@@ -32,6 +32,10 @@ export class EstoquePecasService {
     return this.movimentacoesSubject.asObservable();
   }
 
+  listarMovimentacoesAtual(): MovimentacaoEstoque[] {
+    return this.movimentacoesSubject.value;
+  }
+
   buscarPorId(id: string): Peca | undefined {
     return this.pecasSubject.value.find((peca) => peca.id === id);
   }
