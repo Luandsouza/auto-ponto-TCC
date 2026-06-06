@@ -1,4 +1,7 @@
-<router-outlet *ngIf="telaLogin"></router-outlet>
+<div class="flex min-h-screen bg-white">
+  
+  <app-sidebar-cliente></app-sidebar-cliente>
+  
 
 <div *ngIf="!telaLogin" class="min-h-screen bg-slate-50 lg:flex">
   <app-sidebar *ngIf="layoutMecanico"></app-sidebar>
@@ -12,4 +15,6 @@
       <router-outlet></router-outlet>
     </main>
   </div>
+
+
 </div>
