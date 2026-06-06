@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
+import { RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-topbar-cliente',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './topbar-cliente.html',
   styleUrl: './topbar-cliente.css',
 })
