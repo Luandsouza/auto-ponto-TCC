@@ -2,6 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
+
+
 @Component({
   selector: 'app-sidebar',
   imports: [CommonModule, RouterModule],
@@ -34,34 +36,34 @@ export class Sidebar {
       icon: 'chart',
       colorClass: 'bg-sky-500',
     },
-     {
+    {
       label: 'Calendário',
       route: 'calendario',
       icon: 'chart',
       colorClass: 'bg-sky-500',
     },
-     {
+    {
       label: 'Ordens de serviço',
       route: '/ordens-servico',
       icon: 'chart',
       colorClass: 'bg-sky-500',
     },
-      {
+    {
       label: 'Checklist da OS',
       route: '/checklist-os',
-      icon: 'chart',
+      icon: 'list-todo',
       colorClass: 'bg-sky-500',
     },
-      {
+    {
       label: 'Kanban de serviços',
       route: '/kanban-servicos',
-      icon: 'chart',
-      colorClass: 'bg-sky-500',
+      icon: 'view_kanban',
+      colorClass: 'bg-sky-500'
     },
-      {
+    {
       label: 'Cadastro de veículos',
       route: '/cadastro-veiculos',
-      icon: 'chart',
+      icon: 'car',
       colorClass: 'bg-sky-500',
     },
   ];
