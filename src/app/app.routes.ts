@@ -22,7 +22,7 @@ export const routes: Routes = [
       loadComponent: () => import(`./auth/login/login`).then(x => x.Login)
    },
 
-  {
+   {
       path: "mecanica",
       loadComponent: () => import(`./pages/mecanico/home-mecanico/home-mecanico`).then(x => x.HomeMecanico)
    },
@@ -41,6 +41,26 @@ export const routes: Routes = [
    {
       path: "relatorios",
       loadComponent: () => import(`./pages/mecanico/relatorios/relatorios`).then(x => x.Relatorios)
+   },
+   {
+      path: "calendario",
+      loadComponent: () => import(`./pages/mecanico/calendario/calendario`).then(x => x.CalendarComponent)
+   },
+   {
+      path: "cadastro-veiculos",
+      loadComponent: () => import(`./pages/mecanico/cadastro-veiculos/cadastro-veiculos`).then(x => x.CadastroVeiculosComponent)
+   },
+   {
+      path: "ordens-servico",
+      loadComponent: () => import(`./pages/mecanico/ordens-servico/ordens-servico.component`).then(x => x.OrdensServicoComponent)
+   },
+   {
+      path: "checklist-os",
+      loadComponent: () => import(`./pages/mecanico/checklist-os/checklist-os.component`).then(x => x.ChecklistOsComponent)
+   },
+    {
+      path: "kanban-servicos",
+      loadComponent: () => import(`./pages/mecanico/kanban-servicos/kanban-servicos.component`).then(x => x.KanbanServicosComponent)
    },
    {
       path: "**",

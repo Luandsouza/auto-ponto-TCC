@@ -1,0 +1,64 @@
+<div class="checklist-container">
+  <div class="header">
+    <h1>✅ Checklist da OS</h1>
+  </div>
+
+  <!-- Selector de OS -->
+  <div class="selector-os">
+    <label>Selecione a Ordem de Serviço:</label>
+    <select [(ngModel)]="osSelecionada" (change)="carregarChecklist()">
+      <option value="">Selecione...</option>
+      <option *ngFor="let os of ordensServico" [value]="os.numero">
+        {{ os.numero }} - {{ os.cliente }} - {{ os.veiculo }} ({{ os.placa }})
+      </option>
+    </select>
+  </div>
+
+  <!-- Checklist -->
+  <div class="checklist-content" *ngIf="osSelecionada">
+    <div class="progress-container">
+      <div class="progress-label">{{ percentualConcluido }}% Concluído</div>
+      <div class="progress-bar">
+        <div class="progress-fill" [style.width]="percentualConcluido + '%'"></div>
+      </div>
+    </div>
+
+    <div class="checklist-header">
+      <h3>Itens do Checklist</h3>
+      <button class="btn-add" (click)="novaChecklist()">+ Adicionar Item</button>
+    </div>
+
+    <div class="checklist-items">
+      <div class="checklist-item" *ngFor="let item of checklistItens" [class.concluido]="item.concluido">
+        <input type="checkbox" [(ngModel)]="item.concluido" (change)="salvarChecklist()">
+        <div class="item-content">
+          <span class="descricao">{{ item.descricao }}</span>
+          <input type="text" class="observacao" placeholder="Adicionar observação..." 
+                 [(ngModel)]="item.observacao" (blur)="salvarChecklist()">
+        </div>
+        <button class="btn-delete-small" (click)="excluirItem(item.id)">🗑️</button>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="checklistItens.length === 0">
+      <p>📝 Nenhum item no checklist ainda.</p>
+      <button class="btn-primary" (click)="novaChecklist()">+ Adicionar primeiro item</button>
+    </div>
+  </div>
+
+  <!-- Modal Novo Item -->
+  <div class="modal" *ngIf="modalAberto" (click)="fecharModal($event)">
+    <div class="modal-content">
+      <h3>➕ Novo Item de Checklist</h3>
+      <input type="text" [(ngModel)]="novoItemDescricao" 
+             placeholder="Digite a descrição do item..." 
+             class="form-control" 
+             (keyup.enter)="adicionarItem()">
+      <div class="modal-actions">
+        <button class="btn-primary" (click)="adicionarItem()">Adicionar</button>
+        <button class="btn-secondary" (click)="fecharModal()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
