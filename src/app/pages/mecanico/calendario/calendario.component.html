@@ -1,0 +1,186 @@
+<div class="calendario-container">
+  <div class="header">
+    <h1>📅 Calendário de Eventos</h1>
+    <button class="btn-primary" (click)="novoEvento()">+ Novo Evento</button>
+  </div>
+
+  <div class="calendario-main">
+    <!-- Sidebar de Controles -->
+    <div class="sidebar">
+      <div class="controles-mes">
+        <button class="btn-icon" (click)="mesAnterior()">◀</button>
+        <h2>{{ currentYear }} - {{ currentMonth + 1 | date:'MMMM' }}</h2>
+        <button class="btn-icon" (click)="proximoMes()">▶</button>
+      </div>
+      <button class="btn-hoje" (click)="voltarHoje()">Hoje</button>
+
+      <div class="filtros">
+        <h3>Filtros</h3>
+        <select [(ngModel)]="filtroTipo" (change)="generateCalendar()">
+          <option value="todos">Todos os eventos</option>
+          <option value="servico">🔧 Serviços</option>
+          <option value="reuniao">👥 Reuniões</option>
+          <option value="lembrete">📝 Lembretes</option>
+          <option value="entrega">🚚 Entregas</option>
+        </select>
+      </div>
+
+      <div class="legenda">
+        <h3>Legenda</h3>
+        <div class="legenda-item">
+          <span class="legenda-cor" style="background: #3498db"></span>
+          <span>Serviços</span>
+        </div>
+        <div class="legenda-item">
+          <span class="legenda-cor" style="background: #9b59b6"></span>
+          <span>Reuniões</span>
+        </div>
+        <div class="legenda-item">
+          <span class="legenda-cor" style="background: #2ecc71"></span>
+          <span>Lembretes</span>
+        </div>
+        <div class="legenda-item">
+          <span class="legenda-cor" style="background: #f39c12"></span>
+          <span>Entregas</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Calendário -->
+    <div class="calendario-content">
+      <div class="calendar">
+        <div class="weekdays">
+          <div class="weekday" *ngFor="let day of weekDays">{{ day }}</div>
+        </div>
+        
+        <div class="days">
+          <div class="day" 
+               *ngFor="let date of daysInMonth"
+               [class.other-month]="!isCurrentMonth(date)"
+               [class.today]="isToday(date)"
+               [class.selected]="selectedDate && date.toDateString() === selectedDate.toDateString()"
+               (click)="selecionarData(date)">
+            <div class="day-number">{{ date.getDate() }}</div>
+            <div class="day-events">
+              <div class="event-badge" 
+                   *ngFor="let event of getEventsForDay(date).slice(0, 3)"
+                   [style.background]="event.color"
+                   [title]="event.title">
+                {{ event.time ? event.time : '' }} {{ event.title }}
+              </div>
+              <div class="more-events" *ngIf="getEventsForDay(date).length > 3">
+                +{{ getEventsForDay(date).length - 3 }} mais
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Eventos do Dia -->
+      <div class="eventos-dia" *ngIf="selectedDate">
+        <div class="eventos-header">
+          <h3>📋 Eventos - {{ selectedDate | date:'dd/MM/yyyy' }}</h3>
+          <button class="btn-add-small" (click)="novoEvento()">+ Adicionar</button>
+        </div>
+        
+        <div class="eventos-list" *ngIf="eventsForSelectedDate.length > 0">
+          <div class="evento-card" *ngFor="let event of eventsForSelectedDate">
+            <div class="evento-cor" [style.background]="event.color"></div>
+            <div class="evento-content">
+              <div class="evento-title">
+                <span class="evento-icon">{{ getTipoIcon(event.tipo || '') }}</span>
+                <strong>{{ event.title }}</strong>
+                <span class="evento-tipo">{{ getTipoLabel(event.tipo || '') }}</span>
+              </div>
+              <div class="evento-details">
+                <span *ngIf="event.time">🕒 {{ event.time }}</span>
+                <span *ngIf="event.cliente">👤 {{ event.cliente }}</span>
+                <span *ngIf="event.veiculo">🚗 {{ event.veiculo }}</span>
+              </div>
+              <div class="evento-desc" *ngIf="event.description">
+                📝 {{ event.description }}
+              </div>
+            </div>
+            <div class="evento-actions">
+              <button class="btn-edit-small" (click)="editarEvento(event)">✏️</button>
+              <button class="btn-delete-small" (click)="excluirEvento(event.id)">🗑️</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="no-events" *ngIf="eventsForSelectedDate.length === 0">
+          <p>📭 Nenhum evento para este dia</p>
+          <button class="btn-primary" (click)="novoEvento()">Criar evento</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Evento -->
+  <div class="modal" *ngIf="modalAberto" (click)="fecharModal($event)">
+    <div class="modal-content">
+      <h2>{{ editando ? '✏️ Editar Evento' : '➕ Novo Evento' }}</h2>
+      
+      <form (ngSubmit)="salvarEvento()">
+        <div class="form-group">
+          <label>Título *</label>
+          <input type="text" [(ngModel)]="eventAtual.title" name="title" required>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label>Data *</label>
+            <input type="date" [(ngModel)]="eventAtual.date" name="date" required>
+          </div>
+          <div class="form-group">
+            <label>Horário</label>
+            <input type="time" [(ngModel)]="eventAtual.time" name="time">
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Tipo *</label>
+          <select [(ngModel)]="eventAtual.tipo" name="tipo" required>
+            <option value="servico">🔧 Serviço</option>
+            <option value="reuniao">👥 Reunião</option>
+            <option value="lembrete">📝 Lembrete</option>
+            <option value="entrega">🚚 Entrega</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label>Cor</label>
+          <div class="color-options">
+            <div *ngFor="let cor of colorOptions" 
+                 class="color-option"
+                 [style.background]="cor.valor"
+                 [class.selected]="eventAtual.color === cor.valor"
+                 (click)="eventAtual.color = cor.valor">
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label>Cliente</label>
+            <input type="text" [(ngModel)]="eventAtual.cliente" name="cliente">
+          </div>
+          <div class="form-group">
+            <label>Veículo</label>
+            <input type="text" [(ngModel)]="eventAtual.veiculo" name="veiculo">
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Descrição</label>
+          <textarea [(ngModel)]="eventAtual.description" name="description" rows="3"></textarea>
+        </div>
+        
+        <div class="modal-actions">
+          <button type="submit" class="btn-primary">Salvar</button>
+          <button type="button" class="btn-secondary" (click)="fecharModal()">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

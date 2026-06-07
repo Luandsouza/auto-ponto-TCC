@@ -44,7 +44,7 @@ export const routes: Routes = [
    },
    {
       path: "calendario",
-      loadComponent: () => import(`./pages/mecanico/calendario/calendario`).then(x => x.CalendarComponent)
+      loadComponent: () => import(`./pages/mecanico/calendario/calendario.component`).then(x => x.CalendarioComponent)
    },
    {
       path: "cadastro-veiculos",
