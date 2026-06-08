@@ -1,42 +1,71 @@
-<section class="space-y-6">
-  <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+<section class="mechanic-home space-y-6">
+  <div class="mechanic-hero">
     <div>
-      <p class="text-sm font-bold uppercase text-auto-orange">Visão geral</p>
-      <h2 class="mt-1 text-3xl font-black text-auto-navy">Dashboard da mecânica</h2>
-      <p class="mt-2 max-w-3xl text-sm leading-6 text-muted">
-        Indicadores principais para acompanhar a operação da oficina em um só lugar.
+      <p class="text-sm font-black uppercase tracking-wide text-auto-orange">Visão geral</p>
+      <h2 class="mt-2 text-3xl font-black text-white sm:text-4xl">Dashboard da mecânica</h2>
+      <p class="mt-3 max-w-3xl text-sm leading-6 text-slate-300">
+        Painel operacional para acompanhar ordens, estoque, caixa e prioridades da oficina.
       </p>
     </div>
 
     <div class="flex flex-wrap gap-3">
-      <a routerLink="/servicos" class="rounded-md bg-auto-blue px-4 py-2 text-sm font-black text-white transition hover:bg-auto-navy">Novo serviço</a>
-      <a routerLink="/financeiro" class="rounded-md border border-auto-orange px-4 py-2 text-sm font-black text-auto-orange transition hover:bg-auto-amber">Financeiro</a>
+      <a routerLink="/servicos" class="hero-action hero-primary">Novo serviço</a>
+      <a routerLink="/financeiro" class="hero-action hero-secondary">Financeiro</a>
     </div>
   </div>
 
   <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-    <article class="rounded-md border border-slate-200 bg-white p-5 shadow-sm">
-      <p class="text-sm font-bold text-muted">Serviços ativos</p>
-      <p class="mt-3 text-3xl font-black text-auto-blue">{{ servicosAtivos }}</p>
+    <article class="metric-card">
+      <span class="metric-icon icon-blue">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5h6M6 6h12v15H6zM8 12h8M8 16h5" /></svg>
+      </span>
+      <p>Serviços ativos</p>
+      <strong>{{ servicosAtivos }}</strong>
     </article>
-    <article class="rounded-md border border-slate-200 bg-white p-5 shadow-sm">
-      <p class="text-sm font-bold text-muted">Serviços concluídos</p>
-      <p class="mt-3 text-3xl font-black text-auto-orange">{{ servicosConcluidos }}</p>
+    <article class="metric-card">
+      <span class="metric-icon icon-orange">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4 12l5 5L20 6" /></svg>
+      </span>
+      <p>Concluídos</p>
+      <strong>{{ servicosConcluidos }}</strong>
     </article>
-    <article class="rounded-md border border-slate-200 bg-white p-5 shadow-sm">
-      <p class="text-sm font-bold text-muted">Saldo realizado</p>
-      <p class="mt-3 text-3xl font-black text-auto-navy">{{ formatarMoeda(resumoFinanceiro.saldoRealizado) }}</p>
+    <article class="metric-card">
+      <span class="metric-icon icon-navy">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4 7h16v12H4zM16 12h5M7 7V5h10v2" /></svg>
+      </span>
+      <p>Saldo realizado</p>
+      <strong>{{ formatarMoeda(resumoFinanceiro.saldoRealizado) }}</strong>
     </article>
-    <article class="rounded-md border border-slate-200 bg-white p-5 shadow-sm">
-      <p class="text-sm font-bold text-muted">Estoque em custo</p>
-      <p class="mt-3 text-3xl font-black text-emerald-600">{{ formatarMoeda(valorEstoque) }}</p>
+    <article class="metric-card">
+      <span class="metric-icon icon-green">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8l-9-5-9 5 9 5 9-5zM3 8v8l9 5 9-5V8" /></svg>
+      </span>
+      <p>Estoque em custo</p>
+      <strong>{{ formatarMoeda(valorEstoque) }}</strong>
     </article>
   </div>
 
+  <div class="grid gap-6 xl:grid-cols-2">
+    <app-auto-chart
+      title="Operação da oficina"
+      subtitle="Serviços ativos, concluídos e alertas"
+      type="doughnut"
+      [data]="operacaoChartData"
+    ></app-auto-chart>
+
+    <app-auto-chart
+      title="Fluxo de caixa"
+      subtitle="Receitas, despesas e saldo realizado"
+      type="bar"
+      [currency]="true"
+      [data]="caixaChartData"
+    ></app-auto-chart>
+  </div>
+
   <div class="grid gap-6 xl:grid-cols-[1.3fr_0.7fr]">
-    <section class="rounded-md border border-slate-200 bg-white p-5 shadow-sm">
+    <section class="surface-card">
       <div class="flex items-center justify-between gap-3">
-        <h3 class="text-lg font-black text-auto-navy">Últimos serviços</h3>
+        <h3>Últimos serviços</h3>
         <a routerLink="/servicos" class="text-sm font-black text-auto-blue">Ver todos</a>
       </div>
 
@@ -62,16 +91,16 @@
       </div>
     </section>
 
-    <section class="rounded-md border border-slate-200 bg-white p-5 shadow-sm">
-      <h3 class="text-lg font-black text-auto-navy">Alertas</h3>
+    <section class="surface-card">
+      <h3>Alertas da oficina</h3>
       <div class="mt-4 space-y-3">
-        <div class="rounded-md border border-orange-200 bg-auto-amber p-4">
-          <p class="text-sm font-black text-auto-navy">Peças abaixo do mínimo</p>
-          <p class="mt-2 text-3xl font-black text-auto-orange">{{ pecasBaixoEstoque }}</p>
+        <div class="alert-card alert-orange">
+          <p>Peças abaixo do mínimo</p>
+          <strong>{{ pecasBaixoEstoque }}</strong>
         </div>
-        <div class="rounded-md border border-sky-200 bg-auto-sky p-4">
-          <p class="text-sm font-black text-auto-navy">Pendente a receber</p>
-          <p class="mt-2 text-2xl font-black text-auto-blue">{{ formatarMoeda(resumoFinanceiro.pendenteReceber) }}</p>
+        <div class="alert-card alert-blue">
+          <p>Pendente a receber</p>
+          <strong>{{ formatarMoeda(resumoFinanceiro.pendenteReceber) }}</strong>
         </div>
       </div>
     </section>

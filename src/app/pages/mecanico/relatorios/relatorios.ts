@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
+import { AutoChart, AutoChartDatum } from '../../../components/auto-chart/auto-chart';
 import { ServicoStatus } from '../../../models/servico';
 import { FinanceiroService } from '../../../service/financeiro.service';
 import { RelatorioService } from '../../../service/relatorio.service';
@@ -15,7 +16,7 @@ type StatusGrafico = {
 
 @Component({
   selector: 'app-relatorios',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, AutoChart],
   templateUrl: './relatorios.html',
   styleUrl: './relatorios.css',
 })
@@ -71,6 +72,23 @@ export class Relatorios {
     }));
   }
 
+  get statusChartData(): AutoChartDatum[] {
+    const colors: Record<ServicoStatus, string> = {
+      orcamento: '#64748b',
+      aprovado: '#0ea5e9',
+      em_andamento: '#f97316',
+      aguardando_peca: '#f59e0b',
+      concluido: '#22c55e',
+      cancelado: '#ef4444',
+    };
+
+    return this.statusGrafico.map((item) => ({
+      label: item.label,
+      value: item.total,
+      color: colors[item.status],
+    }));
+  }
+
   get categoriasFinanceiras() {
     const agrupado = this.lancamentosPeriodo.reduce<Record<string, number>>((resultado, lancamento) => {
       if (lancamento.status === 'cancelado') {
@@ -90,6 +108,34 @@ export class Relatorios {
         percentual: Math.round((valor / maior) * 100),
       }))
       .sort((a, b) => b.valor - a.valor);
+  }
+
+  get categoriasChartData(): AutoChartDatum[] {
+    const palette = ['#15146f', '#f97316', '#0ea5e9', '#22c55e', '#ef4444', '#64748b'];
+
+    return this.categoriasFinanceiras.map((item, index) => ({
+      label: item.categoria,
+      value: item.valor,
+      color: palette[index % palette.length],
+    }));
+  }
+
+  get financeiroChartData(): AutoChartDatum[] {
+    const resumo = this.relatorioFinanceiro.resumo;
+
+    return [
+      { label: 'Receitas', value: resumo.totalReceitas, color: '#22c55e' },
+      { label: 'Despesas', value: resumo.totalDespesas, color: '#ef4444' },
+      { label: 'Realizado', value: Math.max(resumo.saldoRealizado, 0), color: '#0ea5e9' },
+    ];
+  }
+
+  get estoqueChartData(): AutoChartDatum[] {
+    return [
+      { label: 'Custo', value: this.relatorioEstoque.valorTotalCusto, color: '#15146f' },
+      { label: 'Venda', value: this.relatorioEstoque.valorTotalVenda, color: '#f97316' },
+      { label: 'Críticas', value: this.relatorioEstoque.pecasAbaixoMinimo.length, color: '#ef4444' },
+    ];
   }
 
   get margemEstoque(): number {

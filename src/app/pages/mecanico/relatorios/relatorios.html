@@ -32,49 +32,20 @@
   </div>
 
   <div class="grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
-    <section class="rounded-md border border-slate-200 bg-white p-5 shadow-sm">
-      <div class="flex items-center justify-between gap-3">
-        <h3 class="text-lg font-black text-auto-navy">Serviços por status</h3>
-        <span class="rounded-md bg-auto-sky px-3 py-1 text-xs font-black text-auto-blue">Operação</span>
-      </div>
+    <app-auto-chart
+      title="Serviços por status"
+      subtitle="Distribuição operacional das ordens"
+      type="doughnut"
+      [data]="statusChartData"
+    ></app-auto-chart>
 
-      <div class="mt-6 space-y-4">
-        <div *ngFor="let item of statusGrafico" class="status-row">
-          <div class="flex items-center justify-between gap-3">
-            <span>{{ item.label }}</span>
-            <strong>{{ item.total }}</strong>
-          </div>
-          <div class="chart-track">
-            <div class="chart-bar status-bar" [style.width.%]="item.percentual"></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="rounded-md border border-slate-200 bg-white p-5 shadow-sm">
-      <div class="flex items-center justify-between gap-3">
-        <h3 class="text-lg font-black text-auto-navy">Resumo financeiro</h3>
-        <span class="rounded-md bg-auto-amber px-3 py-1 text-xs font-black text-auto-orange">Caixa</span>
-      </div>
-
-      <div class="mt-6 space-y-4">
-        <div class="finance-row">
-          <span>Receitas</span>
-          <div class="chart-track"><div class="chart-bar income-bar" [style.width.%]="percentualFinanceiro(relatorioFinanceiro.resumo.totalReceitas)"></div></div>
-          <strong>{{ formatarMoeda(relatorioFinanceiro.resumo.totalReceitas) }}</strong>
-        </div>
-        <div class="finance-row">
-          <span>Despesas</span>
-          <div class="chart-track"><div class="chart-bar expense-bar" [style.width.%]="percentualFinanceiro(relatorioFinanceiro.resumo.totalDespesas)"></div></div>
-          <strong>{{ formatarMoeda(relatorioFinanceiro.resumo.totalDespesas) }}</strong>
-        </div>
-        <div class="finance-row">
-          <span>Realizado</span>
-          <div class="chart-track"><div class="chart-bar balance-bar" [style.width.%]="percentualFinanceiro(relatorioFinanceiro.resumo.saldoRealizado)"></div></div>
-          <strong>{{ formatarMoeda(relatorioFinanceiro.resumo.saldoRealizado) }}</strong>
-        </div>
-      </div>
-    </section>
+    <app-auto-chart
+      title="Resumo financeiro"
+      subtitle="Receitas, despesas e caixa realizado"
+      type="bar"
+      [currency]="true"
+      [data]="financeiroChartData"
+    ></app-auto-chart>
   </div>
 
   <div class="grid gap-6 xl:grid-cols-[0.9fr_1.1fr]">
@@ -104,23 +75,22 @@
       </div>
     </section>
 
-    <section class="rounded-md border border-slate-200 bg-white p-5 shadow-sm">
-      <h3 class="text-lg font-black text-auto-navy">Categorias financeiras</h3>
-
-      <div class="mt-5 space-y-4">
-        <div *ngFor="let item of categoriasFinanceiras" class="category-row">
-          <div class="flex items-center justify-between gap-3">
-            <span>{{ item.categoria }}</span>
-            <strong>{{ formatarMoeda(item.valor) }}</strong>
-          </div>
-          <div class="chart-track">
-            <div class="chart-bar category-bar" [style.width.%]="item.percentual"></div>
-          </div>
-        </div>
-        <p *ngIf="!categoriasFinanceiras.length" class="rounded-md border border-dashed border-slate-300 p-6 text-center text-sm text-muted">Sem lançamentos financeiros para compor o gráfico.</p>
-      </div>
-    </section>
+    <app-auto-chart
+      title="Categorias financeiras"
+      subtitle="Concentração por centro de custo"
+      type="bar"
+      [currency]="true"
+      [data]="categoriasChartData"
+    ></app-auto-chart>
   </div>
+
+  <app-auto-chart
+    title="Valor do estoque"
+    subtitle="Comparação entre custo, venda e peças críticas"
+    type="line"
+    [currency]="true"
+    [data]="estoqueChartData"
+  ></app-auto-chart>
 
   <section class="rounded-md border border-slate-200 bg-white p-5 shadow-sm">
     <h3 class="text-lg font-black text-auto-navy">Peças abaixo do mínimo</h3>

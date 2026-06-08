@@ -2,13 +2,14 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
+import { AutoChart, AutoChartDatum } from '../../../components/auto-chart/auto-chart';
 import { FinanceiroService } from '../../../service/financeiro.service';
 import { EstoquePecasService } from '../../../service/estoque-pecas.service';
 import { ServicoService } from '../../../service/servico.service';
 
 @Component({
   selector: 'app-home-mecanico',
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, AutoChart],
   templateUrl: './home-mecanico.html',
   styleUrl: './home-mecanico.css',
 })
@@ -47,6 +48,22 @@ export class HomeMecanico {
 
   get ultimosServicos() {
     return this.servicoService.listarAtual().slice(-4).reverse();
+  }
+
+  get operacaoChartData(): AutoChartDatum[] {
+    return [
+      { label: 'Ativos', value: this.servicosAtivos, color: '#f97316' },
+      { label: 'Concluídos', value: this.servicosConcluidos, color: '#22c55e' },
+      { label: 'Estoque baixo', value: this.pecasBaixoEstoque, color: '#ef4444' },
+    ];
+  }
+
+  get caixaChartData(): AutoChartDatum[] {
+    return [
+      { label: 'Receitas', value: this.resumoFinanceiro.totalReceitas, color: '#22c55e' },
+      { label: 'Despesas', value: this.resumoFinanceiro.totalDespesas, color: '#ef4444' },
+      { label: 'Realizado', value: Math.max(this.resumoFinanceiro.saldoRealizado, 0), color: '#0ea5e9' },
+    ];
   }
 
   formatarMoeda(valor: number): string {

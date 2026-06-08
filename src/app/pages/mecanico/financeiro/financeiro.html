@@ -92,31 +92,21 @@
         </div>
       </form>
 
-      <section class="rounded-md border border-slate-200 bg-white p-5 shadow-sm">
-        <h3 class="text-lg font-black text-auto-navy">Comparativo financeiro</h3>
-        <div class="mt-5 space-y-4">
-          <div class="chart-row">
-            <span>Receitas</span>
-            <div class="chart-track"><div class="chart-bar chart-income" [style.width.%]="percentual(resumo.totalReceitas)"></div></div>
-            <strong>{{ formatarMoeda(resumo.totalReceitas) }}</strong>
-          </div>
-          <div class="chart-row">
-            <span>Despesas</span>
-            <div class="chart-track"><div class="chart-bar chart-expense" [style.width.%]="percentual(resumo.totalDespesas)"></div></div>
-            <strong>{{ formatarMoeda(resumo.totalDespesas) }}</strong>
-          </div>
-          <div class="chart-row">
-            <span>A receber</span>
-            <div class="chart-track"><div class="chart-bar chart-pending-income" [style.width.%]="percentual(resumo.pendenteReceber)"></div></div>
-            <strong>{{ formatarMoeda(resumo.pendenteReceber) }}</strong>
-          </div>
-          <div class="chart-row">
-            <span>A pagar</span>
-            <div class="chart-track"><div class="chart-bar chart-pending-expense" [style.width.%]="percentual(resumo.pendentePagar)"></div></div>
-            <strong>{{ formatarMoeda(resumo.pendentePagar) }}</strong>
-          </div>
-        </div>
-      </section>
+      <app-auto-chart
+        title="Fluxo financeiro"
+        subtitle="Receitas, despesas e pendências"
+        type="bar"
+        [currency]="true"
+        [data]="fluxoChartData"
+      ></app-auto-chart>
+
+      <app-auto-chart
+        title="Saúde do caixa"
+        subtitle="Previsto, realizado e pendente"
+        type="doughnut"
+        [currency]="true"
+        [data]="saldoChartData"
+      ></app-auto-chart>
     </div>
 
     <section class="min-w-0 rounded-md border border-slate-200 bg-white p-5 shadow-sm">

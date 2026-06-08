@@ -33,7 +33,7 @@
       </div>
     </div>
 
-    <div class="flex items-center justify-center p-5 sm:p-8">
+    <div class="login-panel flex items-center justify-center p-5 sm:p-8">
       <div class="w-full max-w-xl">
         <div class="mb-8">
           <p class="text-sm font-bold uppercase text-auto-orange">Entrar no sistema</p>
@@ -46,30 +46,44 @@
         <div class="grid gap-4 sm:grid-cols-2">
           <a
             routerLink="/home"
-            class="group rounded-md border border-slate-200 bg-white p-5 shadow-sm transition hover:border-auto-blue hover:shadow-md"
+            class="profile-card profile-client group"
           >
-            <span class="grid h-12 w-12 place-items-center rounded-md bg-auto-sky text-auto-blue">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 12a4 4 0 100-8 4 4 0 000 8zM4 21a8 8 0 0116 0" />
+            <span class="profile-illustration">
+              <svg viewBox="0 0 96 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="14" y="30" width="68" height="22" rx="8" fill="#1aa7f2"/>
+                <path d="M25 30l8-14h29l10 14" fill="#bfeaff"/>
+                <path d="M33 16h29l10 14H25l8-14z" stroke="#11124a" stroke-width="3" stroke-linejoin="round"/>
+                <circle cx="30" cy="54" r="8" fill="#11124a"/>
+                <circle cx="66" cy="54" r="8" fill="#11124a"/>
+                <circle cx="30" cy="54" r="3" fill="#eaf7ff"/>
+                <circle cx="66" cy="54" r="3" fill="#eaf7ff"/>
+                <path d="M19 41h9M68 41h9" stroke="white" stroke-width="3" stroke-linecap="round"/>
               </svg>
             </span>
             <h3 class="mt-5 text-xl font-black text-auto-navy">Cliente</h3>
             <p class="mt-2 text-sm leading-6 text-muted">Acompanhar agenda, histórico e status dos serviços.</p>
-            <p class="mt-5 text-sm font-black text-auto-blue">Entrar como cliente</p>
+            <p class="profile-link text-auto-blue">Entrar como cliente</p>
           </a>
 
           <a
             routerLink="/mecanica"
-            class="group rounded-md border border-slate-200 bg-white p-5 shadow-sm transition hover:border-auto-orange hover:shadow-md"
+            class="profile-card profile-mechanic group"
           >
-            <span class="grid h-12 w-12 place-items-center rounded-md bg-auto-amber text-auto-orange">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M14.7 6.3a4 4 0 005 5L11 20l-5-5 8.7-8.7z" />
+            <span class="profile-illustration">
+              <svg viewBox="0 0 96 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18 51h60" stroke="#11124a" stroke-width="5" stroke-linecap="round"/>
+                <path d="M27 48l9-18h24l9 18" fill="#fff3e9"/>
+                <path d="M27 48l9-18h24l9 18" stroke="#11124a" stroke-width="3" stroke-linejoin="round"/>
+                <rect x="31" y="42" width="34" height="10" rx="4" fill="#ff7418"/>
+                <circle cx="36" cy="55" r="7" fill="#11124a"/>
+                <circle cx="60" cy="55" r="7" fill="#11124a"/>
+                <path d="M69 18l8 8M77 18l-8 8" stroke="#ff7418" stroke-width="4" stroke-linecap="round"/>
+                <path d="M19 20l10 10M29 20L19 30" stroke="#1aa7f2" stroke-width="4" stroke-linecap="round"/>
               </svg>
             </span>
             <h3 class="mt-5 text-xl font-black text-auto-navy">Mecânica</h3>
             <p class="mt-2 text-sm leading-6 text-muted">Gerenciar serviços, estoque, financeiro e relatórios.</p>
-            <p class="mt-5 text-sm font-black text-auto-orange">Entrar na oficina</p>
+            <p class="profile-link text-auto-orange">Entrar na oficina</p>
           </a>
         </div>
       </div>
