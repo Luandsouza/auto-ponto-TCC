@@ -52,17 +52,17 @@ export class HomeMecanico {
 
   get operacaoChartData(): AutoChartDatum[] {
     return [
-      { label: 'Ativos', value: this.servicosAtivos, color: '#f97316' },
-      { label: 'Concluídos', value: this.servicosConcluidos, color: '#22c55e' },
-      { label: 'Estoque baixo', value: this.pecasBaixoEstoque, color: '#ef4444' },
+      { label: 'Ativos', value: this.servicosAtivos, color: '#1E3A8A' },
+      { label: 'Concluídos', value: this.servicosConcluidos, color: '#F59E0B' },
+      { label: 'Estoque baixo', value: this.pecasBaixoEstoque, color: '#374151' },
     ];
   }
 
   get caixaChartData(): AutoChartDatum[] {
     return [
-      { label: 'Receitas', value: this.resumoFinanceiro.totalReceitas, color: '#22c55e' },
-      { label: 'Despesas', value: this.resumoFinanceiro.totalDespesas, color: '#ef4444' },
-      { label: 'Realizado', value: Math.max(this.resumoFinanceiro.saldoRealizado, 0), color: '#0ea5e9' },
+      { label: 'Receitas', value: this.resumoFinanceiro.totalReceitas, color: '#1E3A8A' },
+      { label: 'Despesas', value: this.resumoFinanceiro.totalDespesas, color: '#374151' },
+      { label: 'Realizado', value: Math.max(this.resumoFinanceiro.saldoRealizado, 0), color: '#F59E0B' },
     ];
   }
 
@@ -71,16 +71,19 @@ export class HomeMecanico {
   }
 
   private garantirDadosDemonstrativos(): void {
-    if (
-      this.servicoService.listarAtual().length ||
-      this.estoquePecasService.listarAtual().length ||
-      this.financeiroService.listarAtual().length
-    ) {
-      return;
-    }
+    const dias = (quantidade: number) =>
+      new Date(Date.now() + quantidade * 86400000).toISOString();
 
-    const pastilha = this.estoquePecasService.criar({
-      nome: 'Pastilha de freio',
+    const obterPeca = (dados: Parameters<EstoquePecasService['criar']>[0]) => {
+      const existente = this.estoquePecasService
+        .listarAtual()
+        .find((peca) => peca.codigo === dados.codigo);
+
+      return existente || this.estoquePecasService.criar(dados);
+    };
+
+    const pastilha = obterPeca({
+      nome: 'Pastilha de freio dianteira',
       codigo: 'PF-204',
       categoria: 'Freio',
       fabricante: 'Bosch',
@@ -93,8 +96,8 @@ export class HomeMecanico {
       ativo: true,
     });
 
-    this.estoquePecasService.criar({
-      nome: 'Filtro de óleo',
+    const filtroOleo = obterPeca({
+      nome: 'Filtro de óleo premium',
       codigo: 'FO-110',
       categoria: 'Motor',
       fabricante: 'Tecfil',
@@ -107,53 +110,211 @@ export class HomeMecanico {
       ativo: true,
     });
 
-    const servico = this.servicoService.criar({
-      titulo: 'Revisão preventiva',
-      descricao: 'Troca de filtros, inspeção de freios e checklist geral.',
-      categoria: 'revisao',
-      status: 'em_andamento',
-      valorMaoObra: 280,
-      valorPecas: 119,
-      desconto: 20,
-      pecas: [{ pecaId: pastilha.id, nome: pastilha.nome, quantidade: 1, valorUnitario: pastilha.valorVenda }],
-      dataAbertura: new Date().toISOString(),
-      dataPrevisao: new Date(Date.now() + 86400000).toISOString(),
-      observacoes: 'Cliente pediu prioridade na entrega.',
+    const oleo = obterPeca({
+      nome: 'Óleo sintético 5W30',
+      codigo: 'OL-530',
+      categoria: 'Lubrificantes',
+      fabricante: 'Mobil',
+      fornecedor: 'LubriMais',
+      localizacao: 'Corredor C1',
+      quantidadeAtual: 18,
+      quantidadeMinima: 10,
+      valorCusto: 36,
+      valorVenda: 69,
+      ativo: true,
     });
 
-    this.servicoService.criar({
-      titulo: 'Diagnóstico elétrico',
-      descricao: 'Falha intermitente no painel e teste de bateria.',
-      categoria: 'eletrica',
-      status: 'orcamento',
-      valorMaoObra: 180,
-      valorPecas: 0,
-      desconto: 0,
-      pecas: [],
-      dataAbertura: new Date().toISOString(),
-      observacoes: 'Aguardando aprovação do orçamento.',
+    const bateria = obterPeca({
+      nome: 'Bateria 60Ah selada',
+      codigo: 'BAT-60',
+      categoria: 'Elétrica',
+      fabricante: 'Moura',
+      fornecedor: 'Eletro Auto Vale',
+      localizacao: 'Bancada E3',
+      quantidadeAtual: 2,
+      quantidadeMinima: 4,
+      valorCusto: 318,
+      valorVenda: 489,
+      ativo: true,
     });
 
-    this.financeiroService.criar({
-      tipo: 'receita',
-      categoria: 'servico',
-      descricao: servico.titulo,
-      valor: servico.total,
-      status: 'pendente',
-      dataVencimento: new Date().toISOString(),
-      servicoId: servico.id,
-      observacoes: 'Receita vinculada ao serviço.',
+    const correia = obterPeca({
+      nome: 'Correia dentada',
+      codigo: 'CD-089',
+      categoria: 'Motor',
+      fabricante: 'Gates',
+      fornecedor: 'Auto Peças Central',
+      localizacao: 'Prateleira B4',
+      quantidadeAtual: 6,
+      quantidadeMinima: 3,
+      valorCusto: 84,
+      valorVenda: 149,
+      ativo: true,
     });
 
-    this.financeiroService.criar({
-      tipo: 'despesa',
-      categoria: 'fornecedor',
-      descricao: 'Compra de filtros e pastilhas',
-      valor: 420,
-      status: 'pago',
-      dataVencimento: new Date().toISOString(),
-      dataPagamento: new Date().toISOString(),
-      observacoes: 'Reposição inicial para demonstração.',
+    const amortecedor = obterPeca({
+      nome: 'Amortecedor dianteiro',
+      codigo: 'AM-221',
+      categoria: 'Suspensão',
+      fabricante: 'Monroe',
+      fornecedor: 'Suspensão Pro',
+      localizacao: 'Rack D2',
+      quantidadeAtual: 4,
+      quantidadeMinima: 4,
+      valorCusto: 210,
+      valorVenda: 349,
+      ativo: true,
+    });
+
+    const servicosDemo: Parameters<ServicoService['criar']>[0][] = [
+      {
+        titulo: 'Revisão preventiva completa',
+        descricao: 'Troca de óleo, filtro, inspeção de freios e checklist geral.',
+        categoria: 'revisao',
+        status: 'em_andamento',
+        valorMaoObra: 280,
+        valorPecas: oleo.valorVenda + filtroOleo.valorVenda + pastilha.valorVenda,
+        desconto: 30,
+        pecas: [
+          { pecaId: oleo.id, nome: oleo.nome, quantidade: 1, valorUnitario: oleo.valorVenda },
+          { pecaId: filtroOleo.id, nome: filtroOleo.nome, quantidade: 1, valorUnitario: filtroOleo.valorVenda },
+          { pecaId: pastilha.id, nome: pastilha.nome, quantidade: 1, valorUnitario: pastilha.valorVenda },
+        ],
+        dataAbertura: dias(-1),
+        dataPrevisao: dias(1),
+        observacoes: 'Cliente pediu prioridade na entrega.',
+      },
+      {
+        titulo: 'Troca de bateria e teste do alternador',
+        descricao: 'Substituição da bateria, limpeza de terminais e teste de carga.',
+        categoria: 'eletrica',
+        status: 'concluido',
+        valorMaoObra: 160,
+        valorPecas: bateria.valorVenda,
+        desconto: 0,
+        pecas: [{ pecaId: bateria.id, nome: bateria.nome, quantidade: 1, valorUnitario: bateria.valorVenda }],
+        dataAbertura: dias(-7),
+        dataPrevisao: dias(-6),
+        dataConclusao: dias(-6),
+        observacoes: 'Serviço finalizado e pago no balcão.',
+      },
+      {
+        titulo: 'Substituição de correia dentada',
+        descricao: 'Troca preventiva da correia e inspeção de sincronismo do motor.',
+        categoria: 'manutencao',
+        status: 'aprovado',
+        valorMaoObra: 420,
+        valorPecas: correia.valorVenda,
+        desconto: 20,
+        pecas: [{ pecaId: correia.id, nome: correia.nome, quantidade: 1, valorUnitario: correia.valorVenda }],
+        dataAbertura: dias(-2),
+        dataPrevisao: dias(2),
+        observacoes: 'Peças separadas para execução amanhã.',
+      },
+      {
+        titulo: 'Diagnóstico elétrico do painel',
+        descricao: 'Falha intermitente no painel e teste de bateria em carga.',
+        categoria: 'diagnostico',
+        status: 'orcamento',
+        valorMaoObra: 180,
+        valorPecas: 0,
+        desconto: 0,
+        pecas: [],
+        dataAbertura: dias(0),
+        dataPrevisao: dias(3),
+        observacoes: 'Aguardando aprovação do orçamento.',
+      },
+      {
+        titulo: 'Reparo de suspensão dianteira',
+        descricao: 'Troca de amortecedores dianteiros e alinhamento preliminar.',
+        categoria: 'manutencao',
+        status: 'em_andamento',
+        valorMaoObra: 360,
+        valorPecas: amortecedor.valorVenda * 2,
+        desconto: 50,
+        pecas: [{ pecaId: amortecedor.id, nome: amortecedor.nome, quantidade: 2, valorUnitario: amortecedor.valorVenda }],
+        dataAbertura: dias(-3),
+        dataPrevisao: dias(1),
+        observacoes: 'Veículo permanece no elevador hidráulico.',
+      },
+      {
+        titulo: 'Troca de óleo expressa',
+        descricao: 'Troca de óleo sintético e conferência de níveis.',
+        categoria: 'manutencao',
+        status: 'concluido',
+        valorMaoObra: 95,
+        valorPecas: oleo.valorVenda + filtroOleo.valorVenda,
+        desconto: 0,
+        pecas: [
+          { pecaId: oleo.id, nome: oleo.nome, quantidade: 1, valorUnitario: oleo.valorVenda },
+          { pecaId: filtroOleo.id, nome: filtroOleo.nome, quantidade: 1, valorUnitario: filtroOleo.valorVenda },
+        ],
+        dataAbertura: dias(-12),
+        dataPrevisao: dias(-12),
+        dataConclusao: dias(-12),
+        observacoes: 'Serviço rápido concluído no mesmo dia.',
+      },
+    ];
+
+    const servicosCriados = servicosDemo.map((dados) => {
+      const existente = this.servicoService
+        .listarAtual()
+        .find((servico) => servico.titulo === dados.titulo);
+
+      return existente || this.servicoService.criar(dados);
+    });
+
+    const criarLancamentoSeAusente = (dados: Parameters<FinanceiroService['criar']>[0]) => {
+      const existente = this.financeiroService
+        .listarAtual()
+        .some((lancamento) => lancamento.descricao === dados.descricao);
+
+      if (!existente) {
+        this.financeiroService.criar(dados);
+      }
+    };
+
+    servicosCriados.forEach((servico) => {
+      criarLancamentoSeAusente({
+        tipo: 'receita',
+        categoria: 'servico',
+        descricao: `Serviço - ${servico.titulo}`,
+        valor: servico.total,
+        status: servico.status === 'concluido' ? 'pago' : 'pendente',
+        dataVencimento: servico.dataConclusao || servico.dataPrevisao || servico.dataAbertura,
+        dataPagamento: servico.status === 'concluido' ? servico.dataConclusao || servico.dataAbertura : undefined,
+        servicoId: servico.id,
+        observacoes: 'Receita vinculada ao serviço demonstrativo.',
+      });
+    });
+
+    [
+      {
+        descricao: 'Compra de filtros, óleo e pastilhas',
+        valor: 780,
+        data: dias(-10),
+      },
+      {
+        descricao: 'Reposição de baterias e correias',
+        valor: 1260,
+        data: dias(-5),
+      },
+      {
+        descricao: 'Pedido de amortecedores dianteiros',
+        valor: 840,
+        data: dias(2),
+      },
+    ].forEach((despesa) => {
+      criarLancamentoSeAusente({
+        tipo: 'despesa',
+        categoria: 'fornecedor',
+        descricao: despesa.descricao,
+        valor: despesa.valor,
+        status: despesa.data <= dias(0) ? 'pago' : 'pendente',
+        dataVencimento: despesa.data,
+        dataPagamento: despesa.data <= dias(0) ? despesa.data : undefined,
+        observacoes: 'Despesa demonstrativa de reposição de estoque.',
+      });
     });
   }
 }

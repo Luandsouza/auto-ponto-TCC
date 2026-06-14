@@ -45,7 +45,7 @@ export class AutoChart implements AfterViewInit, OnChanges, OnDestroy {
   @ViewChild('canvas') private readonly canvasRef?: ElementRef<HTMLCanvasElement>;
 
   private chart?: Chart;
-  private readonly palette = ['#f97316', '#0ea5e9', '#22c55e', '#ef4444', '#64748b', '#15146f'];
+  private readonly palette = ['#1E3A8A', '#F59E0B', '#374151', '#64748B', '#0F766E', '#B45309'];
 
   ngAfterViewInit(): void {
     this.renderChart();
@@ -97,8 +97,9 @@ export class AutoChart implements AfterViewInit, OnChanges, OnDestroy {
 
     const chartType: ChartType = this.type === 'doughnut' ? 'doughnut' : this.type;
     const gradient = context.createLinearGradient(0, 0, 0, 260);
-    gradient.addColorStop(0, 'rgba(249, 115, 22, 0.26)');
-    gradient.addColorStop(1, 'rgba(14, 165, 233, 0.02)');
+    gradient.addColorStop(0, 'rgba(30, 58, 138, 0.22)');
+    gradient.addColorStop(0.52, 'rgba(245, 158, 11, 0.12)');
+    gradient.addColorStop(1, 'rgba(31, 41, 55, 0.04)');
 
     const chartOptions: ChartConfiguration['options'] & { cutout?: string } = {
       responsive: true,
@@ -113,7 +114,7 @@ export class AutoChart implements AfterViewInit, OnChanges, OnDestroy {
         },
         tooltip: {
           backgroundColor: '#0f172a',
-          borderColor: 'rgba(249, 115, 22, 0.5)',
+          borderColor: 'rgba(245, 158, 11, 0.5)',
           borderWidth: 1,
           padding: 12,
           titleFont: {
@@ -152,7 +153,7 @@ export class AutoChart implements AfterViewInit, OnChanges, OnDestroy {
               y: {
                 beginAtZero: true,
                 grid: {
-                  color: 'rgba(148, 163, 184, 0.24)',
+                  color: 'rgba(55, 65, 81, 0.16)',
                 },
                 ticks: {
                   color: '#64748b',

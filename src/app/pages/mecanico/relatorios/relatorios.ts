@@ -74,12 +74,12 @@ export class Relatorios {
 
   get statusChartData(): AutoChartDatum[] {
     const colors: Record<ServicoStatus, string> = {
-      orcamento: '#64748b',
-      aprovado: '#0ea5e9',
-      em_andamento: '#f97316',
-      aguardando_peca: '#f59e0b',
-      concluido: '#22c55e',
-      cancelado: '#ef4444',
+      orcamento: '#64748B',
+      aprovado: '#1E3A8A',
+      em_andamento: '#F59E0B',
+      aguardando_peca: '#B45309',
+      concluido: '#0F766E',
+      cancelado: '#374151',
     };
 
     return this.statusGrafico.map((item) => ({
@@ -111,7 +111,7 @@ export class Relatorios {
   }
 
   get categoriasChartData(): AutoChartDatum[] {
-    const palette = ['#15146f', '#f97316', '#0ea5e9', '#22c55e', '#ef4444', '#64748b'];
+    const palette = ['#1E3A8A', '#F59E0B', '#374151', '#64748B', '#0F766E', '#B45309'];
 
     return this.categoriasFinanceiras.map((item, index) => ({
       label: item.categoria,
@@ -124,17 +124,17 @@ export class Relatorios {
     const resumo = this.relatorioFinanceiro.resumo;
 
     return [
-      { label: 'Receitas', value: resumo.totalReceitas, color: '#22c55e' },
-      { label: 'Despesas', value: resumo.totalDespesas, color: '#ef4444' },
-      { label: 'Realizado', value: Math.max(resumo.saldoRealizado, 0), color: '#0ea5e9' },
+      { label: 'Receitas', value: resumo.totalReceitas, color: '#1E3A8A' },
+      { label: 'Despesas', value: resumo.totalDespesas, color: '#374151' },
+      { label: 'Realizado', value: Math.max(resumo.saldoRealizado, 0), color: '#F59E0B' },
     ];
   }
 
   get estoqueChartData(): AutoChartDatum[] {
     return [
-      { label: 'Custo', value: this.relatorioEstoque.valorTotalCusto, color: '#15146f' },
-      { label: 'Venda', value: this.relatorioEstoque.valorTotalVenda, color: '#f97316' },
-      { label: 'Críticas', value: this.relatorioEstoque.pecasAbaixoMinimo.length, color: '#ef4444' },
+      { label: 'Custo', value: this.relatorioEstoque.valorTotalCusto, color: '#1E3A8A' },
+      { label: 'Venda', value: this.relatorioEstoque.valorTotalVenda, color: '#F59E0B' },
+      { label: 'Críticas', value: this.relatorioEstoque.pecasAbaixoMinimo.length, color: '#374151' },
     ];
   }
 

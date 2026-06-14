@@ -68,18 +68,18 @@ export class Financeiro {
 
   get fluxoChartData(): AutoChartDatum[] {
     return [
-      { label: 'Receitas', value: this.resumo.totalReceitas, color: '#22c55e' },
-      { label: 'Despesas', value: this.resumo.totalDespesas, color: '#ef4444' },
-      { label: 'A receber', value: this.resumo.pendenteReceber, color: '#0ea5e9' },
-      { label: 'A pagar', value: this.resumo.pendentePagar, color: '#f97316' },
+      { label: 'Receitas', value: this.resumo.totalReceitas, color: '#1E3A8A' },
+      { label: 'Despesas', value: this.resumo.totalDespesas, color: '#374151' },
+      { label: 'A receber', value: this.resumo.pendenteReceber, color: '#F59E0B' },
+      { label: 'A pagar', value: this.resumo.pendentePagar, color: '#B45309' },
     ];
   }
 
   get saldoChartData(): AutoChartDatum[] {
     return [
-      { label: 'Previsto', value: Math.max(this.resumo.saldo, 0), color: '#15146f' },
-      { label: 'Realizado', value: Math.max(this.resumo.saldoRealizado, 0), color: '#0ea5e9' },
-      { label: 'Pendente', value: this.resumo.pendenteReceber + this.resumo.pendentePagar, color: '#f97316' },
+      { label: 'Previsto', value: Math.max(this.resumo.saldo, 0), color: '#1E3A8A' },
+      { label: 'Realizado', value: Math.max(this.resumo.saldoRealizado, 0), color: '#F59E0B' },
+      { label: 'Pendente', value: this.resumo.pendenteReceber + this.resumo.pendentePagar, color: '#374151' },
     ];
   }
 

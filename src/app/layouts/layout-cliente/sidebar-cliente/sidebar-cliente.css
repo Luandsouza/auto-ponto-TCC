@@ -15,6 +15,7 @@
   border-radius: 8px;
   padding: 10px 12px;
   color: #475569;
+  cursor: pointer;
   font-size: 0.875rem;
   font-weight: 850;
   transition:
@@ -40,9 +41,9 @@
 
 .client-menu-icon {
   display: grid;
-  width: 42px;
-  height: 42px;
-  flex: 0 0 42px;
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
   place-items: center;
   border-radius: 8px;
   background:
@@ -83,6 +84,25 @@
   z-index: 1;
   color: #ffffff;
   filter: drop-shadow(0 2px 2px rgba(15, 23, 42, 0.28));
+  transition: transform 160ms ease;
+}
+
+.client-menu-link:hover .client-realistic-icon svg {
+  transform: scale(1.08);
+}
+
+.client-realistic-icon img {
+  position: relative;
+  z-index: 1;
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.3));
+  transition: transform 160ms ease;
+}
+
+.client-menu-link:hover .client-realistic-icon img {
+  transform: scale(1.08);
 }
 
 .client-realistic-icon i {

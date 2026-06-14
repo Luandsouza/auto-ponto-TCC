@@ -1,92 +1,31 @@
-<main class="min-h-screen bg-slate-50">
-  <section class="grid min-h-screen lg:grid-cols-[1.05fr_0.95fr]">
-    <div class="flex flex-col justify-between bg-auto-navy p-6 text-white sm:p-8 lg:p-10">
-      <div class="flex items-center">
-        <div class="login-logo-box rounded-md bg-white shadow-sm">
-          <img src="/logo4.jpg" alt="Auto Ponto" class="h-full w-full object-contain" />
-        </div>
-      </div>
-
-      <div class="max-w-2xl py-16">
-        <p class="text-sm font-bold uppercase tracking-wide text-auto-orange">Sistema de oficina</p>
-        <h1 class="mt-4 text-4xl font-black leading-tight sm:text-5xl">
-          Auto Ponto
-        </h1>
-        <p class="mt-5 max-w-xl text-base leading-7 text-slate-200">
-          Acesse o painel do cliente para acompanhar agendamentos ou entre na área da mecânica para gerenciar serviços, estoque, financeiro e relatórios.
-        </p>
-      </div>
-
-      <div class="grid gap-3 text-sm text-slate-200 sm:grid-cols-3">
-        <div class="rounded-md border border-white/15 p-4">
-          <p class="font-bold text-white">Serviços</p>
-          <p class="mt-1">Ordens e acompanhamento.</p>
-        </div>
-        <div class="rounded-md border border-white/15 p-4">
-          <p class="font-bold text-white">Estoque</p>
-          <p class="mt-1">Peças e movimentações.</p>
-        </div>
-        <div class="rounded-md border border-white/15 p-4">
-          <p class="font-bold text-white">Financeiro</p>
-          <p class="mt-1">Receitas, despesas e saldo.</p>
-        </div>
-      </div>
+<main class="landing-page">
+  <a
+    routerLink="/home"
+    class="landing-panel landing-panel-client"
+    [style.backgroundImage]="'url(' + clienteImagem + ')'"
+    aria-label="Entrar na área do cliente"
+  >
+    <div class="landing-brand">
+      <img src="/logo4.jpg" alt="Auto Ponto" />
     </div>
 
-    <div class="login-panel flex items-center justify-center p-5 sm:p-8">
-      <div class="w-full max-w-xl">
-        <div class="mb-8">
-          <p class="text-sm font-bold uppercase text-auto-orange">Entrar no sistema</p>
-          <h2 class="mt-2 text-3xl font-black text-auto-navy">Escolha seu perfil</h2>
-          <p class="mt-2 text-sm leading-6 text-muted">
-            Esta tela inicial separa a experiência do cliente da rotina administrativa da oficina.
-          </p>
-        </div>
-
-        <div class="grid gap-4 sm:grid-cols-2">
-          <a
-            routerLink="/home"
-            class="profile-card profile-client group"
-          >
-            <span class="profile-illustration">
-              <svg viewBox="0 0 96 72" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="14" y="30" width="68" height="22" rx="8" fill="#1aa7f2"/>
-                <path d="M25 30l8-14h29l10 14" fill="#bfeaff"/>
-                <path d="M33 16h29l10 14H25l8-14z" stroke="#11124a" stroke-width="3" stroke-linejoin="round"/>
-                <circle cx="30" cy="54" r="8" fill="#11124a"/>
-                <circle cx="66" cy="54" r="8" fill="#11124a"/>
-                <circle cx="30" cy="54" r="3" fill="#eaf7ff"/>
-                <circle cx="66" cy="54" r="3" fill="#eaf7ff"/>
-                <path d="M19 41h9M68 41h9" stroke="white" stroke-width="3" stroke-linecap="round"/>
-              </svg>
-            </span>
-            <h3 class="mt-5 text-xl font-black text-auto-navy">Cliente</h3>
-            <p class="mt-2 text-sm leading-6 text-muted">Acompanhar agenda, histórico e status dos serviços.</p>
-            <p class="profile-link text-auto-blue">Entrar como cliente</p>
-          </a>
-
-          <a
-            routerLink="/mecanica"
-            class="profile-card profile-mechanic group"
-          >
-            <span class="profile-illustration">
-              <svg viewBox="0 0 96 72" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M18 51h60" stroke="#11124a" stroke-width="5" stroke-linecap="round"/>
-                <path d="M27 48l9-18h24l9 18" fill="#fff3e9"/>
-                <path d="M27 48l9-18h24l9 18" stroke="#11124a" stroke-width="3" stroke-linejoin="round"/>
-                <rect x="31" y="42" width="34" height="10" rx="4" fill="#ff7418"/>
-                <circle cx="36" cy="55" r="7" fill="#11124a"/>
-                <circle cx="60" cy="55" r="7" fill="#11124a"/>
-                <path d="M69 18l8 8M77 18l-8 8" stroke="#ff7418" stroke-width="4" stroke-linecap="round"/>
-                <path d="M19 20l10 10M29 20L19 30" stroke="#1aa7f2" stroke-width="4" stroke-linecap="round"/>
-              </svg>
-            </span>
-            <h3 class="mt-5 text-xl font-black text-auto-navy">Mecânica</h3>
-            <p class="mt-2 text-sm leading-6 text-muted">Gerenciar serviços, estoque, financeiro e relatórios.</p>
-            <p class="profile-link text-auto-orange">Entrar na oficina</p>
-          </a>
-        </div>
-      </div>
+    <div class="landing-content">
+      <p>Portal do cliente</p>
+      <h1>Área do Cliente</h1>
+      <span>Acompanhe agenda, histórico e status dos serviços do seu veículo.</span>
     </div>
-  </section>
+  </a>
+
+  <a
+    routerLink="/mecanica"
+    class="landing-panel landing-panel-workshop"
+    [style.backgroundImage]="'url(' + oficinaImagem + ')'"
+    aria-label="Entrar na área da oficina"
+  >
+    <div class="landing-content">
+      <p>Central da oficina</p>
+      <h2>Área da Oficina</h2>
+      <span>Gerencie serviços, estoque, financeiro, relatórios e operação mecânica.</span>
+    </div>
+  </a>
 </main>

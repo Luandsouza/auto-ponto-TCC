@@ -29,25 +29,25 @@ export class SidebarCliente {
       label: 'Home',
       route: '/home',
       iconPaths: icons.home,
-      accent: '#1aa7f2',
+      accent: '#1E3A8A',
     },
     {
       label: 'Agenda de Serviço',
       route: '/agenda',
       iconPaths: icons.calendar,
-      accent: '#ff7418',
+      accent: '#F59E0B',
     },
     {
       label: 'Histórico',
       route: '/historico',
       iconPaths: icons.history,
-      accent: '#0ea5e9',
+      accent: '#374151',
     },
     {
       label: 'Status dos Serviços',
       route: '/status',
       iconPaths: icons.wrench,
-      accent: '#22c55e',
+      accent: '#1E3A8A',
     },
   ];
 }

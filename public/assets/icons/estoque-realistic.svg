@@ -1,0 +1,15 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="box" x1="12" y1="14" x2="50" y2="54" gradientUnits="userSpaceOnUse"><stop stop-color="#6B7280"/><stop offset="1" stop-color="#374151"/></linearGradient>
+    <linearGradient id="tape" x1="22" y1="15" x2="40" y2="49" gradientUnits="userSpaceOnUse"><stop stop-color="#FBBF24"/><stop offset="1" stop-color="#F59E0B"/></linearGradient>
+    <filter id="shadow" x="6" y="8" width="54" height="52" color-interpolation-filters="sRGB"><feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#111827" flood-opacity=".32"/></filter>
+  </defs>
+  <g filter="url(#shadow)">
+    <path d="M12 25 32 15l20 10v25L32 59 12 50V25Z" fill="url(#box)"/>
+    <path d="M12 25 32 35l20-10" stroke="#CBD5E1" stroke-width="2" opacity=".45"/>
+    <path d="M32 35v24" stroke="#111827" stroke-width="2" opacity=".35"/>
+    <path d="M24 19 44 29v12l-8-3-4 6V35L12 25l12-6Z" fill="url(#tape)" opacity=".95"/>
+    <circle cx="48" cy="48" r="7" fill="#1E3A8A"/>
+    <path d="M45 48h6M48 45v6" stroke="#E5E7EB" stroke-width="2" stroke-linecap="round"/>
+  </g>
+</svg>

@@ -19,3 +19,10 @@
   font-size: 0.8125rem;
   font-weight: 900;
 }
+
+.client-topbar button,
+.client-topbar .client-chip,
+.client-topbar .client-profile,
+.client-topbar [routerLink] {
+  cursor: pointer;
+}
