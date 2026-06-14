@@ -7,4 +7,7 @@ import { RouterLink } from '@angular/router';
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
-export class Login {}
+export class Login {
+  clienteImagem = 'assets/images/cliente-oficina-realista.jpg';
+  oficinaImagem = 'assets/images/oficina-mecanica-completa-realista.jpg';
+}

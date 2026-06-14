@@ -1,0 +1,28 @@
+.client-topbar {
+  border-bottom: 1px solid rgba(148, 163, 184, 0.28);
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.96), rgba(248, 250, 252, 0.94)),
+    radial-gradient(circle at top right, rgba(26, 167, 242, 0.14), transparent 30%);
+  box-shadow: 0 14px 38px rgba(15, 23, 42, 0.06);
+  backdrop-filter: blur(14px);
+}
+
+.client-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgba(34, 197, 94, 0.22);
+  border-radius: 8px;
+  background: rgba(240, 253, 244, 0.85);
+  padding: 10px 12px;
+  color: #166534;
+  font-size: 0.8125rem;
+  font-weight: 900;
+}
+
+.client-topbar button,
+.client-topbar .client-chip,
+.client-topbar .client-profile,
+.client-topbar [routerLink] {
+  cursor: pointer;
+}

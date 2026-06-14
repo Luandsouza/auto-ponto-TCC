@@ -1,94 +1,53 @@
-<aside
-  class="border-r border-slate-200 bg-white text-auto-navy lg:sticky lg:top-0 lg:h-screen lg:w-72"
->
-  <div class="flex h-full flex-col">
-    <div class="flex items-center gap-3 border-b border-slate-200 px-6 py-6">
-      <img src="/logo4.jpg" alt="Auto Ponto" class="h-16 w-44 object-contain" />
+<aside class="mechanic-sidebar text-white lg:sticky lg:top-0 lg:h-screen lg:w-[19rem]">
+  <div class="flex h-full min-h-screen flex-col">
+    <div class="border-b border-white/10 px-5 py-5">
+      <div class="rounded-md bg-white p-3 shadow-lg shadow-black/20">
+        <img src="/logo4.jpg" alt="Auto Ponto" class="h-20 w-full object-contain" />
+      </div>
+      <div class="mt-4 flex items-center gap-3">
+        <span class="grid h-10 w-10 place-items-center rounded-md bg-auto-orange text-white">
+          <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.3">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M14.7 6.3a4 4 0 0 0 5 5L11 20l-5-5 8.7-8.7z" />
+          </svg>
+        </span>
+        <div>
+          <p class="text-xs font-bold uppercase tracking-wide text-slate-400">Oficina conectada</p>
+          <p class="text-sm font-black text-white">Gestão mecânica</p>
+        </div>
+      </div>
     </div>
 
-    <nav class="flex-1 space-y-2 px-4 py-6">
+    <nav class="custom-scroll flex-1 space-y-1 overflow-y-auto px-3 py-5">
       <a
         *ngFor="let item of menuItems"
         [routerLink]="item.route"
-        routerLinkActive="border-auto-blue bg-auto-sky text-auto-navy shadow-sm"
-        class="flex items-center gap-3 rounded-md border border-transparent px-4 py-3 text-sm font-bold text-slate-600 transition hover:border-auto-orange hover:bg-auto-amber hover:text-auto-navy"
+        routerLinkActive="active-menu"
+        [routerLinkActiveOptions]="{ exact: item.route === '/mecanica' }"
+        class="menu-link group"
       >
-        <span
-          class="grid h-9 w-9 shrink-0 place-items-center rounded-md text-white"
-          [ngClass]="item.colorClass"
-        >
-          <svg
-            *ngIf="item.icon === 'clipboard'"
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            stroke-width="2"
-          >
+        <span class="menu-icon realistic-icon" [style.--accent]="item.accent">
+          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.35" aria-hidden="true">
             <path
+              *ngFor="let path of item.iconPaths"
               stroke-linecap="round"
               stroke-linejoin="round"
-              d="M9 5h6M9 3h6a1 1 0 011 1v2H8V4a1 1 0 011-1zM6 6h12a1 1 0 011 1v13a1 1 0 01-1 1H6a1 1 0 01-1-1V7a1 1 0 011-1zM8 12h8M8 16h5"
+              [attr.d]="path"
             />
           </svg>
-          <svg
-            *ngIf="item.icon === 'box'"
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M21 8l-9-5-9 5 9 5 9-5zM3 8v8l9 5 9-5V8M12 13v8"
-            />
-          </svg>
-          <svg
-            *ngIf="item.icon === 'wallet'"
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M4 7h14a2 2 0 012 2v9a2 2 0 01-2 2H4a2 2 0 01-2-2V9a2 2 0 012-2zM16 12h5M17.5 15a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM6 7V5a2 2 0 012-2h8"
-            />
-          </svg>
-          <svg
-            *ngIf="item.icon === 'chart'"
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M4 19V5M4 19h16M8 16V9M12 16V7M16 16v-4"
-            />
-          </svg>
+          <i></i>
         </span>
 
-        {{ item.label }}
+        <span class="min-w-0 flex-1 truncate">{{ item.label }}</span>
       </a>
     </nav>
 
-    <div class="m-4 rounded-md border border-auto-orange/25 bg-auto-amber p-4">
-      <p class="text-sm font-bold text-auto-navy">Serviços ativos</p>
-      <p class="mt-1 text-3xl font-black text-auto-orange">12</p>
-      <p class="mt-1 text-xs text-muted">Ordens abertas para acompanhamento.</p>
+    <div class="m-4 rounded-md border border-white/10 bg-white/8 p-4 shadow-inner">
+      <div class="flex items-center justify-between gap-3">
+        <p class="text-xs font-bold uppercase tracking-wide text-slate-400">Ritmo da oficina</p>
+        <span class="h-2.5 w-2.5 rounded-full bg-emerald-400 shadow-[0_0_18px_rgba(52,211,153,0.9)]"></span>
+      </div>
+      <p class="mt-2 text-3xl font-black text-white">92%</p>
+      <p class="mt-1 text-xs leading-5 text-slate-300">Operação estável para serviços, estoque e financeiro.</p>
     </div>
   </div>
-
-  
 </aside>

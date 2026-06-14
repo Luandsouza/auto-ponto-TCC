@@ -1,0 +1,15 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="wallet" x1="10" y1="18" x2="54" y2="52" gradientUnits="userSpaceOnUse"><stop stop-color="#334E9B"/><stop offset="1" stop-color="#1E3A8A"/></linearGradient>
+    <linearGradient id="coin" x1="34" y1="18" x2="55" y2="44" gradientUnits="userSpaceOnUse"><stop stop-color="#FDE68A"/><stop offset="1" stop-color="#F59E0B"/></linearGradient>
+    <filter id="shadow" x="5" y="10" width="56" height="50" color-interpolation-filters="sRGB"><feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#111827" flood-opacity=".34"/></filter>
+  </defs>
+  <g filter="url(#shadow)">
+    <rect x="10" y="22" width="43" height="30" rx="7" fill="url(#wallet)"/>
+    <path d="M16 22v-5h28c3 0 5 2 5 5H16Z" fill="#374151"/>
+    <rect x="38" y="31" width="19" height="13" rx="5" fill="#F59E0B"/>
+    <circle cx="44" cy="38" r="3" fill="#FFF7ED"/>
+    <circle cx="44" cy="23" r="10" fill="url(#coin)"/>
+    <path d="M44 18v10M40 21h7c2 0 2 4 0 4h-6" stroke="#92400E" stroke-width="2" stroke-linecap="round"/>
+  </g>
+</svg>

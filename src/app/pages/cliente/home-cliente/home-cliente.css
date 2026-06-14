@@ -1,0 +1,142 @@
+.client-home {
+  color: #11124a;
+}
+
+.client-hero {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, rgba(17, 18, 74, 0.96), rgba(14, 165, 233, 0.78)),
+    radial-gradient(circle at 88% 10%, rgba(255, 116, 24, 0.4), transparent 30%);
+  box-shadow: 0 22px 55px rgba(15, 23, 42, 0.14);
+  padding: 28px;
+}
+
+.client-action {
+  border-radius: 8px;
+  background: #ff7418;
+  color: white;
+  padding: 11px 16px;
+  font-size: 0.875rem;
+  font-weight: 900;
+  white-space: nowrap;
+  box-shadow: 0 12px 28px rgba(255, 116, 24, 0.26);
+}
+
+.client-card,
+.client-panel {
+  min-width: 0;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+  padding: 20px;
+}
+
+.client-icon {
+  display: grid;
+  width: 46px;
+  height: 46px;
+  place-items: center;
+  border-radius: 8px;
+}
+
+.client-icon svg {
+  width: 23px;
+  height: 23px;
+  stroke-width: 2.25;
+}
+
+.client-card p,
+.mini-label {
+  margin-top: 14px;
+  color: #64748b;
+  font-size: 0.875rem;
+  font-weight: 800;
+}
+
+.client-card strong,
+.mini-value {
+  display: block;
+  margin-top: 8px;
+  color: #11124a;
+  font-size: 1.35rem;
+  font-weight: 950;
+}
+
+.client-panel h3 {
+  color: #11124a;
+  font-size: 1.05rem;
+  font-weight: 950;
+}
+
+.timeline-row {
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  border-radius: 8px;
+  background: #f8fafc;
+  padding: 14px;
+}
+
+.timeline-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: #cbd5e1;
+}
+
+.timeline-dot.concluido {
+  background: #22c55e;
+}
+
+.timeline-dot.ativo {
+  background: #ff7418;
+  box-shadow: 0 0 0 6px rgba(255, 116, 24, 0.14);
+}
+
+.timeline-row p,
+.schedule-card p {
+  color: #11124a;
+  font-size: 0.9rem;
+  font-weight: 900;
+}
+
+.timeline-row small,
+.schedule-card small {
+  color: #64748b;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.timeline-row strong {
+  color: #64748b;
+  font-size: 0.82rem;
+}
+
+.schedule-card {
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 8px;
+  background: #f8fafc;
+  padding: 14px;
+}
+
+.schedule-card strong {
+  display: block;
+  margin: 6px 0 4px;
+  color: #ff7418;
+  font-size: 0.88rem;
+  font-weight: 950;
+}
+
+@media (max-width: 768px) {
+  .client-hero {
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 22px;
+  }
+}

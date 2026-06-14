@@ -1,93 +1,41 @@
-<aside
-  class="border-r border-slate-200 bg-white text-auto-navy lg:sticky lg:top-0 lg:h-screen lg:w-72"
->
-  <div class="flex h-full flex-col">
-    <div class="flex items-center gap-3 border-b border-slate-200 px-6 py-6">
-      <img src="/logo4.jpg" alt="Auto Ponto" class="h-16 w-44 object-contain" />
+<aside class="client-sidebar text-auto-navy lg:sticky lg:top-0 lg:h-screen lg:w-72">
+  <div class="flex h-full min-h-screen flex-col">
+    <div class="border-b border-slate-200 px-5 py-5">
+      <div class="rounded-md bg-white p-3 shadow-sm">
+        <img src="/logo4.jpg" alt="Auto Ponto" class="h-20 w-full object-contain" />
+      </div>
+      <p class="mt-4 text-xs font-black uppercase tracking-wide text-auto-orange">Portal do cliente</p>
+      <p class="text-sm font-black text-auto-navy">Acompanhamento do veículo</p>
     </div>
 
-    <nav class="flex-1 space-y-2 px-4 py-6">
+    <nav class="flex-1 space-y-2 px-4 py-5">
       <a
         *ngFor="let item of menuItems"
         [routerLink]="item.route"
-        routerLinkActive="border-auto-blue bg-auto-sky text-auto-navy shadow-sm"
+        routerLinkActive="client-active-menu"
         [routerLinkActiveOptions]="{ exact: true }"
-        class="flex items-center gap-3 rounded-md border border-transparent px-4 py-3 text-sm font-bold text-slate-600 transition hover:border-auto-orange hover:bg-auto-amber hover:text-auto-navy"
+        class="client-menu-link group"
       >
-        <span
-          class="grid h-9 w-9 shrink-0 place-items-center rounded-md text-white"
-          [ngClass]="item.colorClass"
-        >
-          <svg
-            *ngIf="item.icon === 'home'"
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            stroke-width="2"
-          >
+        <span class="client-menu-icon client-realistic-icon" [style.--accent]="item.accent">
+          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.35" aria-hidden="true">
             <path
+              *ngFor="let path of item.iconPaths"
               stroke-linecap="round"
               stroke-linejoin="round"
-              d="M3 10.5L12 3l9 7.5V20a1 1 0 01-1 1h-5v-6H9v6H4a1 1 0 01-1-1v-9.5z"
+              [attr.d]="path"
             />
           </svg>
-          <svg
-            *ngIf="item.icon === 'calendar'"
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M8 3v3M16 3v3M4 9h16M5 5h14a1 1 0 011 1v14a1 1 0 01-1 1H5a1 1 0 01-1-1V6a1 1 0 011-1z"
-            />
-          </svg>
-          <svg
-            *ngIf="item.icon === 'history'"
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M4 7v5h5M5.5 12A7 7 0 1012 5a7 7 0 00-6.5 4.4M12 8v5l3 2"
-            />
-          </svg>
-          <svg
-            *ngIf="item.icon === 'wrench'"
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M14.7 6.3a4 4 0 005 5L11 20l-5-5 8.7-8.7z"
-            />
-          </svg>
+          <i></i>
         </span>
 
-        {{ item.label }}
+        <span class="min-w-0 flex-1 truncate">{{ item.label }}</span>
       </a>
     </nav>
 
     <div class="m-4 rounded-md border border-auto-blue/20 bg-auto-sky p-4">
-      <p class="text-sm font-bold text-auto-navy">Atendimento hoje</p>
+      <p class="text-sm font-black text-auto-navy">Atendimento hoje</p>
       <p class="mt-1 text-3xl font-black text-auto-blue">92%</p>
-      <p class="mt-1 text-xs text-muted">Índice médio de satisfação dos clientes.</p>
+      <p class="mt-1 text-xs font-semibold text-muted">Índice médio de satisfação dos clientes.</p>
     </div>
   </div>
 </aside>
