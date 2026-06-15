@@ -1,0 +1,16 @@
+.team-card {
+  --team-color: #1e3a8a;
+}
+
+.team-mark {
+  display: block;
+  width: 44px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--team-color);
+}
+
+.team-card app-auto-chart {
+  display: block;
+  min-height: 360px;
+}

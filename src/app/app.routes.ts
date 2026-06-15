@@ -43,6 +43,10 @@ export const routes: Routes = [
       loadComponent: () => import(`./pages/mecanico/relatorios/relatorios`).then(x => x.Relatorios)
    },
    {
+      path: "equipes-mecanico",
+      loadComponent: () => import(`./pages/mecanico/equipes-mecanico/equipes-mecanico`).then(x => x.EquipesMecanico)
+   },
+   {
       path: "calendario",
       loadComponent: () => import(`./pages/mecanico/calendario/calendario.component`).then(x => x.CalendarioComponent)
    },

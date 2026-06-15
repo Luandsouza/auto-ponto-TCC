@@ -1,0 +1,129 @@
+<section class="space-y-6">
+  <div class="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
+    <div>
+      <p class="text-sm font-bold uppercase text-auto-orange">Mecânica operacional</p>
+      <h2 class="mt-1 text-3xl font-black text-auto-navy">Equipes de mecânicos</h2>
+      <p class="mt-2 max-w-3xl text-sm leading-6 text-muted">Acompanhe os 3 times da oficina, suas funções e o volume de serviços executados por especialidade.</p>
+    </div>
+  </div>
+
+  <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+    <article class="rounded-md border border-slate-200 bg-white p-5 shadow-sm">
+      <p class="text-sm font-bold text-muted">Mecânicos ativos</p>
+      <p class="mt-2 text-3xl font-black text-auto-blue">{{ totalMecanicos }}</p>
+    </article>
+    <article class="rounded-md border border-slate-200 bg-white p-5 shadow-sm">
+      <p class="text-sm font-bold text-muted">Serviços no mês</p>
+      <p class="mt-2 text-3xl font-black text-auto-orange">{{ totalServicos }}</p>
+    </article>
+    <article class="rounded-md border border-slate-200 bg-white p-5 shadow-sm">
+      <p class="text-sm font-bold text-muted">Horas produtivas</p>
+      <p class="mt-2 text-3xl font-black text-auto-navy">{{ totalHoras }}h</p>
+    </article>
+    <article class="rounded-md border border-slate-200 bg-white p-5 shadow-sm">
+      <p class="text-sm font-bold text-muted">Produtividade média</p>
+      <p class="mt-2 text-3xl font-black text-emerald-600">{{ produtividadeMedia }}%</p>
+    </article>
+  </div>
+
+  <div class="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
+    <app-auto-chart
+      title="Serviços por time"
+      subtitle="Comparativo de ordens atendidas"
+      type="doughnut"
+      [data]="servicosPorEquipeChart"
+    ></app-auto-chart>
+
+    <app-auto-chart
+      title="Faturamento por time"
+      subtitle="Receita estimada dos serviços executados"
+      type="bar"
+      [currency]="true"
+      [data]="faturamentoPorEquipeChart"
+    ></app-auto-chart>
+  </div>
+
+  <div class="grid gap-6 xl:grid-cols-3">
+    <article *ngFor="let equipe of equipes" class="team-card rounded-md border border-slate-200 bg-white p-5 shadow-sm" [style.--team-color]="equipe.cor">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <span class="team-mark"></span>
+          <h3 class="mt-3 text-xl font-black text-auto-navy">{{ equipe.nome }}</h3>
+          <p class="mt-2 text-sm leading-6 text-muted">{{ equipe.foco }}</p>
+        </div>
+        <div class="rounded-md bg-slate-50 px-3 py-2 text-right">
+          <p class="text-xs font-bold uppercase text-muted">Líder</p>
+          <p class="text-sm font-black text-auto-navy">{{ equipe.lider }}</p>
+        </div>
+      </div>
+
+      <div class="mt-5 grid gap-3 sm:grid-cols-3 xl:grid-cols-1 2xl:grid-cols-3">
+        <div class="rounded-md bg-slate-50 p-3">
+          <p class="text-xs font-bold uppercase text-muted">Serviços</p>
+          <p class="mt-1 text-xl font-black text-auto-navy">{{ totalServicosEquipe(equipe) }}</p>
+        </div>
+        <div class="rounded-md bg-slate-50 p-3">
+          <p class="text-xs font-bold uppercase text-muted">Horas</p>
+          <p class="mt-1 text-xl font-black text-auto-navy">{{ totalHorasEquipe(equipe) }}h</p>
+        </div>
+        <div class="rounded-md bg-slate-50 p-3">
+          <p class="text-xs font-bold uppercase text-muted">Receita</p>
+          <p class="mt-1 text-xl font-black text-auto-navy">{{ formatarMoeda(faturamentoEquipe(equipe)) }}</p>
+        </div>
+      </div>
+
+      <div class="mt-5">
+        <app-auto-chart
+          [title]="equipe.nome"
+          subtitle="Serviços por categoria"
+          type="bar"
+          [data]="dadosServicosEquipe(equipe)"
+        ></app-auto-chart>
+      </div>
+    </article>
+  </div>
+
+  <section class="rounded-md border border-slate-200 bg-white p-5 shadow-sm">
+    <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+      <div>
+        <h3 class="text-lg font-black text-auto-navy">Funções dos times</h3>
+        <p class="mt-1 text-sm text-muted">Tabela de membros, especialidades, turnos e produtividade individual.</p>
+      </div>
+      <p class="text-lg font-black text-auto-orange">{{ formatarMoeda(faturamentoTotal) }}</p>
+    </div>
+
+    <div class="mt-5 overflow-x-auto">
+      <table class="w-full min-w-[860px] text-left text-sm">
+        <thead class="border-b border-slate-200 text-xs uppercase text-muted">
+          <tr>
+            <th class="py-3">Time</th>
+            <th class="py-3">Mecânico</th>
+            <th class="py-3">Função</th>
+            <th class="py-3">Especialidade</th>
+            <th class="py-3">Turno</th>
+            <th class="py-3 text-right">Produtividade</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let equipe of equipes">
+            <tr *ngFor="let membro of equipe.membros" class="border-b border-slate-100">
+              <td class="py-3">
+                <span class="inline-flex items-center gap-2 font-black text-auto-navy">
+                  <span class="h-2.5 w-2.5 rounded-full" [style.background]="equipe.cor"></span>
+                  {{ equipe.nome }}
+                </span>
+              </td>
+              <td class="py-3 font-black text-auto-navy">{{ membro.nome }}</td>
+              <td class="py-3 text-muted">{{ membro.funcao }}</td>
+              <td class="py-3 text-muted">{{ membro.especialidade }}</td>
+              <td class="py-3 text-muted">{{ membro.turno }}</td>
+              <td class="py-3 text-right">
+                <span class="rounded-md bg-emerald-50 px-2 py-1 font-black text-emerald-700">{{ membro.produtividade }}%</span>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</section>
