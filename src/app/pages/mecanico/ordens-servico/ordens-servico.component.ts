@@ -259,5 +259,26 @@ export class OrdensServicoComponent implements OnInit {
       this.modalAberto = false;
       this.osAtual = {};
     }
+    enviarOrcamento(os: OrdemServicoComponent) {
+  if (!os.agendamentoId) return;
+
+  const agendamentos = this.carregarAgendamentos();
+  const agendamento = agendamentos.find(
+    item => item.id === os.agendamentoId
+  );
+
+  if (!agendamento) return;
+
+  agendamento.orcamento = {
+    descricao: os.servicos.join(', '),
+    valor: os.valorTotal,
+    observacao: os.observacoes,
+    status: 'Aguardando aprovação',
+    enviadoEm: new Date().toISOString()
+  };
+
+  agendamento.atualizadoEm = new Date().toISOString();
+  this.salvarAgendamentos(agendamentos);
+}
   }
 }
