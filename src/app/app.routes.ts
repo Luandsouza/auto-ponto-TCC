@@ -51,8 +51,8 @@ export const routes: Routes = [
       loadComponent: () => import(`./pages/mecanico/calendario/calendario.component`).then(x => x.CalendarioComponent)
    },
    {
-      path: "cadastro-veiculos",
-      loadComponent: () => import(`./pages/mecanico/cadastro-veiculos/cadastro-veiculos`).then(x => x.CadastroVeiculosComponent)
+      path: "cliente/veiculos",
+      loadComponent: () => import(`./pages/cliente/cadastro-veiculos/cadastro-veiculos`).then(x => x.CadastroVeiculosComponent)
    },
    {
       path: "ordens-servico",
@@ -61,10 +61,6 @@ export const routes: Routes = [
    {
       path: "checklist-os",
       loadComponent: () => import(`./pages/mecanico/checklist-os/checklist-os.component`).then(x => x.ChecklistOsComponent)
-   },
-    {
-      path: "kanban-servicos",
-      loadComponent: () => import(`./pages/mecanico/kanban-servicos/kanban-servicos.component`).then(x => x.KanbanServicosComponent)
    },
    {
       path: "**",

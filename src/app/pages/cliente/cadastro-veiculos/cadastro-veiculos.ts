@@ -19,12 +19,12 @@ export interface Veiculo {
 
 @Component({
   selector: 'app-cadastro-veiculos',
-  standalone: true, // Importante para standalone components
+  standalone: true,
   imports: [
-    CommonModule,      // Fornece ngIf, ngFor, ngClass
-    ReactiveFormsModule, // Fornece formGroup, formControlName
-    CurrencyPipe,      // Para formatação de moeda
-    DecimalPipe        // Para formatação de números
+    CommonModule,
+    ReactiveFormsModule,
+    CurrencyPipe,
+    DecimalPipe
   ],
   templateUrl: './cadastro-veiculos.component.html',
   styleUrls: ['./cadastro-veiculos.component.css']
@@ -34,7 +34,7 @@ export class CadastroVeiculosComponent implements OnInit {
   veiculos: Veiculo[] = [];
   editando = false;
   veiculoEditandoId: number | null = null;
-  currentYear = new Date().getFullYear(); // Adicionado para resolver o erro
+  currentYear = new Date().getFullYear();
 
   marcas = ['Toyota', 'Honda', 'Volkswagen', 'Chevrolet', 'Fiat', 'Hyundai', 'Nissan', 'Ford', 'Renault', 'BMW', 'Mercedes-Benz'];
   combustiveis = ['Gasolina', 'Etanol', 'Flex', 'Diesel', 'Elétrico'] as const;

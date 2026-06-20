@@ -17,9 +17,7 @@ const icons = {
   chart: ['M4 19V5', 'M4 19h16', 'M8 16V9', 'M12 16V7', 'M16 16v-4'],
   users: ['M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2', 'M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z', 'M22 21v-2a4 4 0 0 0-3-3.87', 'M16 3.13a4 4 0 0 1 0 7.75'],
   calendar: ['M8 3v3', 'M16 3v3', 'M4 9h16', 'M5 5h14a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z'],
-  car: ['M7 17h10', 'M5 17h14l-1.6-5.4A2 2 0 0 0 15.5 10h-7a2 2 0 0 0-1.9 1.6L5 17z', 'M7 17v2', 'M17 17v2', 'M8 14h.01', 'M16 14h.01'],
   checklist: ['M9 6h11', 'M9 12h11', 'M9 18h11', 'M4 6l1 1 2-2', 'M4 12l1 1 2-2', 'M4 18l1 1 2-2'],
-  kanban: ['M4 5h6v14H4z', 'M14 5h6v8h-6z', 'M14 16h6v3h-6z'],
   wrench: ['M14.7 6.3a4 4 0 0 0 5 5L11 20l-5-5 8.7-8.7z'],
 };
 
@@ -84,18 +82,6 @@ export class Sidebar {
       route: '/checklist-os',
       iconPaths: icons.checklist,
       accent: '#374151',
-    },
-    {
-      label: 'Kanban de serviços',
-      route: '/kanban-servicos',
-      iconPaths: icons.kanban,
-      accent: '#1E3A8A',
-    },
-    {
-      label: 'Cadastro de veículos',
-      route: '/cadastro-veiculos',
-      iconPaths: icons.car,
-      accent: '#F59E0B',
     },
   ];
 }
