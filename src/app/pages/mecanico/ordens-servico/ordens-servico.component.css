@@ -134,6 +134,7 @@
   display: flex;
   gap: 10px;
   border-top: 1px solid #ecf0f1;
+  flex-wrap: wrap;
 }
 
 .os-footer button {
@@ -143,6 +144,16 @@
   border-radius: 5px;
   cursor: pointer;
   transition: all 0.3s;
+}
+
+.status-select {
+  width: 100%;
+  padding: 9px;
+  border: 1px solid #dbe3ea;
+  border-radius: 5px;
+  background: #f8fafc;
+  color: #2c3e50;
+  font-weight: 700;
 }
 
 .btn-edit { background: #3498db; color: white; }

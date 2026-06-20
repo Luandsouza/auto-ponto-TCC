@@ -1,0 +1,31 @@
+<main class="min-h-screen bg-slate-50 p-6">
+  <section class="mx-auto max-w-5xl">
+    <div class="mb-6">
+      <p class="text-sm font-black uppercase tracking-wide text-auto-orange">Retorno da oficina</p>
+      <h1 class="text-3xl font-black text-auto-navy">Status dos Serviços</h1>
+      <p class="mt-1 text-sm text-slate-500">Acompanhe aqui todas as atualizações feitas nas Ordens de Serviço.</p>
+    </div>
+
+    <div *ngIf="!atendimentos.length" class="rounded-lg border border-dashed border-slate-300 bg-white p-10 text-center text-slate-500">
+      Você ainda não possui solicitações de serviço.
+    </div>
+
+    <div class="grid gap-4">
+      <article *ngFor="let item of atendimentos" class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+          <div>
+            <p class="text-xs font-black uppercase tracking-wide text-auto-blue">{{ item.ordemServicoNumero || 'Solicitação enviada' }}</p>
+            <h2 class="mt-1 text-xl font-black text-auto-navy">{{ item.automovel }}</h2>
+            <p class="text-sm text-slate-500">{{ item.placa }} · {{ item.servico }}</p>
+          </div>
+          <span class="w-fit rounded-full bg-auto-sky px-4 py-2 text-sm font-black text-auto-blue">{{ item.status }}</span>
+        </div>
+        <div class="mt-4 border-t border-slate-100 pt-4 text-sm text-slate-600">
+          <p>Agendado para {{ item.data | date:'dd/MM/yyyy' }} às {{ item.hora }}</p>
+          <p *ngIf="item.observacao" class="mt-1">Observação: {{ item.observacao }}</p>
+          <p class="mt-2 text-xs text-slate-400">Última atualização: {{ item.atualizadoEm | date:'dd/MM/yyyy HH:mm' }}</p>
+        </div>
+      </article>
+    </div>
+  </section>
+</main>

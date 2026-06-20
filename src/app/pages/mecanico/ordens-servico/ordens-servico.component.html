@@ -47,6 +47,14 @@
       </div>
       
       <div class="os-footer">
+        <select
+          class="status-select"
+          [ngModel]="os.status"
+          (ngModelChange)="atualizarStatus(os, $event)"
+          aria-label="Atualizar status da ordem de serviço"
+        >
+          <option *ngFor="let status of statusList" [value]="status">{{ status }}</option>
+        </select>
         <button class="btn-edit" (click)="editarOS(os)">✏️ Editar</button>
         <button class="btn-view" (click)="verDetalhes(os)">👁️ Detalhes</button>
         <button class="btn-delete" (click)="excluirOS(os.id)">🗑️ Excluir</button>

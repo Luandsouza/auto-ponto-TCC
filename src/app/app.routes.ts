@@ -15,7 +15,8 @@ export const routes: Routes = [
    },
    {
       path: "cliente/agendar",
-      loadComponent: () => import(`./pages/cliente/agenda-cliente/cadastro-agenda-cliente/cadastro-agenda-cliente`).then(x => x.CadastroAgendaCliente)
+      redirectTo: "agenda",
+      pathMatch: "full"
    },
    {
       path: "login",
@@ -53,6 +54,10 @@ export const routes: Routes = [
    {
       path: "cliente/veiculos",
       loadComponent: () => import(`./pages/cliente/cadastro-veiculos/cadastro-veiculos`).then(x => x.CadastroVeiculosComponent)
+   },
+   {
+      path: "status",
+      loadComponent: () => import(`./pages/cliente/status-servicos/status-servicos`).then(x => x.StatusServicos)
    },
    {
       path: "ordens-servico",

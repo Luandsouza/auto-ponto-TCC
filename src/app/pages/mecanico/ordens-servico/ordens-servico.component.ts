@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import {
+  AGENDAMENTOS_STORAGE_KEY,
+  AgendamentoCliente,
+  StatusAtendimento,
+} from '../../../models/agendamento-cliente';
 
 export interface OrdemServicoComponent {
   id: number;
@@ -15,6 +20,7 @@ export interface OrdemServicoComponent {
   servicos: string[];
   valorTotal: number;
   observacoes: string;
+  agendamentoId?: number;
 }
 
 @Component({
@@ -78,11 +84,60 @@ export class OrdensServicoComponent implements OnInit {
       ];
       this.salvarLocalStorage();
     }
+    this.receberSolicitacoesCliente();
     this.filtrarOS();
   }
 
   salvarLocalStorage() {
     localStorage.setItem('ordens_servico', JSON.stringify(this.ordensServico));
+  }
+
+  receberSolicitacoesCliente() {
+    const agendamentos = this.carregarAgendamentos();
+    let houveAlteracao = false;
+
+    agendamentos.forEach(agendamento => {
+      const osExistente = this.ordensServico.find(os => os.agendamentoId === agendamento.id);
+
+      if (osExistente) {
+        if (agendamento.status === 'Cancelada' && osExistente.status !== 'Cancelada') {
+          osExistente.status = 'Cancelada';
+          houveAlteracao = true;
+        }
+        return;
+      }
+
+      if (agendamento.status === 'Cancelada') {
+        return;
+      }
+
+      const numero = this.proximoNumeroOS();
+      this.ordensServico.unshift({
+        id: Date.now() + agendamento.id,
+        numero,
+        cliente: agendamento.cliente,
+        veiculo: agendamento.automovel,
+        placa: agendamento.placa,
+        dataAbertura: new Date(),
+        dataPrevisao: this.criarDataLocal(agendamento.data),
+        status: agendamento.status === 'Solicitado' ? 'Aberta' : agendamento.status,
+        prioridade: 'Média',
+        servicos: [agendamento.servico],
+        valorTotal: 0,
+        observacoes: agendamento.observacao,
+        agendamentoId: agendamento.id,
+      });
+
+      agendamento.status = 'Aberta';
+      agendamento.ordemServicoNumero = numero;
+      agendamento.atualizadoEm = new Date().toISOString();
+      houveAlteracao = true;
+    });
+
+    if (houveAlteracao) {
+      this.salvarLocalStorage();
+      this.salvarAgendamentos(agendamentos);
+    }
   }
 
   filtrarOS() {
@@ -137,16 +192,66 @@ export class OrdensServicoComponent implements OnInit {
       this.ordensServico.push(novaOS);
     }
     this.salvarLocalStorage();
+    this.devolverStatusAoCliente(this.osAtual as OrdemServicoComponent);
     this.carregarOS();
     this.fecharModal();
   }
 
   excluirOS(id: number) {
     if (confirm('Tem certeza que deseja excluir esta OS?')) {
+      const osExcluida = this.ordensServico.find(os => os.id === id);
       this.ordensServico = this.ordensServico.filter(os => os.id !== id);
       this.salvarLocalStorage();
+      if (osExcluida?.agendamentoId) {
+        this.devolverStatusAoCliente({ ...osExcluida, status: 'Cancelada' });
+      }
       this.carregarOS();
     }
+  }
+
+  atualizarStatus(os: OrdemServicoComponent, status: OrdemServicoComponent['status']) {
+    os.status = status;
+    this.salvarLocalStorage();
+    this.devolverStatusAoCliente(os);
+    this.filtrarOS();
+  }
+
+  private devolverStatusAoCliente(os: OrdemServicoComponent) {
+    if (!os.agendamentoId) {
+      return;
+    }
+
+    const agendamentos = this.carregarAgendamentos();
+    const agendamento = agendamentos.find(item => item.id === os.agendamentoId);
+    if (!agendamento) {
+      return;
+    }
+
+    agendamento.status = os.status as StatusAtendimento;
+    agendamento.ordemServicoNumero = os.numero;
+    agendamento.atualizadoEm = new Date().toISOString();
+    this.salvarAgendamentos(agendamentos);
+  }
+
+  private carregarAgendamentos(): AgendamentoCliente[] {
+    const saved = localStorage.getItem(AGENDAMENTOS_STORAGE_KEY);
+    return saved ? JSON.parse(saved) : [];
+  }
+
+  private salvarAgendamentos(agendamentos: AgendamentoCliente[]) {
+    localStorage.setItem(AGENDAMENTOS_STORAGE_KEY, JSON.stringify(agendamentos));
+  }
+
+  private proximoNumeroOS(): string {
+    const maiorNumero = this.ordensServico.reduce((maior, os) => {
+      const numero = Number(os.numero.replace(/\D/g, ''));
+      return Math.max(maior, Number.isNaN(numero) ? 0 : numero);
+    }, 0);
+    return `OS-${String(maiorNumero + 1).padStart(3, '0')}`;
+  }
+
+  private criarDataLocal(data: string): Date {
+    return data ? new Date(`${data}T12:00:00`) : new Date();
   }
 
   fecharModal(event?: MouseEvent) {

@@ -1,192 +1,106 @@
 <main class="min-h-screen bg-slate-50 p-6">
-
   <section class="mx-auto max-w-6xl">
-
-    
     <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-
       <div>
         <h1 class="text-3xl font-black text-auto-navy">Agenda de Serviços</h1>
-        <p class="text-sm text-slate-500 mt-1">
-          Gerencie seu agendamentos
-        </p>
+        <p class="mt-1 text-sm text-slate-500">Solicite serviços e acompanhe o retorno da oficina.</p>
       </div>
-
-        <!-- routerLink="/cliente/agendar" -->
-      <button
-        (click)="abrirModal()"
-        class="rounded-md bg-auto-orange px-5 py-2 text-sm font-black text-white hover:opacity-90 transition"
-      >
+      <button (click)="abrirModal()" class="rounded-md bg-auto-orange px-5 py-2 text-sm font-black text-white hover:opacity-90">
         + Agendar
       </button>
-
     </div>
 
-   
-    <div class="mb-6">
-      <input
-        type="search"
-        placeholder="Buscar pelo agendamento..."
-        class="w-full rounded-md border border-slate-300 bg-white p-3 text-sm focus:border-auto-blue focus:outline-none focus:ring-2 focus:ring-auto-sky"
-      />
+    <input
+      type="search"
+      [(ngModel)]="filtro"
+      placeholder="Buscar por veículo, placa, serviço ou status..."
+      class="mb-6 w-full rounded-md border border-slate-300 bg-white p-3 text-sm focus:border-auto-blue focus:outline-none"
+    />
+
+    <div *ngIf="!agendamentosFiltrados.length" class="rounded-lg border border-dashed border-slate-300 bg-white p-10 text-center text-slate-500">
+      Nenhum agendamento encontrado.
     </div>
 
-    
-    <div class="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
-
+    <div *ngIf="agendamentosFiltrados.length" class="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
       <div class="overflow-x-auto">
-
         <table class="min-w-full text-sm">
-
           <thead class="bg-auto-navy text-white">
             <tr>
-              <th class="px-4 py-3 text-left font-bold">ID</th>
-              <th class="px-4 py-3 text-left font-bold">Automóvel</th>
-              <th class="px-4 py-3 text-left font-bold">Serviço</th>
-              <th class="px-4 py-3 text-left font-bold">Data</th>
-              <th class="px-4 py-3 text-left font-bold">Horário</th>
-              <th class="px-4 py-3 text-left font-bold">Observação</th>
-              <th class="px-4 py-3 text-left font-bold">Ações</th>
+              <th class="px-4 py-3 text-left">OS</th>
+              <th class="px-4 py-3 text-left">Automóvel</th>
+              <th class="px-4 py-3 text-left">Serviço</th>
+              <th class="px-4 py-3 text-left">Data</th>
+              <th class="px-4 py-3 text-left">Status da oficina</th>
+              <th class="px-4 py-3 text-left">Ação</th>
             </tr>
           </thead>
-
           <tbody class="divide-y divide-slate-100">
-
-            <tr class="hover:bg-slate-50 transition">
-
-              <td class="px-4 py-3">01</td>
-              <td class="px-4 py-3">Corsa</td>
-              <td class="px-4 py-3">Troca de óleo</td>
-              <td class="px-4 py-3">01/01/2001</td>
-              <td class="px-4 py-3">00:00</td>
-              <td class="px-4 py-3">Verificar freios</td>
-
-              <!-- AÇÕES -->
+            <tr *ngFor="let item of agendamentosFiltrados" class="hover:bg-slate-50">
+              <td class="px-4 py-3 font-bold">{{ item.ordemServicoNumero || 'Aguardando' }}</td>
+              <td class="px-4 py-3">{{ item.automovel }}<small class="block text-slate-500">{{ item.placa }}</small></td>
+              <td class="px-4 py-3">{{ item.servico }}</td>
+              <td class="px-4 py-3">{{ item.data | date:'dd/MM/yyyy' }} às {{ item.hora }}</td>
               <td class="px-4 py-3">
-                <div class="flex gap-2">
-
-                  <button
-                    class="rounded-md bg-auto-blue px-3 py-1 text-xs font-bold text-white hover:opacity-90 transition"
-                  >
-                    Alterar
-                  </button>
-
-                  <button
-                    class="rounded-md bg-red-500 px-3 py-1 text-xs font-bold text-white hover:bg-red-600 transition"
-                  >
-                    Excluir
-                  </button>
-
-                </div>
+                <span class="rounded-full bg-auto-sky px-3 py-1 text-xs font-black text-auto-blue">{{ item.status }}</span>
               </td>
-
+              <td class="px-4 py-3">
+                <button
+                  (click)="cancelarAgendamento(item)"
+                  [disabled]="item.status === 'Concluída' || item.status === 'Cancelada'"
+                  class="rounded-md bg-red-500 px-3 py-1 text-xs font-bold text-white disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  Cancelar
+                </button>
+              </td>
             </tr>
-
           </tbody>
-
         </table>
-
       </div>
     </div>
-
   </section>
-
 </main>
 
-<div *ngIf="showModal">
-    <main class="min-h-screen bg-slate-50 flex items-center justify-center p-6">
-  <section class="w-full max-w-3xl rounded-lg bg-white shadow-lg border border-slate-200 overflow-hidden">
-
-    
+<div *ngIf="showModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 p-6">
+  <form (ngSubmit)="salvarAgendamento()" class="w-full max-w-2xl overflow-hidden rounded-lg bg-white shadow-xl">
     <div class="bg-auto-navy p-6 text-white">
-      <h1 class="text-3xl font-black">Agendamento</h1>
-      <p class="mt-2 text-sm text-slate-200">
-        Preencha os dados abaixo para agendar um serviço na oficina.
-      </p>
+      <h2 class="text-2xl font-black">Novo agendamento</h2>
+      <p class="mt-1 text-sm text-slate-200">A solicitação será enviada para Ordens de Serviço.</p>
     </div>
-
-    
-    <div class="p-6 sm:p-8 grid gap-6">
-
-      
-      <div>
-        <label for="automovel" class="block text-sm font-bold text-auto-navy mb-2">
-          Automóvel
-        </label>
-        <select
-          name="automovel"
-          id="automovel"
-          class="w-full rounded-md border border-slate-300 p-3 focus:border-auto-blue focus:outline-none focus:ring-2 focus:ring-auto-sky"
-        >
-          <option value="">Selecione</option>
-          <option value="hb20">HB20</option>
-          <option value="corsa">Corsa</option>
+    <div class="grid gap-5 p-6">
+      <label class="grid gap-2 text-sm font-bold text-auto-navy">
+        Veículo
+        <select [(ngModel)]="formulario.placa" name="placa" required class="rounded-md border border-slate-300 p-3">
+          <option value="">Selecione um veículo</option>
+          <option *ngFor="let veiculo of veiculos" [value]="veiculo.placa">
+            {{ veiculo.marca }} {{ veiculo.modelo }} — {{ veiculo.placa }}
+          </option>
         </select>
-      </div>
-
-      
-      <div>
-        <label for="servico" class="block text-sm font-bold text-auto-navy mb-2">
-          Tipo de Serviço
+      </label>
+      <p *ngIf="!veiculos.length" class="rounded-md bg-amber-50 p-3 text-sm font-bold text-amber-700">
+        Cadastre um veículo em “Meus Veículos” antes de agendar.
+      </p>
+      <label class="grid gap-2 text-sm font-bold text-auto-navy">
+        Serviço
+        <input [(ngModel)]="formulario.servico" name="servico" required placeholder="Ex.: Troca de óleo" class="rounded-md border border-slate-300 p-3" />
+      </label>
+      <div class="grid gap-4 sm:grid-cols-2">
+        <label class="grid gap-2 text-sm font-bold text-auto-navy">
+          Data
+          <input type="date" [(ngModel)]="formulario.data" name="data" required class="rounded-md border border-slate-300 p-3" />
         </label>
-        <input
-          type="text"
-          placeholder="Ex: Troca de óleo"
-          class="w-full rounded-md border border-slate-300 p-3 focus:border-auto-blue focus:outline-none focus:ring-2 focus:ring-auto-sky"
-        />
-      </div>
-
-      
-      <div class="grid sm:grid-cols-2 gap-4">
-        <div>
-          <label for="data" class="block text-sm font-bold text-auto-navy mb-2">
-            Data disponível
-          </label>
-          <input
-            type="date"
-            class="w-full rounded-md border border-slate-300 p-3 focus:border-auto-blue focus:outline-none focus:ring-2 focus:ring-auto-sky"
-          />
-        </div>
-
-        <div>
-          <label for="hora" class="block text-sm font-bold text-auto-navy mb-2">
-            Horário
-          </label>
-          <input
-            type="time"
-            class="w-full rounded-md border border-slate-300 p-3 focus:border-auto-blue focus:outline-none focus:ring-2 focus:ring-auto-sky"
-          />
-        </div>
-      </div>
-
-      <!-- Observação -->
-      <div>
-        <label for="observacao" class="block text-sm font-bold text-auto-navy mb-2">
-          Observação
+        <label class="grid gap-2 text-sm font-bold text-auto-navy">
+          Horário
+          <input type="time" [(ngModel)]="formulario.hora" name="hora" required class="rounded-md border border-slate-300 p-3" />
         </label>
-        <input
-          type="text"
-          placeholder="Ex: Carro faz barulho ao frear"
-          class="w-full rounded-md border border-slate-300 p-3 focus:border-auto-blue focus:outline-none focus:ring-2 focus:ring-auto-sky"
-        />
       </div>
-
-      
-      <div class="flex justify-end gap-3 pt-4">
-        <button
-          class="rounded-md border border-slate-300 px-5 py-2 text-sm font-bold text-slate-600 hover:bg-slate-100 transition"
-        >
-          Cancelar
-        </button>
-
-        <button
-          class="rounded-md bg-auto-orange px-5 py-2 text-sm font-black text-white hover:opacity-90 transition"
-        >
-          Salvar Agendamento
-        </button>
+      <label class="grid gap-2 text-sm font-bold text-auto-navy">
+        Observação
+        <textarea [(ngModel)]="formulario.observacao" name="observacao" rows="3" class="rounded-md border border-slate-300 p-3"></textarea>
+      </label>
+      <div class="flex justify-end gap-3">
+        <button type="button" (click)="fecharModal()" class="rounded-md border border-slate-300 px-5 py-2 font-bold text-slate-600">Cancelar</button>
+        <button type="submit" [disabled]="!veiculos.length" class="rounded-md bg-auto-orange px-5 py-2 font-black text-white disabled:opacity-40">Enviar solicitação</button>
       </div>
-
     </div>
-  </section>
-</main>
+  </form>
 </div>
