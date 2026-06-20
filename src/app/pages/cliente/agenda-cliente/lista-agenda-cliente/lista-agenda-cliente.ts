@@ -5,6 +5,7 @@ import {
   AGENDAMENTOS_STORAGE_KEY,
   AgendamentoCliente,
 } from '../../../../models/agendamento-cliente';
+import { RouterLink } from "@angular/router";
 
 interface VeiculoCliente {
   marca: string;
@@ -15,7 +16,7 @@ interface VeiculoCliente {
 @Component({
   selector: 'app-lista-agenda-cliente',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, RouterLink],
   templateUrl: './lista-agenda-cliente.html',
   styleUrl: './lista-agenda-cliente.css',
 })

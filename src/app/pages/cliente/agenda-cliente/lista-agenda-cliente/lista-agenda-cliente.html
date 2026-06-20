@@ -26,17 +26,16 @@
         <table class="min-w-full text-sm">
           <thead class="bg-auto-navy text-white">
             <tr>
-              <th class="px-4 py-3 text-left">OS</th>
               <th class="px-4 py-3 text-left">Automóvel</th>
               <th class="px-4 py-3 text-left">Serviço</th>
               <th class="px-4 py-3 text-left">Data</th>
               <th class="px-4 py-3 text-left">Status da oficina</th>
               <th class="px-4 py-3 text-left">Ação</th>
+              <th class="px-4 py-3 text-left">Orçamento</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-100">
             <tr *ngFor="let item of agendamentosFiltrados" class="hover:bg-slate-50">
-              <td class="px-4 py-3 font-bold">{{ item.ordemServicoNumero || 'Aguardando' }}</td>
               <td class="px-4 py-3">{{ item.automovel }}<small class="block text-slate-500">{{ item.placa }}</small></td>
               <td class="px-4 py-3">{{ item.servico }}</td>
               <td class="px-4 py-3">{{ item.data | date:'dd/MM/yyyy' }} às {{ item.hora }}</td>
@@ -50,6 +49,12 @@
                   class="rounded-md bg-red-500 px-3 py-1 text-xs font-bold text-white disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   Cancelar
+                </button>
+              </td>
+              <td class="px-4 py-3">
+                <button
+                routerLink=""
+                class="rounded-md bg-red-500 px-3 py-1 text-xs font-bold text-white disabled:cursor-not-allowed disabled:opacity-40">Orçamento
                 </button>
               </td>
             </tr>
