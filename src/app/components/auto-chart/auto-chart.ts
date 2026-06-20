@@ -16,7 +16,8 @@ import {
   Filler,
   TooltipItem,
   registerables,
-} from 'chart.js';
+} 
+from 'chart.js';
 
 Chart.register(...registerables, Filler);
 
