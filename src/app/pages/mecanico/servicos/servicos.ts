@@ -100,10 +100,6 @@ export class Servicos {
     };
   }
 
-  concluir(servico: Servico): void {
-    this.servicoService.concluir(servico.id);
-  }
-
   remover(id: string): void {
     this.servicoService.remover(id);
   }
