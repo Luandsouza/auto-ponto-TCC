@@ -9,6 +9,8 @@ import {
   TipoLancamentoFinanceiro,
 } from '../models/financeiro';
 import { FiltroPeriodo } from '../models/relatorio';
+import { OrdemServico } from '../models/ordem-servico';
+import { Servico } from '../models/servico';
 
 @Injectable({
   providedIn: 'root',
@@ -18,6 +20,16 @@ export class FinanceiroService {
   private readonly lancamentosSubject = new BehaviorSubject<LancamentoFinanceiro[]>(
     this.carregar(),
   );
+
+  constructor() {
+    if (typeof window !== 'undefined') {
+      window.addEventListener('storage', event => {
+        if (event.key === this.storageKey) {
+          this.lancamentosSubject.next(this.carregar());
+        }
+      });
+    }
+  }
 
   listar(): Observable<LancamentoFinanceiro[]> {
     return this.lancamentosSubject.asObservable();
@@ -45,6 +57,8 @@ export class FinanceiroService {
     const agora = new Date().toISOString();
     const novoLancamento: LancamentoFinanceiro = {
       ...lancamento,
+      valor: this.normalizarValor(lancamento.valor),
+      origem: lancamento.origem || 'manual',
       id: this.gerarId(),
       dataCadastro: agora,
       dataAtualizacao: agora,
@@ -67,6 +81,11 @@ export class FinanceiroService {
     const lancamentoAtualizado: LancamentoFinanceiro = {
       ...lancamentoAtual,
       ...alteracoes,
+      valor: this.normalizarValor(alteracoes.valor ?? lancamentoAtual.valor),
+      dataPagamento:
+        alteracoes.status && alteracoes.status !== 'pago'
+          ? undefined
+          : alteracoes.dataPagamento ?? lancamentoAtual.dataPagamento,
       dataAtualizacao: new Date().toISOString(),
     };
 
@@ -94,7 +113,10 @@ export class FinanceiroService {
   }
 
   gerarResumo(periodo: FiltroPeriodo = {}): ResumoFinanceiro {
-    const lancamentos = this.filtrarPorPeriodo(periodo);
+    return this.gerarResumoDosLancamentos(this.filtrarPorPeriodo(periodo));
+  }
+
+  gerarResumoDosLancamentos(lancamentos: LancamentoFinanceiro[]): ResumoFinanceiro {
 
     const totalReceitas = this.somar(lancamentos, 'receita');
     const totalDespesas = this.somar(lancamentos, 'despesa');
@@ -115,6 +137,91 @@ export class FinanceiroService {
     };
   }
 
+  sincronizarServico(servico: Servico): LancamentoFinanceiro | undefined {
+    const vinculados = this.lancamentosSubject.value.filter(
+      lancamento => lancamento.servicoId === servico.id,
+    );
+    const existente = vinculados[0];
+    vinculados.slice(1).forEach(lancamento => this.remover(lancamento.id));
+    const statusGeraReceita = [
+      'aprovado',
+      'em_andamento',
+      'aguardando_peca',
+      'concluido',
+    ].includes(servico.status);
+
+    if (!statusGeraReceita) {
+      return existente
+        ? this.atualizar(existente.id, {
+            status: 'cancelado',
+            dataPagamento: undefined,
+          })
+        : undefined;
+    }
+
+    const dados: NovoLancamentoFinanceiro = {
+      tipo: 'receita',
+      categoria: 'servico',
+      descricao: `Serviço - ${servico.titulo}`,
+      valor: servico.total,
+      status:
+        servico.status === 'cancelado'
+          ? 'cancelado'
+          : servico.status === 'concluido'
+            ? 'pago'
+            : 'pendente',
+      dataVencimento: servico.dataConclusao || servico.dataPrevisao || servico.dataAbertura,
+      dataPagamento:
+        servico.status === 'concluido'
+          ? servico.dataConclusao || new Date().toISOString()
+          : undefined,
+      servicoId: servico.id,
+      origem: 'servico',
+      observacoes: 'Receita sincronizada automaticamente com o serviço.',
+    };
+
+    return existente
+      ? (this.atualizar(existente.id, dados) as LancamentoFinanceiro)
+      : this.criar(dados);
+  }
+
+  sincronizarOrdemServico(ordem: OrdemServico): LancamentoFinanceiro | undefined {
+    const vinculados = this.lancamentosSubject.value.filter(
+      lancamento => lancamento.ordemServicoId === ordem.id,
+    );
+    const existente = vinculados[0];
+    vinculados.slice(1).forEach(lancamento => this.remover(lancamento.id));
+    const statusGeraReceita = ['Aguardando Execução', 'Em Execução', 'Finalizado'].includes(
+      ordem.status,
+    );
+
+    if (!statusGeraReceita) {
+      return existente
+        ? this.atualizar(existente.id, {
+            status: 'cancelado',
+            dataPagamento: undefined,
+          })
+        : undefined;
+    }
+
+    const dados: NovoLancamentoFinanceiro = {
+      tipo: 'receita',
+      categoria: 'servico',
+      descricao: `${ordem.numero} - ${ordem.servicos.join(', ') || ordem.veiculo}`,
+      valor: ordem.valorTotal,
+      status: ordem.status === 'Cancelado' ? 'cancelado' : existente?.status === 'pago' ? 'pago' : 'pendente',
+      dataVencimento: ordem.dataPrevisao || ordem.dataAbertura,
+      dataPagamento: existente?.status === 'pago' ? existente.dataPagamento : undefined,
+      ordemServicoId: ordem.id,
+      origem: 'ordem_servico',
+      observacoes: `Receita sincronizada automaticamente com ${ordem.numero}.`,
+    };
+
+    return existente
+      ? (this.atualizar(existente.id, dados) as LancamentoFinanceiro)
+      : this.criar(dados);
+  }
+
   private somar(lancamentos: LancamentoFinanceiro[], tipo: TipoLancamentoFinanceiro): number {
     return lancamentos
       .filter((lancamento) => lancamento.tipo === tipo && lancamento.status !== 'cancelado')
@@ -123,8 +230,12 @@ export class FinanceiroService {
 
   private estaNoPeriodo(data: string, periodo: FiltroPeriodo): boolean {
     const timestamp = new Date(data).getTime();
-    const dataInicial = periodo.dataInicial ? new Date(periodo.dataInicial).getTime() : undefined;
-    const dataFinal = periodo.dataFinal ? new Date(periodo.dataFinal).getTime() : undefined;
+    const dataInicial = periodo.dataInicial
+      ? new Date(`${periodo.dataInicial.slice(0, 10)}T00:00:00`).getTime()
+      : undefined;
+    const dataFinal = periodo.dataFinal
+      ? new Date(`${periodo.dataFinal.slice(0, 10)}T23:59:59.999`).getTime()
+      : undefined;
 
     if (dataInicial !== undefined && timestamp < dataInicial) {
       return false;
@@ -154,7 +265,17 @@ export class FinanceiroService {
     }
 
     try {
-      return JSON.parse(dados) as LancamentoFinanceiro[];
+      return (JSON.parse(dados) as LancamentoFinanceiro[]).map(lancamento => ({
+        ...lancamento,
+        valor: this.normalizarValor(lancamento.valor),
+        origem:
+          lancamento.origem ||
+          (lancamento.ordemServicoId
+            ? 'ordem_servico'
+            : lancamento.servicoId
+              ? 'servico'
+              : 'manual'),
+      }));
     } catch {
       return [];
     }
@@ -174,5 +295,10 @@ export class FinanceiroService {
     return typeof crypto !== 'undefined' && 'randomUUID' in crypto
       ? crypto.randomUUID()
       : `${Date.now()}-${Math.random()}`;
+  }
+
+  private normalizarValor(valor: number): number {
+    const numero = Number(valor);
+    return Number.isFinite(numero) ? Math.max(numero, 0) : 0;
   }
 }

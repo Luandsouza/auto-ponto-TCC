@@ -65,20 +65,13 @@ export class Servicos {
     };
 
     if (this.editandoId) {
-      this.servicoService.atualizar(this.editandoId, dados);
+      const servico = this.servicoService.atualizar(this.editandoId, dados);
+      if (servico) {
+        this.financeiroService.sincronizarServico(servico);
+      }
     } else {
       const servico = this.servicoService.criar(dados);
-      this.financeiroService.criar({
-        tipo: 'receita',
-        categoria: 'servico',
-        descricao: servico.titulo,
-        valor: servico.total,
-        status: servico.status === 'concluido' ? 'pago' : 'pendente',
-        dataVencimento: servico.dataPrevisao || servico.dataAbertura,
-        dataPagamento: servico.status === 'concluido' ? new Date().toISOString() : undefined,
-        servicoId: servico.id,
-        observacoes: 'Gerado pelo cadastro de serviços.',
-      });
+      this.financeiroService.sincronizarServico(servico);
     }
 
     this.cancelarEdicao();
@@ -101,6 +94,12 @@ export class Servicos {
   }
 
   remover(id: string): void {
+    const lancamento = this.financeiroService
+      .listarAtual()
+      .find(item => item.servicoId === id);
+    if (lancamento) {
+      this.financeiroService.atualizar(lancamento.id, { status: 'cancelado' });
+    }
     this.servicoService.remover(id);
   }
 

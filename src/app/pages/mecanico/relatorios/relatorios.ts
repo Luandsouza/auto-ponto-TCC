@@ -122,11 +122,16 @@ export class Relatorios {
 
   get financeiroChartData(): AutoChartDatum[] {
     const resumo = this.relatorioFinanceiro.resumo;
+    const saldoRealizado = resumo.saldoRealizado;
 
     return [
       { label: 'Receitas', value: resumo.totalReceitas, color: '#1E3A8A' },
       { label: 'Despesas', value: resumo.totalDespesas, color: '#374151' },
-      { label: 'Realizado', value: Math.max(resumo.saldoRealizado, 0), color: '#F59E0B' },
+      {
+        label: saldoRealizado >= 0 ? 'Saldo realizado' : 'Déficit realizado',
+        value: Math.abs(saldoRealizado),
+        color: saldoRealizado >= 0 ? '#F59E0B' : '#B91C1C',
+      },
     ];
   }
 
@@ -151,7 +156,12 @@ export class Relatorios {
 
   get maiorFinanceiro(): number {
     const resumo = this.relatorioFinanceiro.resumo;
-    return Math.max(resumo.totalReceitas, resumo.totalDespesas, resumo.saldoRealizado, 1);
+    return Math.max(
+      resumo.totalReceitas,
+      resumo.totalDespesas,
+      Math.abs(resumo.saldoRealizado),
+      1,
+    );
   }
 
   percentualFinanceiro(valor: number): number {

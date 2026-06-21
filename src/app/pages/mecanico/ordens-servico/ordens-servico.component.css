@@ -109,6 +109,13 @@
 .status-badge.aguardando-peças { background: #e67e22; }
 .status-badge.concluída { background: #2ecc71; }
 .status-badge.cancelada { background: #95a5a6; }
+.status-badge.status-aguardando-orcamento { background: #3b82f6; }
+.status-badge.status-orcamento-execucao { background: #8b5cf6; }
+.status-badge.status-aguardando-aprovacao { background: #f59e0b; }
+.status-badge.status-aguardando-execucao { background: #06b6d4; }
+.status-badge.status-em-execucao { background: #f97316; }
+.status-badge.status-finalizado { background: #22c55e; }
+.status-badge.status-cancelado { background: #94a3b8; }
 
 .os-body {
   padding: 15px;
@@ -162,6 +169,9 @@
 .btn-view:hover { background: #229954; }
 .btn-delete { background: #e74c3c; color: white; }
 .btn-delete:hover { background: #c0392b; }
+.btn-budget { background: #f59e0b; color: white; }
+.btn-budget:hover:not(:disabled) { background: #d97706; }
+.btn-budget:disabled { cursor: not-allowed; opacity: 0.45; }
 
 .modal {
   position: fixed;

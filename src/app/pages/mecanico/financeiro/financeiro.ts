@@ -40,20 +40,21 @@ export class Financeiro {
 
   constructor(private readonly financeiroService: FinanceiroService) {}
 
-  get lancamentos(): LancamentoFinanceiro[] {
+  get lancamentosPeriodo(): LancamentoFinanceiro[] {
     return this.financeiroService
       .filtrarPorPeriodo({ dataInicial: this.dataInicial || undefined, dataFinal: this.dataFinal || undefined })
+      .slice();
+  }
+
+  get lancamentos(): LancamentoFinanceiro[] {
+    return this.lancamentosPeriodo
       .filter((lancamento) => this.filtroTipo === 'todos' || lancamento.tipo === this.filtroTipo)
       .filter((lancamento) => this.filtroStatus === 'todos' || lancamento.status === this.filtroStatus)
-      .slice()
       .reverse();
   }
 
   get resumo() {
-    return this.financeiroService.gerarResumo({
-      dataInicial: this.dataInicial || undefined,
-      dataFinal: this.dataFinal || undefined,
-    });
+    return this.financeiroService.gerarResumoDosLancamentos(this.lancamentos);
   }
 
   get maiorValorGrafico(): number {
@@ -76,17 +77,34 @@ export class Financeiro {
   }
 
   get saldoChartData(): AutoChartDatum[] {
+    const saldoPrevisto = this.resumo.saldo;
+    const saldoRealizado = this.resumo.saldoRealizado;
     return [
-      { label: 'Previsto', value: Math.max(this.resumo.saldo, 0), color: '#1E3A8A' },
-      { label: 'Realizado', value: Math.max(this.resumo.saldoRealizado, 0), color: '#F59E0B' },
+      {
+        label: saldoPrevisto >= 0 ? 'Saldo previsto' : 'Déficit previsto',
+        value: Math.abs(saldoPrevisto),
+        color: saldoPrevisto >= 0 ? '#1E3A8A' : '#DC2626',
+      },
+      {
+        label: saldoRealizado >= 0 ? 'Saldo realizado' : 'Déficit realizado',
+        value: Math.abs(saldoRealizado),
+        color: saldoRealizado >= 0 ? '#F59E0B' : '#B91C1C',
+      },
       { label: 'Pendente', value: this.resumo.pendenteReceber + this.resumo.pendentePagar, color: '#374151' },
     ];
   }
 
   salvar(): void {
+    const valor = this.converterValorMonetario(this.formulario.valor);
+    if (!this.formulario.descricao.trim() || valor <= 0 || !this.formulario.dataVencimento) {
+      alert('Preencha descrição, valor maior que zero e data de vencimento.');
+      return;
+    }
+
     const dados = {
       ...this.formulario,
-      valor: this.converterValorMonetario(this.formulario.valor),
+      descricao: this.formulario.descricao.trim(),
+      valor,
       dataPagamento: this.formulario.status === 'pago' ? this.formulario.dataPagamento || new Date().toISOString().slice(0, 10) : undefined,
     };
 
@@ -114,11 +132,23 @@ export class Financeiro {
   }
 
   marcarPago(lancamento: LancamentoFinanceiro): void {
+    if (lancamento.status !== 'pendente') {
+      return;
+    }
     this.financeiroService.marcarComoPago(lancamento.id);
   }
 
   remover(id: string): void {
-    this.financeiroService.remover(id);
+    if (confirm('Deseja excluir este lançamento financeiro?')) {
+      this.financeiroService.remover(id);
+    }
+  }
+
+  limparFiltros(): void {
+    this.dataInicial = '';
+    this.dataFinal = '';
+    this.filtroTipo = 'todos';
+    this.filtroStatus = 'todos';
   }
 
   cancelarEdicao(): void {
@@ -139,7 +169,22 @@ export class Financeiro {
       return '-';
     }
 
-    return new Intl.DateTimeFormat('pt-BR').format(new Date(data));
+    return new Intl.DateTimeFormat('pt-BR').format(
+      new Date(`${data.slice(0, 10)}T12:00:00`),
+    );
+  }
+
+  origemLabel(lancamento: LancamentoFinanceiro): string {
+    const labels = {
+      manual: 'Manual',
+      servico: 'Serviço',
+      ordem_servico: 'Ordem de serviço',
+    };
+    return labels[lancamento.origem || 'manual'];
+  }
+
+  podeAlterarCadastro(lancamento: LancamentoFinanceiro): boolean {
+    return (lancamento.origem || 'manual') === 'manual';
   }
 
   private criarFormularioPadrao() {

@@ -59,10 +59,15 @@ export class HomeMecanico {
   }
 
   get caixaChartData(): AutoChartDatum[] {
+    const saldoRealizado = this.resumoFinanceiro.saldoRealizado;
     return [
       { label: 'Receitas', value: this.resumoFinanceiro.totalReceitas, color: '#1E3A8A' },
       { label: 'Despesas', value: this.resumoFinanceiro.totalDespesas, color: '#374151' },
-      { label: 'Realizado', value: Math.max(this.resumoFinanceiro.saldoRealizado, 0), color: '#F59E0B' },
+      {
+        label: saldoRealizado >= 0 ? 'Saldo realizado' : 'Déficit realizado',
+        value: Math.abs(saldoRealizado),
+        color: saldoRealizado >= 0 ? '#F59E0B' : '#B91C1C',
+      },
     ];
   }
 
@@ -275,17 +280,7 @@ export class HomeMecanico {
     };
 
     servicosCriados.forEach((servico) => {
-      criarLancamentoSeAusente({
-        tipo: 'receita',
-        categoria: 'servico',
-        descricao: `Serviço - ${servico.titulo}`,
-        valor: servico.total,
-        status: servico.status === 'concluido' ? 'pago' : 'pendente',
-        dataVencimento: servico.dataConclusao || servico.dataPrevisao || servico.dataAbertura,
-        dataPagamento: servico.status === 'concluido' ? servico.dataConclusao || servico.dataAbertura : undefined,
-        servicoId: servico.id,
-        observacoes: 'Receita vinculada ao serviço demonstrativo.',
-      });
+      this.financeiroService.sincronizarServico(servico);
     });
 
     [

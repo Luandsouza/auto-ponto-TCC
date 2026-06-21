@@ -1,10 +1,23 @@
 export type StatusAtendimento =
   | 'Solicitado'
-  | 'Aberta'
-  | 'Em Andamento'
-  | 'Aguardando Peças'
-  | 'Concluída'
-  | 'Cancelada';
+  | 'Aguardando Orçamento'
+  | 'Aguardando Aprovação'
+  | 'Reprovado'
+  | 'Aprovado'
+  | 'Em Execução'
+  | 'Finalizado'
+  | 'Cancelado';
+
+export type StatusOrcamentoCliente = 'pendente' | 'aprovado' | 'reprovado';
+
+export interface OrcamentoCliente {
+  descricao: string;
+  valor: number;
+  observacao?: string;
+  status: StatusOrcamentoCliente;
+  enviadoEm: string;
+  respondidoEm?: string;
+}
 
 export interface AgendamentoCliente {
   id: number;
@@ -17,6 +30,8 @@ export interface AgendamentoCliente {
   observacao: string;
   status: StatusAtendimento;
   ordemServicoNumero?: string;
+  ordemServicoId?: number;
+  orcamento?: OrcamentoCliente;
   atualizadoEm: string;
 }
 

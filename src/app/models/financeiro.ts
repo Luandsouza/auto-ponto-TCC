@@ -1,5 +1,6 @@
 export type TipoLancamentoFinanceiro = 'receita' | 'despesa';
 export type StatusLancamentoFinanceiro = 'pendente' | 'pago' | 'cancelado';
+export type OrigemLancamentoFinanceiro = 'manual' | 'servico' | 'ordem_servico';
 
 export type CategoriaFinanceira =
   | 'servico'
@@ -20,7 +21,9 @@ export interface LancamentoFinanceiro {
   dataVencimento: string;
   dataPagamento?: string;
   servicoId?: string;
+  ordemServicoId?: number;
   pecaId?: string;
+  origem?: OrigemLancamentoFinanceiro;
   observacoes?: string;
   dataCadastro: string;
   dataAtualizacao: string;

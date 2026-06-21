@@ -45,17 +45,20 @@
               <td class="px-4 py-3">
                 <button
                   (click)="cancelarAgendamento(item)"
-                  [disabled]="item.status === 'Concluída' || item.status === 'Cancelada'"
+                  [disabled]="!podeCancelar(item)"
+                  [title]="podeCancelar(item) ? 'Cancelar ordem de serviço' : 'O cancelamento é bloqueado após o início da execução'"
                   class="rounded-md bg-red-500 px-3 py-1 text-xs font-bold text-white disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   Cancelar
                 </button>
               </td>
               <td class="px-4 py-3">
-                <button
-                routerLink=""
-                class="rounded-md bg-red-500 px-3 py-1 text-xs font-bold text-white disabled:cursor-not-allowed disabled:opacity-40">Orçamento
-                </button>
+                <span *ngIf="item.orcamento; else semOrcamento" class="font-bold text-auto-navy">
+                  {{ item.orcamento.valor | currency:'BRL' }}
+                </span>
+                <ng-template #semOrcamento>
+                  <span class="text-xs text-slate-400">Ainda não enviado</span>
+                </ng-template>
               </td>
             </tr>
           </tbody>

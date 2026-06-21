@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ChecklistOs } from './checklist-os.component';
+import { ChecklistOsComponent } from './checklist-os.component';
 
 describe('ChecklistOs', () => {
-  let component: ChecklistOs;
-  let fixture: ComponentFixture<ChecklistOs>;
+  let component: ChecklistOsComponent;
+  let fixture: ComponentFixture<ChecklistOsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ChecklistOs],
+      imports: [ChecklistOsComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ChecklistOs);
+    fixture = TestBed.createComponent(ChecklistOsComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

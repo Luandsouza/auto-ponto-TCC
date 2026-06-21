@@ -1,245 +1,172 @@
-import { Component, OnInit } from '@angular/core';
 import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import {
-  AGENDAMENTOS_STORAGE_KEY,
-  AgendamentoCliente,
-  StatusAtendimento,
-} from '../../../models/agendamento-cliente';
 
-export interface OrdemServicoComponent {
-  id: number;
-  numero: string;
-  cliente: string;
-  veiculo: string;
-  placa: string;
-  dataAbertura: Date;
-  dataPrevisao: Date;
-  status: 'Aberta' | 'Em Andamento' | 'Aguardando Peças' | 'Concluída' | 'Cancelada';
-  prioridade: 'Baixa' | 'Média' | 'Alta' | 'Urgente';
-  servicos: string[];
-  valorTotal: number;
-  observacoes: string;
-  agendamentoId?: number;
-}
+import {
+  OrdemServico,
+  PrioridadeOrdem,
+  STATUS_EMPRESA,
+  StatusEmpresa,
+} from '../../../models/ordem-servico';
+import { OrdemServicoService } from '../../../service/ordem-servico.service';
 
 @Component({
   selector: 'app-ordens-servico',
   standalone: true,
   imports: [CommonModule, FormsModule, CurrencyPipe, DatePipe],
   templateUrl: './ordens-servico.component.html',
-  styleUrls: ['./ordens-servico.component.css']
+  styleUrls: ['./ordens-servico.component.css'],
 })
 export class OrdensServicoComponent implements OnInit {
-  ordensServico: OrdemServicoComponent[] = [];
-  osFiltradas: OrdemServicoComponent[] = [];
-  filtro: string = '';
-  filtroStatus: string = '';
-  filtroPrioridade: string = '';
-  modalAberto: boolean = false;
-  editando: boolean = false;
-  osAtual: Partial<OrdemServicoComponent> = {};
-  
-  statusList = ['Aberta', 'Em Andamento', 'Aguardando Peças', 'Concluída', 'Cancelada'];
-  prioridadeList = ['Baixa', 'Média', 'Alta', 'Urgente'];
+  ordensServico: OrdemServico[] = [];
+  osFiltradas: OrdemServico[] = [];
+  filtro = '';
+  filtroStatus = '';
+  filtroPrioridade = '';
+  modalAberto = false;
+  editando = false;
+  osAtual: Partial<OrdemServico> = {};
 
-  ngOnInit() {
-    this.carregarOS();
-  }
+  readonly statusList = STATUS_EMPRESA;
+  readonly prioridadeList: PrioridadeOrdem[] = ['Baixa', 'Média', 'Alta', 'Urgente'];
 
-  carregarOS() {
-    const saved = localStorage.getItem('ordens_servico');
-    if (saved) {
-      this.ordensServico = JSON.parse(saved);
-    } else {
-      this.ordensServico = [
-        {
-          id: 1,
-          numero: 'OS-001',
-          cliente: 'João Silva',
-          veiculo: 'Honda Civic',
-          placa: 'ABC1234',
-          dataAbertura: new Date(),
-          dataPrevisao: new Date(Date.now() + 7*24*60*60*1000),
-          status: 'Em Andamento',
-          prioridade: 'Alta',
-          servicos: ['Troca de óleo', 'Revisão completa'],
-          valorTotal: 850,
-          observacoes: 'Cliente solicitou urgência'
-        },
-        {
-          id: 2,
-          numero: 'OS-002',
-          cliente: 'Maria Santos',
-          veiculo: 'Toyota Corolla',
-          placa: 'XYZ5678',
-          dataAbertura: new Date(),
-          dataPrevisao: new Date(Date.now() + 3*24*60*60*1000),
-          status: 'Aberta',
-          prioridade: 'Urgente',
-          servicos: ['Troca de pastilhas de freio', 'Alinhamento'],
-          valorTotal: 450,
-          observacoes: ''
-        }
-      ];
-      this.salvarLocalStorage();
-    }
-    this.receberSolicitacoesCliente();
-    this.filtrarOS();
-  }
+  constructor(private readonly ordemServicoService: OrdemServicoService) {}
 
-  salvarLocalStorage() {
-    localStorage.setItem('ordens_servico', JSON.stringify(this.ordensServico));
-  }
-
-  receberSolicitacoesCliente() {
-    const agendamentos = this.carregarAgendamentos();
-    let houveAlteracao = false;
-
-    agendamentos.forEach(agendamento => {
-      const osExistente = this.ordensServico.find(os => os.agendamentoId === agendamento.id);
-
-      if (osExistente) {
-        if (agendamento.status === 'Cancelada' && osExistente.status !== 'Cancelada') {
-          osExistente.status = 'Cancelada';
-          houveAlteracao = true;
-        }
-        return;
-      }
-
-      if (agendamento.status === 'Cancelada') {
-        return;
-      }
-
-      const numero = this.proximoNumeroOS();
-      this.ordensServico.unshift({
-        id: Date.now() + agendamento.id,
-        numero,
-        cliente: agendamento.cliente,
-        veiculo: agendamento.automovel,
-        placa: agendamento.placa,
-        dataAbertura: new Date(),
-        dataPrevisao: this.criarDataLocal(agendamento.data),
-        status: agendamento.status === 'Solicitado' ? 'Aberta' : agendamento.status,
-        prioridade: 'Média',
-        servicos: [agendamento.servico],
-        valorTotal: 0,
-        observacoes: agendamento.observacao,
-        agendamentoId: agendamento.id,
-      });
-
-      agendamento.status = 'Aberta';
-      agendamento.ordemServicoNumero = numero;
-      agendamento.atualizadoEm = new Date().toISOString();
-      houveAlteracao = true;
+  ngOnInit(): void {
+    this.ordemServicoService.sincronizarSolicitacoes();
+    this.ordemServicoService.ordens$.subscribe(ordens => {
+      this.ordensServico = ordens;
+      this.filtrarOS();
     });
-
-    if (houveAlteracao) {
-      this.salvarLocalStorage();
-      this.salvarAgendamentos(agendamentos);
-    }
   }
 
-  filtrarOS() {
+  filtrarOS(): void {
+    const termo = this.filtro.toLowerCase();
     this.osFiltradas = this.ordensServico.filter(os => {
-      const matchTexto = !this.filtro || 
-        os.cliente.toLowerCase().includes(this.filtro.toLowerCase()) ||
-        os.veiculo.toLowerCase().includes(this.filtro.toLowerCase()) ||
-        os.placa.toLowerCase().includes(this.filtro.toLowerCase());
-      
-      const matchStatus = !this.filtroStatus || os.status === this.filtroStatus;
-      const matchPrioridade = !this.filtroPrioridade || os.prioridade === this.filtroPrioridade;
-      
-      return matchTexto && matchStatus && matchPrioridade;
+      const correspondeAoTexto =
+        !termo ||
+        os.cliente.toLowerCase().includes(termo) ||
+        os.veiculo.toLowerCase().includes(termo) ||
+        os.placa.toLowerCase().includes(termo) ||
+        os.numero.toLowerCase().includes(termo);
+      const correspondeAoStatus = !this.filtroStatus || os.status === this.filtroStatus;
+      const correspondeAPrioridade =
+        !this.filtroPrioridade || os.prioridade === this.filtroPrioridade;
+
+      return correspondeAoTexto && correspondeAoStatus && correspondeAPrioridade;
     });
   }
 
-  novaOS() {
+  novaOS(): void {
+    const agora = new Date();
     this.editando = false;
     this.osAtual = {
-      numero: `OS-${String(this.ordensServico.length + 1).padStart(3, '0')}`,
-      dataAbertura: new Date(),
-      status: 'Aberta',
+      numero: this.proximoNumeroOS(),
+      dataAbertura: agora.toISOString(),
+      dataPrevisao: agora.toISOString().slice(0, 10),
+      status: 'Aguardando Orçamento',
       prioridade: 'Média',
       servicos: [],
-      valorTotal: 0
+      valorTotal: 0,
+      observacoes: '',
     };
     this.modalAberto = true;
   }
 
-  editarOS(os: OrdemServicoComponent) {
+  editarOS(os: OrdemServico): void {
     this.editando = true;
-    this.osAtual = { ...os };
+    this.osAtual = {
+      ...os,
+      dataPrevisao: os.dataPrevisao.slice(0, 10),
+      servicos: [...os.servicos],
+    };
     this.modalAberto = true;
   }
 
-  verDetalhes(os: OrdemServicoComponent) {
-    alert(`OS: ${os.numero}\nCliente: ${os.cliente}\nVeículo: ${os.veiculo}\nServiços: ${os.servicos.join(', ')}\nValor: R$ ${os.valorTotal}`);
+  verDetalhes(os: OrdemServico): void {
+    alert(
+      `OS: ${os.numero}\nCliente: ${os.cliente}\nVeículo: ${os.veiculo}\n` +
+        `Serviços: ${os.servicos.join(', ')}\nValor: ${os.valorTotal.toLocaleString(
+          'pt-BR',
+          { style: 'currency', currency: 'BRL' },
+        )}`,
+    );
   }
 
-  salvarOS() {
-    if (this.editando && this.osAtual.id) {
-      const index = this.ordensServico.findIndex(os => os.id === this.osAtual.id);
-      if (index !== -1) {
-        this.ordensServico[index] = { ...this.osAtual as OrdemServicoComponent };
-      }
-    } else {
-      const novaOS = {
-        ...this.osAtual,
-        id: Date.now(),
-        dataAbertura: new Date()
-      } as OrdemServicoComponent;
-      this.ordensServico.push(novaOS);
-    }
-    this.salvarLocalStorage();
-    this.devolverStatusAoCliente(this.osAtual as OrdemServicoComponent);
-    this.carregarOS();
+  salvarOS(): void {
+    const agora = new Date().toISOString();
+    const ordem: OrdemServico = {
+      id: this.osAtual.id ?? Date.now(),
+      numero: this.osAtual.numero || this.proximoNumeroOS(),
+      cliente: this.osAtual.cliente || '',
+      veiculo: this.osAtual.veiculo || '',
+      placa: this.osAtual.placa || '',
+      dataAbertura: this.osAtual.dataAbertura || agora,
+      dataPrevisao: this.normalizarData(this.osAtual.dataPrevisao),
+      status: this.osAtual.status || 'Aguardando Orçamento',
+      prioridade: this.osAtual.prioridade || 'Média',
+      servicos: this.osAtual.servicos || [],
+      valorTotal: Number(this.osAtual.valorTotal) || 0,
+      observacoes: this.osAtual.observacoes || '',
+      agendamentoId: this.osAtual.agendamentoId,
+      atualizadoEm: agora,
+    };
+
+    this.ordemServicoService.salvarOrdem(ordem);
     this.fecharModal();
   }
 
-  excluirOS(id: number) {
-    if (confirm('Tem certeza que deseja excluir esta OS?')) {
-      const osExcluida = this.ordensServico.find(os => os.id === id);
-      this.ordensServico = this.ordensServico.filter(os => os.id !== id);
-      this.salvarLocalStorage();
-      if (osExcluida?.agendamentoId) {
-        this.devolverStatusAoCliente({ ...osExcluida, status: 'Cancelada' });
-      }
-      this.carregarOS();
+  excluirOS(id: number): void {
+    if (confirm('Tem certeza que deseja cancelar/excluir esta OS?')) {
+      this.ordemServicoService.excluirOrdem(id);
     }
   }
 
-  atualizarStatus(os: OrdemServicoComponent, status: OrdemServicoComponent['status']) {
-    os.status = status;
-    this.salvarLocalStorage();
-    this.devolverStatusAoCliente(os);
-    this.filtrarOS();
+  atualizarStatus(os: OrdemServico, status: StatusEmpresa): void {
+    this.ordemServicoService.atualizarStatus(os.id, status);
   }
 
-  private devolverStatusAoCliente(os: OrdemServicoComponent) {
-    if (!os.agendamentoId) {
+  enviarOrcamento(os: OrdemServico): void {
+    if (os.valorTotal <= 0) {
+      alert('Informe o valor do orçamento antes de enviá-lo ao cliente.');
       return;
     }
+    this.ordemServicoService.enviarOrcamento(os.id);
+  }
 
-    const agendamentos = this.carregarAgendamentos();
-    const agendamento = agendamentos.find(item => item.id === os.agendamentoId);
-    if (!agendamento) {
-      return;
+  podeEnviarOrcamento(os: OrdemServico): boolean {
+    return (
+      !!os.agendamentoId &&
+      os.valorTotal > 0 &&
+      ['Aguardando Orçamento', 'Orçamento em Execução'].includes(os.status)
+    );
+  }
+
+  atualizarServicos(valor: string): void {
+    this.osAtual.servicos = valor
+      .split(',')
+      .map(item => item.trim())
+      .filter(Boolean);
+  }
+
+  classeStatus(status: StatusEmpresa): string {
+    const classes: Record<StatusEmpresa, string> = {
+      'Aguardando Orçamento': 'status-aguardando-orcamento',
+      'Orçamento em Execução': 'status-orcamento-execucao',
+      'Aguardando Aprovação': 'status-aguardando-aprovacao',
+      'Aguardando Execução': 'status-aguardando-execucao',
+      'Em Execução': 'status-em-execucao',
+      Finalizado: 'status-finalizado',
+      Cancelado: 'status-cancelado',
+    };
+    return classes[status];
+  }
+
+  fecharModal(event?: MouseEvent): void {
+    if (!event || event.target === event.currentTarget) {
+      this.modalAberto = false;
+      this.osAtual = {};
     }
-
-    agendamento.status = os.status as StatusAtendimento;
-    agendamento.ordemServicoNumero = os.numero;
-    agendamento.atualizadoEm = new Date().toISOString();
-    this.salvarAgendamentos(agendamentos);
-  }
-
-  private carregarAgendamentos(): AgendamentoCliente[] {
-    const saved = localStorage.getItem(AGENDAMENTOS_STORAGE_KEY);
-    return saved ? JSON.parse(saved) : [];
-  }
-
-  private salvarAgendamentos(agendamentos: AgendamentoCliente[]) {
-    localStorage.setItem(AGENDAMENTOS_STORAGE_KEY, JSON.stringify(agendamentos));
   }
 
   private proximoNumeroOS(): string {
@@ -250,35 +177,7 @@ export class OrdensServicoComponent implements OnInit {
     return `OS-${String(maiorNumero + 1).padStart(3, '0')}`;
   }
 
-  private criarDataLocal(data: string): Date {
-    return data ? new Date(`${data}T12:00:00`) : new Date();
-  }
-
-  fecharModal(event?: MouseEvent) {
-    if (!event || event.target === event.currentTarget) {
-      this.modalAberto = false;
-      this.osAtual = {};
-    }
-    enviarOrcamento(os: OrdemServicoComponent) {
-  if (!os.agendamentoId) return;
-
-  const agendamentos = this.carregarAgendamentos();
-  const agendamento = agendamentos.find(
-    item => item.id === os.agendamentoId
-  );
-
-  if (!agendamento) return;
-
-  agendamento.orcamento = {
-    descricao: os.servicos.join(', '),
-    valor: os.valorTotal,
-    observacao: os.observacoes,
-    status: 'Aguardando aprovação',
-    enviadoEm: new Date().toISOString()
-  };
-
-  agendamento.atualizadoEm = new Date().toISOString();
-  this.salvarAgendamentos(agendamentos);
-}
+  private normalizarData(data?: string): string {
+    return data ? new Date(`${data.slice(0, 10)}T12:00:00`).toISOString() : new Date().toISOString();
   }
 }
