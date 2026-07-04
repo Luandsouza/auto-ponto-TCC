@@ -53,9 +53,13 @@
                 </button>
               </td>
               <td class="px-4 py-3">
-                <span *ngIf="item.orcamento; else semOrcamento" class="font-bold text-auto-navy">
-                  {{ item.orcamento.valor | currency:'BRL' }}
-                </span>
+                <button
+                  *ngIf="item.orcamento; else semOrcamento"
+                  (click)="abrirOrcamento(item)"
+                  class="rounded-md bg-auto-orange px-3 py-1 text-xs font-bold text-white"
+                >
+                  Ver orçamento
+                </button>
                 <ng-template #semOrcamento>
                   <span class="text-xs text-slate-400">Ainda não enviado</span>
                 </ng-template>
@@ -111,4 +115,70 @@
       </div>
     </div>
   </form>
+</div>
+
+<div
+  *ngIf="orcamentoAberto?.orcamento as orcamento"
+  class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 p-6"
+  (click)="fecharOrcamento()"
+>
+  <section class="w-full max-w-lg rounded-lg bg-white shadow-xl" (click)="$event.stopPropagation()">
+    <header class="rounded-t-lg bg-auto-navy p-6 text-white">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <h2 class="text-2xl font-black">Orçamento da oficina</h2>
+          <p>{{ orcamentoAberto?.ordemServicoNumero }}</p>
+        </div>
+        <button
+          type="button"
+          (click)="fecharOrcamento()"
+          class="rounded-md border border-white/30 px-3 py-1 text-sm font-bold text-white hover:bg-white/10"
+          aria-label="Fechar orçamento"
+        >
+          X
+        </button>
+      </div>
+    </header>
+
+    <div class="space-y-4 p-6">
+      <div>
+        <p class="text-sm font-bold text-slate-500">Serviços</p>
+        <p>{{ orcamento.descricao }}</p>
+      </div>
+
+      <div>
+        <p class="text-sm font-bold text-slate-500">Valor</p>
+        <p class="text-3xl font-black text-auto-navy">
+          {{ orcamento.valor | currency:'BRL' }}
+        </p>
+      </div>
+
+      <p *ngIf="orcamento.observacao">
+        {{ orcamento.observacao }}
+      </p>
+
+      <div
+        *ngIf="orcamento.status === 'Aguardando aprovação'"
+        class="flex justify-end gap-3"
+      >
+        <button
+          (click)="responderOrcamento(false)"
+          class="rounded-md bg-red-500 px-5 py-2 font-bold text-white"
+        >
+          Recusar
+        </button>
+
+        <button
+          (click)="responderOrcamento(true)"
+          class="rounded-md bg-green-600 px-5 py-2 font-bold text-white"
+        >
+          Aprovar
+        </button>
+      </div>
+
+      <p *ngIf="orcamento.status !== 'Aguardando aprovação'">
+        Resposta: <strong>{{ orcamento.status }}</strong>
+      </p>
+    </div>
+  </section>
 </div>

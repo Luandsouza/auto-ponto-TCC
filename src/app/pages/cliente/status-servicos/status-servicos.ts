@@ -46,10 +46,7 @@ export class StatusServicos implements OnInit {
     }
   }
 
-  responderOrcamento(
-    atendimento: AgendamentoCliente,
-    resposta: 'aprovado' | 'reprovado',
-  ): void {
-    this.ordemServicoService.responderOrcamento(atendimento.id, resposta);
+  responderOrcamento(atendimento: AgendamentoCliente, aprovado: boolean): void {
+    this.ordemServicoService.responderOrcamento(atendimento.id, aprovado);
   }
 }

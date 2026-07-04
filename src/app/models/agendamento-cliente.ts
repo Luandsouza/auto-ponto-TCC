@@ -8,14 +8,18 @@ export type StatusAtendimento =
   | 'Finalizado'
   | 'Cancelado';
 
-export type StatusOrcamentoCliente = 'pendente' | 'aprovado' | 'reprovado';
+export type StatusOrcamento =
+  | 'Não enviado'
+  | 'Aguardando aprovação'
+  | 'Aprovado'
+  | 'Recusado';
 
-export interface OrcamentoCliente {
+export interface Orcamento {
   descricao: string;
   valor: number;
   observacao?: string;
-  status: StatusOrcamentoCliente;
-  enviadoEm: string;
+  status: StatusOrcamento;
+  enviadoEm?: string;
   respondidoEm?: string;
 }
 
@@ -31,7 +35,7 @@ export interface AgendamentoCliente {
   status: StatusAtendimento;
   ordemServicoNumero?: string;
   ordemServicoId?: number;
-  orcamento?: OrcamentoCliente;
+  orcamento?: Orcamento;
   atualizadoEm: string;
 }
 

@@ -3,10 +3,15 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
    {
       path: "",
-      loadComponent: () => import(`./auth/login/login`).then(x => x.Login)
+      redirectTo: "home",
+      pathMatch: "full"
    },
    {
       path: "home",
+      loadComponent: () => import(`./auth/login/login`).then(x => x.Login)
+   },
+   {
+      path: "cliente",
       loadComponent: () => import(`./pages/cliente/home-cliente/home-cliente`).then(x => x.HomeCliente)
    },
    {
@@ -20,12 +25,18 @@ export const routes: Routes = [
    },
    {
       path: "login",
-      loadComponent: () => import(`./auth/login/login`).then(x => x.Login)
+      redirectTo: "home",
+      pathMatch: "full"
    },
 
    {
       path: "mecanica",
       loadComponent: () => import(`./pages/mecanico/home-mecanico/home-mecanico`).then(x => x.HomeMecanico)
+   },
+   {
+      path: "mecanico",
+      redirectTo: "mecanica",
+      pathMatch: "full"
    },
    {
       path: "servicos",

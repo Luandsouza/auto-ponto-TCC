@@ -48,7 +48,7 @@ export function statusVisivelAoCliente(
 
   if (
     ordem.status === 'Aguardando Orçamento' &&
-    agendamento?.orcamento?.status === 'reprovado'
+    agendamento?.orcamento?.status === 'Recusado'
   ) {
     return 'Reprovado';
   }

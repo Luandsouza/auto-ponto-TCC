@@ -46,21 +46,21 @@
                 <ng-container *ngIf="item.orcamento; else aguardandoOrcamento">
                   <strong class="block text-lg text-auto-navy">{{ item.orcamento.valor | currency:'BRL' }}</strong>
                   <span class="text-xs text-slate-500">{{ item.orcamento.descricao }}</span>
-                  <div *ngIf="item.orcamento.status === 'pendente'" class="mt-3 flex gap-2">
+                  <div *ngIf="item.orcamento.status === 'Aguardando aprovação'" class="mt-3 flex gap-2">
                     <button
-                      (click)="responderOrcamento(item, 'aprovado')"
+                      (click)="responderOrcamento(item, true)"
                       class="rounded-md bg-emerald-600 px-3 py-2 text-xs font-black text-white hover:bg-emerald-700"
                     >
                       Aprovar
                     </button>
                     <button
-                      (click)="responderOrcamento(item, 'reprovado')"
+                      (click)="responderOrcamento(item, false)"
                       class="rounded-md bg-amber-500 px-3 py-2 text-xs font-black text-white hover:bg-amber-600"
                     >
                       Reprovar
                     </button>
                   </div>
-                  <span *ngIf="item.orcamento.status !== 'pendente'" class="mt-2 block text-xs font-black uppercase text-slate-500">
+                  <span *ngIf="item.orcamento.status !== 'Aguardando aprovação'" class="mt-2 block text-xs font-black uppercase text-slate-500">
                     {{ item.orcamento.status }}
                   </span>
                 </ng-container>

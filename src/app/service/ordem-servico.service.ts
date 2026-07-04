@@ -4,6 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 import {
   AGENDAMENTOS_STORAGE_KEY,
   AgendamentoCliente,
+  Orcamento,
 } from '../models/agendamento-cliente';
 import {
   OrdemServico,
@@ -144,7 +145,7 @@ export class OrdemServicoService {
     if (status === 'Orçamento em Execução' && ordem.agendamentoId) {
       const agendamentos = [...this.agendamentosSubject.value];
       const agendamento = agendamentos.find(item => item.id === ordem.agendamentoId);
-      if (agendamento?.orcamento?.status === 'reprovado') {
+      if (agendamento?.orcamento?.status === 'Recusado') {
         agendamento.orcamento = undefined;
         this.salvarAgendamentos(agendamentos);
       }
@@ -169,16 +170,17 @@ export class OrdemServicoService {
       descricao: ordem.servicos.join(', '),
       valor: ordem.valorTotal,
       observacao: ordem.observacoes,
-      status: 'pendente',
+      status: 'Aguardando aprovação',
       enviadoEm: new Date().toISOString(),
     };
+    agendamento.atualizadoEm = new Date().toISOString();
     this.salvarAgendamentos(agendamentos);
     this.atualizarStatus(id, 'Aguardando Aprovação');
   }
 
   responderOrcamento(
     agendamentoId: number,
-    resposta: 'aprovado' | 'reprovado',
+    aprovado: boolean,
   ): void {
     const agendamentos = [...this.agendamentosSubject.value];
     const agendamento = agendamentos.find(item => item.id === agendamentoId);
@@ -192,13 +194,14 @@ export class OrdemServicoService {
 
     agendamento.orcamento = {
       ...agendamento.orcamento,
-      status: resposta,
+      status: aprovado ? 'Aprovado' : 'Recusado',
       respondidoEm: new Date().toISOString(),
     };
+    agendamento.atualizadoEm = new Date().toISOString();
     this.salvarAgendamentos(agendamentos);
     this.atualizarStatus(
       ordem.id,
-      resposta === 'aprovado' ? 'Aguardando Execução' : 'Aguardando Orçamento',
+      aprovado ? 'Aguardando Execução' : 'Aguardando Orçamento',
     );
   }
 
@@ -277,6 +280,7 @@ export class OrdemServicoService {
       item => ({
         ...item,
         status: this.normalizarStatusCliente(item.status as string),
+        orcamento: item.orcamento ? this.normalizarOrcamento(item.orcamento as Orcamento) : undefined,
       }),
     );
   }
@@ -311,6 +315,19 @@ export class OrdemServicoService {
       Cancelada: 'Cancelado',
     };
     return legado[status] || status || 'Aguardando Orçamento';
+  }
+
+  private normalizarOrcamento(orcamento: Orcamento): Orcamento {
+    const legado: Record<string, Orcamento['status']> = {
+      pendente: 'Aguardando aprovação',
+      aprovado: 'Aprovado',
+      reprovado: 'Recusado',
+    };
+
+    return {
+      ...orcamento,
+      status: legado[orcamento.status] || orcamento.status,
+    };
   }
 
   private lerStorage<T>(chave: string, padrao: T): T {

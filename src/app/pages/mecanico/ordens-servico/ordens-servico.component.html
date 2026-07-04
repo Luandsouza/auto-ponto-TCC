@@ -57,7 +57,7 @@
         </select>
         <button
           *ngIf="os.agendamentoId"
-          class="btn-budget"
+          class="btn-view"
           [disabled]="!podeEnviarOrcamento(os)"
           (click)="enviarOrcamento(os)"
         >

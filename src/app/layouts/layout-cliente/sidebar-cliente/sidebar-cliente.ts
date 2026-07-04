@@ -28,7 +28,7 @@ export class SidebarCliente {
   menuItems: ClienteMenuItem[] = [
     {
       label: 'Home',
-      route: '/home',
+      route: '/cliente',
       iconPaths: icons.home,
       accent: '#1E3A8A',
     },

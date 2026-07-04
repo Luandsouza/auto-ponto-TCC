@@ -38,7 +38,7 @@ export class App {
   }
 
   get telaLogin(): boolean {
-    return this.rotaAtual === '/' || this.rotaAtual === '';
+    return ['/', '', '/home', '/login'].includes(this.rotaAtual);
   }
 
   get layoutMecanico(): boolean {

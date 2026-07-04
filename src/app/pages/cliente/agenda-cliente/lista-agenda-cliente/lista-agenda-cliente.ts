@@ -25,6 +25,7 @@ export class ListaAgendaCliente implements OnInit {
   agendamentos: AgendamentoCliente[] = [];
   veiculos: VeiculoCliente[] = [];
   formulario = this.novoFormulario();
+  orcamentoAberto?: AgendamentoCliente;
 
   constructor(private readonly ordemServicoService: OrdemServicoService) {}
 
@@ -53,6 +54,23 @@ export class ListaAgendaCliente implements OnInit {
 
   fecharModal() {
     this.showModal = false;
+  }
+
+  abrirOrcamento(agendamento: AgendamentoCliente) {
+    this.orcamentoAberto = agendamento;
+  }
+
+  fecharOrcamento() {
+    this.orcamentoAberto = undefined;
+  }
+
+  responderOrcamento(aprovado: boolean) {
+    if (!this.orcamentoAberto?.orcamento) {
+      return;
+    }
+
+    this.ordemServicoService.responderOrcamento(this.orcamentoAberto.id, aprovado);
+    this.fecharOrcamento();
   }
 
   salvarAgendamento() {

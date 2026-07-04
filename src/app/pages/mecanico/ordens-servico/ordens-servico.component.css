@@ -166,7 +166,8 @@
 .btn-edit { background: #3498db; color: white; }
 .btn-edit:hover { background: #2980b9; }
 .btn-view { background: #27ae60; color: white; }
-.btn-view:hover { background: #229954; }
+.btn-view:hover:not(:disabled) { background: #229954; }
+.btn-view:disabled { cursor: not-allowed; opacity: 0.45; }
 .btn-delete { background: #e74c3c; color: white; }
 .btn-delete:hover { background: #c0392b; }
 .btn-budget { background: #f59e0b; color: white; }
