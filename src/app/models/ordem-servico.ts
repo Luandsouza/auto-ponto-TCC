@@ -11,6 +11,64 @@ export type StatusEmpresa =
 
 export type PrioridadeOrdem = 'Baixa' | 'Média' | 'Alta' | 'Urgente';
 
+export type StatusServicoOS =
+  | 'pendente'
+  | 'aguardando aprovação'
+  | 'aprovado'
+  | 'em execução'
+  | 'concluído';
+
+export type CategoriaServicoOS =
+  | 'Revisão'
+  | 'Motor'
+  | 'Freios'
+  | 'Suspensão'
+  | 'Elétrica'
+  | 'Pneus'
+  | 'Ar-condicionado'
+  | 'Diagnóstico';
+
+export type TipoDescontoOS = 'percentual' | 'valor';
+
+export interface CatalogoServicoOS {
+  codigo: string;
+  nome: string;
+  descricao: string;
+  categoria: CategoriaServicoOS;
+  precoUnitario: number;
+  tempoEstimado: string;
+}
+
+export interface ServicoOrdem extends CatalogoServicoOS {
+  selecionado: boolean;
+  status: StatusServicoOS;
+  ordem: number;
+  descontoTipo?: TipoDescontoOS;
+  descontoValor?: number;
+  descontoJustificativa?: string;
+  aprovadoEm?: string;
+  aprovadoPor?: string;
+  atualizadoEm?: string;
+  observacao?: string;
+  tecnicoResponsavel?: string;
+  inicioEm?: string;
+  fimEm?: string;
+  anexos?: string[];
+}
+
+export interface AuditoriaOS {
+  id: string;
+  usuario: string;
+  timestamp: string;
+  acao: string;
+  detalhe: string;
+}
+
+export interface EntregaOS {
+  dataHora: string;
+  responsavel: string;
+}
+
 export interface OrdemServico {
   id: number;
   numero: string;
@@ -25,6 +83,12 @@ export interface OrdemServico {
   valorTotal: number;
   observacoes: string;
   agendamentoId?: number;
+  servicosCatalogo?: ServicoOrdem[];
+  descontoTipo?: TipoDescontoOS;
+  descontoValor?: number;
+  descontoJustificativa?: string;
+  auditoria?: AuditoriaOS[];
+  entrega?: EntregaOS;
   atualizadoEm: string;
 }
 

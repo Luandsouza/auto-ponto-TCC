@@ -1,0 +1,237 @@
+<main class="os-detail" *ngIf="ordem; else naoEncontrada">
+  <section class="detail-header">
+    <div>
+      <a routerLink="/ordens-servico" class="back-link">Voltar para OS</a>
+      <h1>{{ ordem.numero }}</h1>
+      <p>{{ ordem.cliente }} · {{ ordem.veiculo }} · {{ ordem.placa }}</p>
+    </div>
+
+    <div class="header-actions">
+      <span class="status-pill">{{ ordem.status }}</span>
+      <a
+        *ngIf="temServicoAprovado"
+        [routerLink]="['/checklist-os', ordem.id]"
+        class="primary-link"
+      >
+        Checklist
+      </a>
+    </div>
+  </section>
+
+  <section class="info-grid">
+    <article>
+      <span>Número da OS</span>
+      <strong>{{ ordem.numero }}</strong>
+    </article>
+    <article>
+      <span>Data de abertura</span>
+      <strong>{{ ordem.dataAbertura | date:'dd/MM/yyyy HH:mm' }}</strong>
+    </article>
+    <article>
+      <span>Previsão</span>
+      <strong>{{ ordem.dataPrevisao | date:'dd/MM/yyyy' }}</strong>
+    </article>
+    <article>
+      <span>Valor atual</span>
+      <strong>{{ ordem.valorTotal | currency:'BRL' }}</strong>
+    </article>
+  </section>
+
+  <section class="observations">
+    <h2>Observações gerais</h2>
+    <p>{{ ordem.observacoes || 'Sem observações registradas.' }}</p>
+  </section>
+
+  <section class="services-layout">
+    <div class="services-main">
+      <div class="table-toolbar">
+        <div>
+          <h2>Serviços oferecidos</h2>
+          <p>Tabela fixa da oficina, sempre disponível para seleção e acompanhamento.</p>
+        </div>
+
+        <label class="mode-toggle">
+          <input type="checkbox" [(ngModel)]="escolhaCliente" />
+          <span>Escolha do Cliente</span>
+        </label>
+      </div>
+
+      <div class="filters">
+        <input
+          type="search"
+          [(ngModel)]="busca"
+          (ngModelChange)="resetarPagina()"
+          placeholder="Buscar por código, nome, descrição ou categoria..."
+        />
+
+        <select [(ngModel)]="categoria" (ngModelChange)="resetarPagina()">
+          <option *ngFor="let item of categorias" [value]="item">
+            {{ item === 'todas' ? 'Todas as categorias' : item }}
+          </option>
+        </select>
+      </div>
+
+      <div class="pending-badge" *ngIf="temPropostaPendente">
+        Aguardando aprovação do cliente
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Selecionar</th>
+              <th>Código</th>
+              <th>Serviço</th>
+              <th>Descrição</th>
+              <th>Preço</th>
+              <th>Tempo</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let servico of servicosPaginados">
+              <td>
+                <input
+                  type="checkbox"
+                  [disabled]="!escolhaCliente || servico.status !== 'pendente'"
+                  [checked]="selecionados.has(servico.codigo) || servico.selecionado"
+                  (change)="alternarSelecao(servico, $any($event.target).checked)"
+                />
+              </td>
+              <td class="code">{{ servico.codigo }}</td>
+              <td>
+                <strong>{{ servico.nome }}</strong>
+                <small>{{ servico.categoria }}</small>
+              </td>
+              <td>{{ servico.descricao }}</td>
+              <td>
+                <strong>{{ valorComDesconto(servico) | currency:'BRL' }}</strong>
+                <small *ngIf="servico.descontoValor">
+                  base {{ servico.precoUnitario | currency:'BRL' }}
+                </small>
+              </td>
+              <td>{{ servico.tempoEstimado }}</td>
+              <td>
+                <select
+                  [ngModel]="servico.status"
+                  (ngModelChange)="alterarStatus(servico, $event)"
+                  [disabled]="servico.status === 'pendente' || servico.status === 'aguardando aprovação' || servico.status === 'concluído'"
+                >
+                  <option *ngFor="let status of statusServico" [value]="status">{{ status }}</option>
+                </select>
+              </td>
+              <td class="actions-cell">
+                <button
+                  *ngIf="servico.status === 'aguardando aprovação'"
+                  type="button"
+                  (click)="responderProposta(servico, true)"
+                >
+                  Aprovar
+                </button>
+                <button
+                  *ngIf="servico.status === 'aguardando aprovação'"
+                  type="button"
+                  class="danger"
+                  (click)="responderProposta(servico, false)"
+                >
+                  Recusar
+                </button>
+
+                <details>
+                  <summary>Editar observação</summary>
+                  <textarea [(ngModel)]="servico.observacao" rows="2"></textarea>
+                  <button type="button" (click)="salvarObservacao(servico)">Salvar</button>
+                </details>
+
+                <details>
+                  <summary>Desconto</summary>
+                  <select [(ngModel)]="servico.descontoTipo">
+                    <option value="valor">Valor</option>
+                    <option value="percentual">Percentual</option>
+                  </select>
+                  <input type="number" min="0" [(ngModel)]="servico.descontoValor" />
+                  <input
+                    type="text"
+                    [(ngModel)]="servico.descontoJustificativa"
+                    placeholder="Justificativa"
+                  />
+                  <button type="button" (click)="aplicarDesconto(servico)">Aplicar</button>
+                </details>
+
+                <details>
+                  <summary>Histórico</summary>
+                  <small>Atualizado: {{ servico.atualizadoEm || ordem.atualizadoEm | date:'dd/MM/yyyy HH:mm' }}</small>
+                  <small *ngIf="servico.aprovadoEm">Aprovado por {{ servico.aprovadoPor }} em {{ servico.aprovadoEm | date:'dd/MM/yyyy HH:mm' }}</small>
+                </details>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="pagination" *ngIf="mostrarPaginacao">
+        <button type="button" (click)="paginaAnterior()" [disabled]="pagina === 1">Anterior</button>
+        <span>Página {{ pagina }} de {{ totalPaginas }}</span>
+        <button type="button" (click)="proximaPagina()" [disabled]="pagina === totalPaginas">Próxima</button>
+      </div>
+    </div>
+
+    <aside class="summary">
+      <h2>Resumo</h2>
+      <div class="summary-line">
+        <span>Subtotal</span>
+        <strong>{{ subtotal | currency:'BRL' }}</strong>
+      </div>
+      <div class="summary-line">
+        <span>Impostos ({{ impostoPercentual }}%)</span>
+        <strong>{{ impostos | currency:'BRL' }}</strong>
+      </div>
+      <div class="summary-total">
+        <span>Total</span>
+        <strong>{{ total | currency:'BRL' }}</strong>
+      </div>
+
+      <button
+        type="button"
+        class="primary-button"
+        [disabled]="!selecionados.size"
+        (click)="confirmarEscolha('cliente')"
+      >
+        Confirmar escolha
+      </button>
+
+      <button
+        type="button"
+        class="secondary-button"
+        [disabled]="!selecionados.size"
+        (click)="confirmarEscolha('atendente')"
+      >
+        Enviar proposta ao cliente
+      </button>
+
+      <p class="summary-note">
+        Aprovações registram usuário, data e hora. Propostas pendentes aparecem como badge na lista de OS.
+      </p>
+    </aside>
+  </section>
+
+  <section class="history">
+    <h2>Histórico da OS</h2>
+    <div *ngIf="!ordem.auditoria?.length" class="empty-history">
+      Nenhuma auditoria registrada.
+    </div>
+    <article *ngFor="let item of ordem.auditoria">
+      <strong>{{ item.acao }}</strong>
+      <span>{{ item.usuario }} · {{ item.timestamp | date:'dd/MM/yyyy HH:mm' }}</span>
+      <p>{{ item.detalhe }}</p>
+    </article>
+  </section>
+</main>
+
+<ng-template #naoEncontrada>
+  <main class="not-found">
+    <h1>OS não encontrada</h1>
+    <a routerLink="/ordens-servico">Voltar</a>
+  </main>
+</ng-template>

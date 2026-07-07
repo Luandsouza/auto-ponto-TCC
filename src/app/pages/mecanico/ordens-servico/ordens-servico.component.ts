@@ -1,6 +1,7 @@
 import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 
 import {
   OrdemServico,
@@ -13,7 +14,7 @@ import { OrdemServicoService } from '../../../service/ordem-servico.service';
 @Component({
   selector: 'app-ordens-servico',
   standalone: true,
-  imports: [CommonModule, FormsModule, CurrencyPipe, DatePipe],
+  imports: [CommonModule, FormsModule, RouterLink, CurrencyPipe, DatePipe],
   templateUrl: './ordens-servico.component.html',
   styleUrls: ['./ordens-servico.component.css'],
 })
@@ -83,14 +84,14 @@ export class OrdensServicoComponent implements OnInit {
     this.modalAberto = true;
   }
 
-  verDetalhes(os: OrdemServico): void {
-    alert(
-      `OS: ${os.numero}\nCliente: ${os.cliente}\nVeículo: ${os.veiculo}\n` +
-        `Serviços: ${os.servicos.join(', ')}\nValor: ${os.valorTotal.toLocaleString(
-          'pt-BR',
-          { style: 'currency', currency: 'BRL' },
-        )}`,
+  temServicoAprovado(os: OrdemServico): boolean {
+    return !!os.servicosCatalogo?.some(servico =>
+      ['aprovado', 'em execução', 'concluído'].includes(servico.status),
     );
+  }
+
+  temPropostaPendente(os: OrdemServico): boolean {
+    return !!os.servicosCatalogo?.some(servico => servico.status === 'aguardando aprovação');
   }
 
   salvarOS(): void {

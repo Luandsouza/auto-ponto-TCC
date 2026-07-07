@@ -75,7 +75,15 @@ export const routes: Routes = [
       loadComponent: () => import(`./pages/mecanico/ordens-servico/ordens-servico.component`).then(x => x.OrdensServicoComponent)
    },
    {
+      path: "os/:id",
+      loadComponent: () => import(`./pages/mecanico/os-detalhe/os-detalhe.component`).then(x => x.OsDetalheComponent)
+   },
+   {
       path: "checklist-os",
+      loadComponent: () => import(`./pages/mecanico/checklist-os/checklist-os.component`).then(x => x.ChecklistOsComponent)
+   },
+   {
+      path: "checklist-os/:id",
       loadComponent: () => import(`./pages/mecanico/checklist-os/checklist-os.component`).then(x => x.ChecklistOsComponent)
    },
    {

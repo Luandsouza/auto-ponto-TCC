@@ -6,4 +6,13 @@ import { Component } from '@angular/core';
   templateUrl: './topbar.html',
   styleUrl: './topbar.css',
 })
-export class Topbar {}
+export class Topbar {
+  get notificacoesPendentes(): number {
+    try {
+      const notificacoes = JSON.parse(localStorage.getItem('notificacoes_oficina') || '[]');
+      return notificacoes.filter((item: { lida?: boolean }) => !item.lida).length;
+    } catch {
+      return 0;
+    }
+  }
+}

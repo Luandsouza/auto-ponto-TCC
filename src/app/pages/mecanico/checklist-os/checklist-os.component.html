@@ -1,64 +1,138 @@
 <div class="checklist-container">
   <div class="header">
-    <h1>✅ Checklist da OS</h1>
+    <div>
+      <a routerLink="/ordens-servico" class="back-link">Voltar para OS</a>
+      <h1>Checklist da oficina</h1>
+      <p>Execução apenas dos serviços aprovados pelo cliente.</p>
+    </div>
   </div>
 
-  <!-- Selector de OS -->
   <div class="selector-os">
-    <label>Selecione a Ordem de Serviço:</label>
+    <label>Ordem de Serviço</label>
     <select [(ngModel)]="osSelecionada" (change)="carregarChecklist()">
       <option value="">Selecione...</option>
-      <option *ngFor="let os of ordensServico" [value]="os.numero">
+      <option *ngFor="let os of ordensServico" [value]="os.id">
         {{ os.numero }} - {{ os.cliente }} - {{ os.veiculo }} ({{ os.placa }})
       </option>
     </select>
   </div>
 
-  <!-- Checklist -->
-  <div class="checklist-content" *ngIf="osSelecionada">
+  <div class="checklist-content" *ngIf="ordem">
+    <div class="os-summary">
+      <div>
+        <span>OS</span>
+        <strong>{{ ordem.numero }}</strong>
+      </div>
+      <div>
+        <span>Cliente</span>
+        <strong>{{ ordem.cliente }}</strong>
+      </div>
+      <div>
+        <span>Status</span>
+        <strong>{{ ordem.status }}</strong>
+      </div>
+      <div *ngIf="ordem.entrega">
+        <span>Entrega</span>
+        <strong>{{ ordem.entrega.dataHora | date:'dd/MM/yyyy HH:mm' }}</strong>
+      </div>
+    </div>
+
+    <label class="technician">
+      Técnico responsável
+      <input [(ngModel)]="tecnicoAtual" />
+    </label>
+
     <div class="progress-container">
-      <div class="progress-label">{{ percentualConcluido }}% Concluído</div>
+      <div class="progress-label">{{ percentualConcluido }}% concluído</div>
       <div class="progress-bar">
         <div class="progress-fill" [style.width]="percentualConcluido + '%'"></div>
       </div>
     </div>
 
-    <div class="checklist-header">
-      <h3>Itens do Checklist</h3>
-      <button class="btn-add" (click)="novaChecklist()">+ Adicionar Item</button>
-    </div>
+    <p *ngIf="erro" class="error-message">{{ erro }}</p>
 
-    <div class="checklist-items">
-      <div class="checklist-item" *ngFor="let item of checklistItens" [class.concluido]="item.concluido">
-        <input type="checkbox" [(ngModel)]="item.concluido" (change)="salvarChecklist()">
-        <div class="item-content">
-          <span class="descricao">{{ item.descricao }}</span>
-          <input type="text" class="observacao" placeholder="Adicionar observação..." 
-                 [(ngModel)]="item.observacao" (blur)="salvarChecklist()">
+    <div class="checklist-items" *ngIf="checklistItens.length; else semAprovados">
+      <article
+        class="checklist-item"
+        *ngFor="let item of checklistItens; let i = index"
+        [class.concluido]="item.status === 'concluído'"
+        draggable="true"
+        (dragstart)="iniciarArraste(item)"
+        (dragover)="$event.preventDefault()"
+        (drop)="soltarSobre(item)"
+      >
+        <div class="item-order">
+          <button type="button" (click)="mover(item, -1)" [disabled]="i === 0">↑</button>
+          <button type="button" (click)="mover(item, 1)" [disabled]="i === checklistItens.length - 1">↓</button>
         </div>
-        <button class="btn-delete-small" (click)="excluirItem(item.id)">🗑️</button>
-      </div>
-    </div>
 
-    <!-- Empty State -->
-    <div class="empty-state" *ngIf="checklistItens.length === 0">
-      <p>📝 Nenhum item no checklist ainda.</p>
-      <button class="btn-primary" (click)="novaChecklist()">+ Adicionar primeiro item</button>
+        <div class="item-content">
+          <div class="item-title">
+            <div>
+              <strong>{{ item.codigo }} · {{ item.nome }}</strong>
+              <span>{{ item.descricao }}</span>
+            </div>
+            <mark>{{ item.status }}</mark>
+          </div>
+
+          <div class="execution-grid">
+            <div>
+              <span>Início</span>
+              <strong>{{ item.inicioEm ? (item.inicioEm | date:'dd/MM/yyyy HH:mm') : '-' }}</strong>
+            </div>
+            <div>
+              <span>Fim</span>
+              <strong>{{ item.fimEm ? (item.fimEm | date:'dd/MM/yyyy HH:mm') : '-' }}</strong>
+            </div>
+            <div>
+              <span>Técnico</span>
+              <strong>{{ item.tecnicoResponsavel || '-' }}</strong>
+            </div>
+          </div>
+
+          <textarea
+            [(ngModel)]="item.observacao"
+            (blur)="salvarObservacao(item)"
+            rows="2"
+            placeholder="Observações de execução..."
+          ></textarea>
+
+          <div class="attachments">
+            <input #anexo type="text" placeholder="URL/nome da foto anexada" />
+            <button type="button" (click)="adicionarAnexo(item, anexo.value); anexo.value = ''">
+              Anexar foto
+            </button>
+          </div>
+          <small *ngIf="item.anexos?.length">
+            Anexos: {{ item.anexos?.join(', ') }}
+          </small>
+        </div>
+
+        <div class="item-actions">
+          <button
+            type="button"
+            (click)="iniciar(item)"
+            [disabled]="item.status !== 'aprovado'"
+          >
+            Iniciar
+          </button>
+          <button
+            type="button"
+            class="finish"
+            (click)="concluir(item)"
+            [disabled]="item.status !== 'em execução'"
+          >
+            Concluir
+          </button>
+        </div>
+      </article>
     </div>
   </div>
 
-  <!-- Modal Novo Item -->
-  <div class="modal" *ngIf="modalAberto" (click)="fecharModal($event)">
-    <div class="modal-content">
-      <h3>➕ Novo Item de Checklist</h3>
-      <input type="text" [(ngModel)]="novoItemDescricao" 
-             placeholder="Digite a descrição do item..." 
-             class="form-control" 
-             (keyup.enter)="adicionarItem()">
-      <div class="modal-actions">
-        <button class="btn-primary" (click)="adicionarItem()">Adicionar</button>
-        <button class="btn-secondary" (click)="fecharModal()">Cancelar</button>
-      </div>
+  <ng-template #semAprovados>
+    <div class="empty-state">
+      Nenhum serviço aprovado para execução nesta OS.
+      <a *ngIf="ordem" [routerLink]="['/os', ordem.id]">Abrir detalhes da OS</a>
     </div>
-  </div>
+  </ng-template>
 </div>

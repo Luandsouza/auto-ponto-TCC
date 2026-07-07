@@ -29,6 +29,9 @@
         <span class="status-badge" [ngClass]="classeStatus(os.status)">
           {{ os.status }}
         </span>
+        <span *ngIf="temPropostaPendente(os)" class="status-badge pending-approval">
+          Aguardando aprovação
+        </span>
       </div>
       
       <div class="os-body">
@@ -64,7 +67,12 @@
           💰 Enviar orçamento
         </button>
         <button class="btn-edit" (click)="editarOS(os)">✏️ Editar</button>
-        <button class="btn-view" (click)="verDetalhes(os)">👁️ Detalhes</button>
+        <a
+          class="btn-view action-link"
+          [routerLink]="temServicoAprovado(os) ? ['/checklist-os', os.id] : ['/os', os.id]"
+        >
+          {{ temServicoAprovado(os) ? '✅ Checklist' : '👁️ Detalhes' }}
+        </a>
         <button class="btn-delete" (click)="excluirOS(os.id)">🗑️ Excluir</button>
       </div>
     </div>

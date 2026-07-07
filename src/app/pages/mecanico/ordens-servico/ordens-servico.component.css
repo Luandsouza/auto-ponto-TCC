@@ -116,6 +116,7 @@
 .status-badge.status-em-execucao { background: #f97316; }
 .status-badge.status-finalizado { background: #22c55e; }
 .status-badge.status-cancelado { background: #94a3b8; }
+.status-badge.pending-approval { background: #f97316; }
 
 .os-body {
   padding: 15px;
@@ -144,13 +145,17 @@
   flex-wrap: wrap;
 }
 
-.os-footer button {
+.os-footer button,
+.os-footer .action-link {
   flex: 1;
   padding: 8px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   transition: all 0.3s;
+  text-align: center;
+  text-decoration: none;
+  font-size: 13px;
 }
 
 .status-select {

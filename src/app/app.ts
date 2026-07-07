@@ -42,7 +42,7 @@ export class App {
   }
 
   get layoutMecanico(): boolean {
-    return ['/mecanica', '/servicos', '/estoque', '/financeiro', '/relatorios', '/equipes-mecanico', '/calendario', '/ordens-servico', '/checklist-os'].some((rota) =>
+    return ['/mecanica', '/servicos', '/estoque', '/financeiro', '/relatorios', '/equipes-mecanico', '/calendario', '/ordens-servico', '/os', '/checklist-os'].some((rota) =>
       this.rotaAtual.startsWith(rota),
     );
   }
