@@ -1,12 +1,12 @@
-<main class="min-h-screen bg-slate-50 p-6">
+<main>
   <section class="mx-auto max-w-6xl">
-    <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div class="client-page-heading mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
       <div>
         <h1 class="text-3xl font-black text-auto-navy">Agenda de Serviços</h1>
         <p class="mt-1 text-sm text-slate-500">Solicite serviços e acompanhe o retorno da oficina.</p>
       </div>
-      <button (click)="abrirModal()" class="rounded-md bg-auto-orange px-5 py-2 text-sm font-black text-white hover:opacity-90">
-        + Agendar
+      <button data-action="calendar" (click)="abrirModal()" class="rounded-md bg-auto-orange px-5 py-2 text-sm font-black text-white hover:opacity-90">
+        Agendar
       </button>
     </div>
 
@@ -17,11 +17,11 @@
       class="mb-6 w-full rounded-md border border-slate-300 bg-white p-3 text-sm focus:border-auto-blue focus:outline-none"
     />
 
-    <div *ngIf="!agendamentosFiltrados.length" class="rounded-lg border border-dashed border-slate-300 bg-white p-10 text-center text-slate-500">
+    <div *ngIf="!agendamentosFiltrados.length" class="client-content-card border-dashed p-10 text-center text-slate-500">
       Nenhum agendamento encontrado.
     </div>
 
-    <div *ngIf="agendamentosFiltrados.length" class="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
+    <div *ngIf="agendamentosFiltrados.length" class="client-content-card overflow-hidden">
       <div class="overflow-x-auto">
         <table class="min-w-full text-sm">
           <thead class="bg-auto-navy text-white">
@@ -44,6 +44,7 @@
               </td>
               <td class="px-4 py-3">
                 <button
+                  data-action="cancel"
                   (click)="cancelarAgendamento(item)"
                   [disabled]="!podeCancelar(item)"
                   [title]="podeCancelar(item) ? 'Cancelar ordem de serviço' : 'O cancelamento é bloqueado após o início da execução'"
@@ -55,6 +56,7 @@
               <td class="px-4 py-3">
                 <button
                   *ngIf="item.orcamento; else semOrcamento"
+                  data-action="view"
                   (click)="abrirOrcamento(item)"
                   class="rounded-md bg-auto-orange px-3 py-1 text-xs font-bold text-white"
                 >
@@ -110,8 +112,8 @@
         <textarea [(ngModel)]="formulario.observacao" name="observacao" rows="3" class="rounded-md border border-slate-300 p-3"></textarea>
       </label>
       <div class="flex justify-end gap-3">
-        <button type="button" (click)="fecharModal()" class="rounded-md border border-slate-300 px-5 py-2 font-bold text-slate-600">Cancelar</button>
-        <button type="submit" [disabled]="!veiculos.length" class="rounded-md bg-auto-orange px-5 py-2 font-black text-white disabled:opacity-40">Enviar solicitação</button>
+        <button type="button" data-action="cancel" (click)="fecharModal()" class="rounded-md border border-slate-300 px-5 py-2 font-bold text-slate-600">Cancelar</button>
+        <button type="submit" data-action="send" [disabled]="!veiculos.length" class="rounded-md bg-auto-orange px-5 py-2 font-black text-white disabled:opacity-40">Enviar solicitação</button>
       </div>
     </div>
   </form>
@@ -131,11 +133,12 @@
         </div>
         <button
           type="button"
+          data-action="close"
           (click)="fecharOrcamento()"
           class="rounded-md border border-white/30 px-3 py-1 text-sm font-bold text-white hover:bg-white/10"
           aria-label="Fechar orçamento"
         >
-          X
+          Fechar
         </button>
       </div>
     </header>
@@ -162,6 +165,7 @@
         class="flex justify-end gap-3"
       >
         <button
+          data-action="cancel"
           (click)="responderOrcamento(false)"
           class="rounded-md bg-red-500 px-5 py-2 font-bold text-white"
         >
@@ -169,6 +173,7 @@
         </button>
 
         <button
+          data-action="approve"
           (click)="responderOrcamento(true)"
           class="rounded-md bg-green-600 px-5 py-2 font-bold text-white"
         >

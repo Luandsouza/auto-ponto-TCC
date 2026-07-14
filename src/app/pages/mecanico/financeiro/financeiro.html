@@ -18,7 +18,7 @@
         <option value="todos">Todos os status</option>
         <option *ngFor="let status of statusDisponiveis" [value]="status">{{ status }}</option>
       </select>
-      <button type="button" (click)="limparFiltros()" class="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font-black text-auto-navy hover:bg-slate-100">
+      <button type="button" data-action="filter" (click)="limparFiltros()" class="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font-black text-auto-navy hover:bg-slate-100">
         Limpar filtros
       </button>
     </div>
@@ -113,8 +113,8 @@
         </div>
 
         <div class="mt-5 flex flex-wrap gap-3">
-          <button class="rounded-md bg-auto-blue px-4 py-2 text-sm font-black text-white transition hover:bg-auto-navy">{{ editandoId ? 'Salvar alterações' : 'Cadastrar lançamento' }}</button>
-          <button *ngIf="editandoId" type="button" (click)="cancelarEdicao()" class="rounded-md border border-slate-300 px-4 py-2 text-sm font-black text-auto-navy hover:bg-slate-100">Cancelar</button>
+          <button data-action="save" class="rounded-md bg-auto-blue px-4 py-2 text-sm font-black text-white transition hover:bg-auto-navy">{{ editandoId ? 'Salvar alterações' : 'Cadastrar lançamento' }}</button>
+          <button *ngIf="editandoId" type="button" data-action="cancel" (click)="cancelarEdicao()" class="rounded-md border border-slate-300 px-4 py-2 text-sm font-black text-auto-navy hover:bg-slate-100">Cancelar</button>
         </div>
       </form>
 
@@ -167,6 +167,7 @@
                 <div class="flex justify-end gap-2">
                   <button
                     type="button"
+                    data-action="edit"
                     (click)="editar(lancamento)"
                     [disabled]="!podeAlterarCadastro(lancamento)"
                     [title]="podeAlterarCadastro(lancamento) ? 'Editar lançamento' : 'Valores automáticos devem ser alterados na origem'"
@@ -176,6 +177,7 @@
                   </button>
                   <button
                     type="button"
+                    data-action="paid"
                     (click)="marcarPago(lancamento)"
                     [disabled]="lancamento.status !== 'pendente'"
                     class="rounded-md border border-emerald-200 px-3 py-2 text-xs font-black text-emerald-700 hover:bg-emerald-50 disabled:cursor-not-allowed disabled:opacity-40"
@@ -184,6 +186,7 @@
                   </button>
                   <button
                     type="button"
+                    data-action="delete"
                     (click)="remover(lancamento.id)"
                     [disabled]="!podeAlterarCadastro(lancamento)"
                     [title]="podeAlterarCadastro(lancamento) ? 'Excluir lançamento' : 'Lançamento protegido porque está vinculado à operação'"

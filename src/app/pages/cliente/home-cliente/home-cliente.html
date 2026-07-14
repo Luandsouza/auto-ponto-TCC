@@ -8,27 +8,29 @@
       </p>
     </div>
 
-    <a routerLink="/agenda" class="client-action">Ver agenda</a>
+    <a routerLink="/agenda" data-action="calendar" class="client-action icon-text">
+      Ver agenda
+    </a>
   </div>
 
   <div class="grid gap-4 md:grid-cols-3">
     <article class="client-card">
-      <span class="client-icon bg-auto-sky text-auto-blue">
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 17h18M6 17l1.4-5.4A2 2 0 0 1 9.3 10h5.4a2 2 0 0 1 1.9 1.6L18 17M7 17v2M17 17v2" /></svg>
+      <span class="client-icon icon-blue">
+        <span class="real-emoji" aria-hidden="true">🚙</span>
       </span>
       <p>Veículo em atendimento</p>
       <strong>Honda Civic</strong>
     </article>
     <article class="client-card">
-      <span class="client-icon bg-auto-amber text-auto-orange">
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20z" /></svg>
+      <span class="client-icon icon-orange">
+        <span class="real-emoji" aria-hidden="true">🧾</span>
       </span>
       <p>Status atual</p>
       <strong>Orçamento</strong>
     </article>
     <article class="client-card">
-      <span class="client-icon bg-emerald-50 text-emerald-600">
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4 12l5 5L20 6" /></svg>
+      <span class="client-icon icon-green">
+        <span class="real-emoji" aria-hidden="true">🤩</span>
       </span>
       <p>Satisfação estimada</p>
       <strong>92%</strong>
@@ -36,15 +38,18 @@
   </div>
 
   <div class="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
-    <section class="client-panel">
+    <section class="client-panel progress-panel">
       <div class="flex items-center justify-between gap-3">
-        <h3>Progresso do serviço</h3>
+        <h3 class="chart-title">
+          <span class="panel-title-icon icon-blue"><span aria-hidden="true">📊</span></span>
+          <span>Progresso do serviço</span>
+        </h3>
         <span class="rounded-md bg-auto-amber px-3 py-1 text-xs font-black text-auto-orange">Em andamento</span>
       </div>
 
       <div class="mt-6 grid gap-4">
         <div *ngFor="let etapa of etapas; let i = index" class="timeline-row">
-          <span class="timeline-dot" [ngClass]="etapa.status"></span>
+          <span class="timeline-emoji" [ngClass]="etapa.status" aria-hidden="true">{{ etapa.emoji }}</span>
           <div class="min-w-0">
             <p>{{ etapa.label }}</p>
             <small>{{ etapa.status === 'ativo' ? 'Etapa atual' : etapa.status === 'concluido' ? 'Concluído' : 'Aguardando' }}</small>
@@ -54,31 +59,42 @@
       </div>
     </section>
 
-    <section class="client-panel">
-      <h3>Próximos passos</h3>
+    <section class="client-panel upcoming-panel">
+      <h3 class="chart-title">
+        <span class="panel-title-icon icon-orange"><span aria-hidden="true">🗓️</span></span>
+        <span>Próximos passos</span>
+      </h3>
       <div class="mt-5 space-y-3">
         <article *ngFor="let item of proximos" class="schedule-card">
-          <p>{{ item.titulo }}</p>
-          <strong>{{ item.data }}</strong>
-          <small>{{ item.detalhe }}</small>
+          <span class="schedule-emoji" aria-hidden="true">{{ item.emoji }}</span>
+          <div><p>{{ item.titulo }}</p><strong>{{ item.data }}</strong><small>{{ item.detalhe }}</small></div>
         </article>
       </div>
     </section>
   </div>
 
-  <section class="client-panel">
+  <section class="client-panel info-panel">
     <div class="grid gap-4 md:grid-cols-3">
-      <div>
+      <div class="client-info-item">
+        <span class="client-info-icon icon-blue"><span aria-hidden="true">🕘</span></span>
+        <div>
         <p class="mini-label">Última atualização</p>
         <strong class="mini-value">Hoje às 09:42</strong>
+        </div>
       </div>
-      <div>
+      <div class="client-info-item">
+        <span class="client-info-icon icon-orange"><span aria-hidden="true">⏳</span></span>
+        <div>
         <p class="mini-label">Previsão</p>
         <strong class="mini-value">Amanhã, 10:00</strong>
+        </div>
       </div>
-      <div>
+      <div class="client-info-item">
+        <span class="client-info-icon icon-navy"><span aria-hidden="true">👨‍🔧</span></span>
+        <div>
         <p class="mini-label">Responsável</p>
         <strong class="mini-value">Equipe Auto Ponto</strong>
+        </div>
       </div>
     </div>
   </section>

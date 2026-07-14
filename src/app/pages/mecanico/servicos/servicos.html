@@ -86,8 +86,8 @@
       </div>
 
       <div class="mt-5 flex flex-wrap gap-3">
-        <button class="rounded-md bg-auto-blue px-4 py-2 text-sm font-black text-white transition hover:bg-auto-navy">{{ editandoId ? 'Salvar alterações' : 'Cadastrar serviço' }}</button>
-        <button *ngIf="editandoId" type="button" (click)="cancelarEdicao()" class="rounded-md border border-slate-300 px-4 py-2 text-sm font-black text-auto-navy transition hover:bg-slate-100">Cancelar</button>
+        <button data-action="save" class="rounded-md bg-auto-blue px-4 py-2 text-sm font-black text-white transition hover:bg-auto-navy">{{ editandoId ? 'Salvar alterações' : 'Cadastrar serviço' }}</button>
+        <button *ngIf="editandoId" type="button" data-action="cancel" (click)="cancelarEdicao()" class="rounded-md border border-slate-300 px-4 py-2 text-sm font-black text-auto-navy transition hover:bg-slate-100">Cancelar</button>
       </div>
     </form>
 
@@ -114,8 +114,8 @@
             <div class="text-left lg:text-right">
               <p class="text-xl font-black text-auto-navy">{{ formatarMoeda(servico.total) }}</p>
               <div class="mt-3 flex flex-nowrap items-center gap-2 lg:justify-end">
-                <button type="button" (click)="editar(servico)" class="min-w-20 rounded-md border border-slate-300 px-3 py-2 text-xs font-black text-auto-navy hover:bg-slate-100">Editar</button>
-                <button type="button" (click)="remover(servico.id)" class="min-w-20 rounded-md border border-red-200 px-3 py-2 text-xs font-black text-red-600 hover:bg-red-50">Excluir</button>
+                <button type="button" data-action="edit" (click)="editar(servico)" class="min-w-20 rounded-md border border-slate-300 px-3 py-2 text-xs font-black text-auto-navy hover:bg-slate-100">Editar</button>
+                <button type="button" data-action="delete" (click)="remover(servico.id)" class="min-w-20 rounded-md border border-red-200 px-3 py-2 text-xs font-black text-red-600 hover:bg-red-50">Excluir</button>
               </div>
             </div>
           </div>

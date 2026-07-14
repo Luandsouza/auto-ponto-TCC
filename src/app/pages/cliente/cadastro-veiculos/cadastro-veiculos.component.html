@@ -131,10 +131,10 @@
         </div>
 
         <div class="form-actions">
-          <button type="button" class="btn btn-secondary" (click)="resetarForm()">
+          <button type="button" data-action="cancel" class="btn btn-secondary" (click)="resetarForm()">
             {{ editando ? 'Cancelar edição' : 'Limpar' }}
           </button>
-          <button type="submit" class="btn btn-primary">
+          <button type="submit" data-action="save" class="btn btn-primary">
             {{ editando ? 'Salvar alterações' : 'Salvar veículo' }}
           </button>
         </div>
@@ -148,7 +148,7 @@
           <p class="section-kicker">Sua garagem</p>
           <h2>Veículos cadastrados</h2>
         </div>
-        <button type="button" class="btn-new" (click)="prepararNovoCadastro()">+ Cadastrar outro</button>
+        <button type="button" data-action="add" class="btn-new" (click)="prepararNovoCadastro()">Cadastrar outro</button>
       </div>
 
       <div *ngIf="veiculos.length === 0" class="empty-state">
@@ -181,8 +181,8 @@
           </div>
 
           <div class="card-actions">
-            <button class="btn-edit" (click)="editarVeiculo(veiculo)">Editar</button>
-            <button class="btn-delete" (click)="excluirVeiculo(veiculo.id)">Excluir</button>
+            <button data-action="edit" class="btn-edit" (click)="editarVeiculo(veiculo)">Editar</button>
+            <button data-action="delete" class="btn-delete" (click)="excluirVeiculo(veiculo.id)">Excluir</button>
           </div>
         </div>
       </div>

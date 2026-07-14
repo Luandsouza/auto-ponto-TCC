@@ -1,7 +1,7 @@
 <div class="checklist-container">
   <div class="header">
     <div>
-      <a routerLink="/ordens-servico" class="back-link">Voltar para OS</a>
+      <a routerLink="/ordens-servico" data-action="back" class="back-link">Voltar para OS</a>
       <h1>Checklist da oficina</h1>
       <p>Execução apenas dos serviços aprovados pelo cliente.</p>
     </div>
@@ -99,7 +99,7 @@
 
           <div class="attachments">
             <input #anexo type="text" placeholder="URL/nome da foto anexada" />
-            <button type="button" (click)="adicionarAnexo(item, anexo.value); anexo.value = ''">
+            <button type="button" data-action="attachment" (click)="adicionarAnexo(item, anexo.value); anexo.value = ''">
               Anexar foto
             </button>
           </div>
@@ -111,6 +111,7 @@
         <div class="item-actions">
           <button
             type="button"
+            data-action="start"
             (click)="iniciar(item)"
             [disabled]="item.status !== 'aprovado'"
           >
@@ -118,6 +119,7 @@
           </button>
           <button
             type="button"
+            data-action="confirm"
             class="finish"
             (click)="concluir(item)"
             [disabled]="item.status !== 'em execução'"
@@ -132,7 +134,7 @@
   <ng-template #semAprovados>
     <div class="empty-state">
       Nenhum serviço aprovado para execução nesta OS.
-      <a *ngIf="ordem" [routerLink]="['/os', ordem.id]">Abrir detalhes da OS</a>
+      <a *ngIf="ordem" [routerLink]="['/os', ordem.id]" data-action="view">Abrir detalhes da OS</a>
     </div>
   </ng-template>
 </div>

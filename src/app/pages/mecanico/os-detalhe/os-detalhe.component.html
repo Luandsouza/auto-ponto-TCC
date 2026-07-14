@@ -1,7 +1,7 @@
 <main class="os-detail" *ngIf="ordem; else naoEncontrada">
   <section class="detail-header">
     <div>
-      <a routerLink="/ordens-servico" class="back-link">Voltar para OS</a>
+      <a routerLink="/ordens-servico" data-action="back" class="back-link">Voltar para OS</a>
       <h1>{{ ordem.numero }}</h1>
       <p>{{ ordem.cliente }} · {{ ordem.veiculo }} · {{ ordem.placa }}</p>
     </div>
@@ -11,6 +11,7 @@
       <a
         *ngIf="temServicoAprovado"
         [routerLink]="['/checklist-os', ordem.id]"
+        data-action="view"
         class="primary-link"
       >
         Checklist
@@ -125,6 +126,7 @@
                 <button
                   *ngIf="servico.status === 'aguardando aprovação'"
                   type="button"
+                  data-action="approve"
                   (click)="responderProposta(servico, true)"
                 >
                   Aprovar
@@ -132,6 +134,7 @@
                 <button
                   *ngIf="servico.status === 'aguardando aprovação'"
                   type="button"
+                  data-action="cancel"
                   class="danger"
                   (click)="responderProposta(servico, false)"
                 >
@@ -141,7 +144,7 @@
                 <details>
                   <summary>Editar observação</summary>
                   <textarea [(ngModel)]="servico.observacao" rows="2"></textarea>
-                  <button type="button" (click)="salvarObservacao(servico)">Salvar</button>
+                  <button type="button" data-action="save" (click)="salvarObservacao(servico)">Salvar</button>
                 </details>
 
                 <details>
@@ -156,7 +159,7 @@
                     [(ngModel)]="servico.descontoJustificativa"
                     placeholder="Justificativa"
                   />
-                  <button type="button" (click)="aplicarDesconto(servico)">Aplicar</button>
+                  <button type="button" data-action="money" (click)="aplicarDesconto(servico)">Aplicar</button>
                 </details>
 
                 <details>
@@ -171,9 +174,9 @@
       </div>
 
       <div class="pagination" *ngIf="mostrarPaginacao">
-        <button type="button" (click)="paginaAnterior()" [disabled]="pagina === 1">Anterior</button>
+        <button type="button" data-action="previous" (click)="paginaAnterior()" [disabled]="pagina === 1">Anterior</button>
         <span>Página {{ pagina }} de {{ totalPaginas }}</span>
-        <button type="button" (click)="proximaPagina()" [disabled]="pagina === totalPaginas">Próxima</button>
+        <button type="button" data-action="next" (click)="proximaPagina()" [disabled]="pagina === totalPaginas">Próxima</button>
       </div>
     </div>
 
@@ -194,6 +197,7 @@
 
       <button
         type="button"
+        data-action="confirm"
         class="primary-button"
         [disabled]="!selecionados.size"
         (click)="confirmarEscolha('cliente')"
@@ -203,6 +207,7 @@
 
       <button
         type="button"
+        data-action="send"
         class="secondary-button"
         [disabled]="!selecionados.size"
         (click)="confirmarEscolha('atendente')"
@@ -232,6 +237,6 @@
 <ng-template #naoEncontrada>
   <main class="not-found">
     <h1>OS não encontrada</h1>
-    <a routerLink="/ordens-servico">Voltar</a>
+    <a routerLink="/ordens-servico" data-action="back">Voltar</a>
   </main>
 </ng-template>

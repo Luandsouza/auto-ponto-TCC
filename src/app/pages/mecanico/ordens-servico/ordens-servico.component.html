@@ -1,7 +1,13 @@
 <div class="os-container">
   <div class="header">
-    <h1>📋 Ordens de Serviço</h1>
-    <button class="btn-primary" (click)="novaOS()">+ Nova OS</button>
+    <h1 class="chart-title">
+      <span class="chart-mark is-navy" aria-hidden="true"></span>
+      <span class="chart-title-text">Ordens de Serviço</span>
+    </h1>
+    <button data-action="add" class="btn-primary icon-text" (click)="novaOS()">
+      <span class="chart-action-icon" aria-hidden="true"></span>
+      Nova OS
+    </button>
   </div>
 
   <!-- Filtros -->
@@ -35,13 +41,13 @@
       </div>
       
       <div class="os-body">
-        <p><strong>🚗 Veículo:</strong> {{ os.veiculo }} - {{ os.placa }}</p>
-        <p><strong>📅 Abertura:</strong> {{ os.dataAbertura | date:'dd/MM/yyyy' }}</p>
-        <p><strong>⏰ Previsão:</strong> {{ os.dataPrevisao | date:'dd/MM/yyyy' }}</p>
-        <p><strong>⚡ Prioridade:</strong> <span class="prioridade">{{ os.prioridade }}</span></p>
-        <p><strong>💰 Valor:</strong> {{ os.valorTotal | currency:'BRL' }}</p>
+        <p><strong><span class="field-icon is-warm" aria-hidden="true"></span>Veículo:</strong> {{ os.veiculo }} - {{ os.placa }}</p>
+        <p><strong><span class="field-icon" aria-hidden="true"></span>Abertura:</strong> {{ os.dataAbertura | date:'dd/MM/yyyy' }}</p>
+        <p><strong><span class="field-icon is-navy" aria-hidden="true"></span>Previsão:</strong> {{ os.dataPrevisao | date:'dd/MM/yyyy' }}</p>
+        <p><strong><span class="field-icon is-danger" aria-hidden="true"></span>Prioridade:</strong> <span class="prioridade">{{ os.prioridade }}</span></p>
+        <p><strong><span class="field-icon is-green" aria-hidden="true"></span>Valor:</strong> {{ os.valorTotal | currency:'BRL' }}</p>
         <div class="servicos" *ngIf="os.servicos.length">
-          <strong>🛠️ Serviços:</strong>
+          <strong><span class="field-icon" aria-hidden="true"></span>Serviços:</strong>
           <ul>
             <li *ngFor="let servico of os.servicos.slice(0,2)">{{ servico }}</li>
             <li *ngIf="os.servicos.length > 2">+{{ os.servicos.length - 2 }} mais</li>
@@ -60,20 +66,30 @@
         </select>
         <button
           *ngIf="os.agendamentoId"
-          class="btn-view"
+          data-action="view"
+          class="btn-view icon-text"
           [disabled]="!podeEnviarOrcamento(os)"
           (click)="enviarOrcamento(os)"
         >
-          💰 Enviar orçamento
+          <span class="chart-action-icon is-green" aria-hidden="true"></span>
+          Enviar orçamento
         </button>
-        <button class="btn-edit" (click)="editarOS(os)">✏️ Editar</button>
+        <button data-action="edit" class="btn-edit icon-text" (click)="editarOS(os)">
+          <span class="chart-action-icon" aria-hidden="true"></span>
+          Editar
+        </button>
         <a
-          class="btn-view action-link"
+          data-action="view"
+          class="btn-view action-link icon-text"
           [routerLink]="temServicoAprovado(os) ? ['/checklist-os', os.id] : ['/os', os.id]"
         >
-          {{ temServicoAprovado(os) ? '✅ Checklist' : '👁️ Detalhes' }}
+          <span class="chart-action-icon is-navy" aria-hidden="true"></span>
+          {{ temServicoAprovado(os) ? 'Checklist' : 'Detalhes' }}
         </a>
-        <button class="btn-delete" (click)="excluirOS(os.id)">🗑️ Excluir</button>
+        <button data-action="delete" class="btn-delete icon-text" (click)="excluirOS(os.id)">
+          <span class="chart-action-icon is-danger" aria-hidden="true"></span>
+          Excluir
+        </button>
       </div>
     </div>
   </div>
@@ -81,7 +97,10 @@
   <!-- Modal Nova/Editar OS -->
   <div class="modal" *ngIf="modalAberto" (click)="fecharModal($event)">
     <div class="modal-content">
-      <h2>{{ editando ? '✏️ Editar OS' : '➕ Nova Ordem de Serviço' }}</h2>
+      <h2 class="chart-title">
+        <span class="chart-mark" [ngClass]="editando ? 'is-warm' : 'is-green'" aria-hidden="true"></span>
+        <span>{{ editando ? 'Editar OS' : 'Nova Ordem de Serviço' }}</span>
+      </h2>
       
       <form (ngSubmit)="salvarOS()">
         <div class="form-group">
@@ -142,8 +161,8 @@
         </div>
         
         <div class="modal-actions">
-          <button type="submit" class="btn-primary">Salvar</button>
-          <button type="button" class="btn-secondary" (click)="fecharModal()">Cancelar</button>
+          <button type="submit" data-action="save" class="btn-primary">Salvar</button>
+          <button type="button" data-action="cancel" class="btn-secondary" (click)="fecharModal()">Cancelar</button>
         </div>
       </form>
     </div>

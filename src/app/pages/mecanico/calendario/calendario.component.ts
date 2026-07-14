@@ -271,13 +271,13 @@ export class CalendarioComponent implements OnInit {
     }
   }
 
-  getTipoIcon(tipo: string): string {
+  getTipoIconClass(tipo: string): string {
     switch(tipo) {
-      case 'servico': return '🔧';
-      case 'reuniao': return '👥';
-      case 'lembrete': return '📝';
-      case 'entrega': return '🚚';
-      default: return '📌';
+      case 'servico': return '';
+      case 'reuniao': return 'is-navy';
+      case 'lembrete': return 'is-green';
+      case 'entrega': return 'is-warm';
+      default: return '';
     }
   }
 

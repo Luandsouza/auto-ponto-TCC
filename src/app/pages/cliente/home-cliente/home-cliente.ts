@@ -10,15 +10,15 @@ import { RouterLink } from '@angular/router';
 })
 export class HomeCliente {
   etapas = [
-    { label: 'Entrada', status: 'concluido' },
-    { label: 'Diagnóstico', status: 'concluido' },
-    { label: 'Orçamento', status: 'ativo' },
-    { label: 'Execução', status: 'pendente' },
-    { label: 'Entrega', status: 'pendente' },
+    { label: 'Entrada', status: 'concluido', emoji: '🚘' },
+    { label: 'Diagnóstico', status: 'concluido', emoji: '🔍' },
+    { label: 'Orçamento', status: 'ativo', emoji: '🧾' },
+    { label: 'Execução', status: 'pendente', emoji: '🔧' },
+    { label: 'Entrega', status: 'pendente', emoji: '🔑' },
   ];
 
   proximos = [
-    { titulo: 'Revisão preventiva', data: 'Hoje, 14:30', detalhe: 'Checklist, freios e filtros' },
-    { titulo: 'Retirada prevista', data: 'Amanhã, 10:00', detalhe: 'Após aprovação do orçamento' },
+    { titulo: 'Revisão preventiva', data: 'Hoje, 14:30', detalhe: 'Checklist, freios e filtros', emoji: '🛠️' },
+    { titulo: 'Retirada prevista', data: 'Amanhã, 10:00', detalhe: 'Após aprovação do orçamento', emoji: '🏁' },
   ];
 }

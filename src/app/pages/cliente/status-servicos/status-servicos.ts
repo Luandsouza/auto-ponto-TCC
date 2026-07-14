@@ -9,6 +9,7 @@ import { OrdemServicoService } from '../../../service/ordem-servico.service';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './status-servicos.html',
+  styleUrl: './status-servicos.css',
 })
 export class StatusServicos implements OnInit {
   atendimentos: AgendamentoCliente[] = [];

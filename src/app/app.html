@@ -1,6 +1,6 @@
 <router-outlet *ngIf="telaLogin"></router-outlet>
 
-<div *ngIf="!telaLogin" class="min-h-screen bg-slate-50 lg:flex">
+<div *ngIf="!telaLogin" class="app-shell-surface min-h-screen lg:flex">
   <app-sidebar *ngIf="layoutMecanico"></app-sidebar>
   <app-sidebar-cliente *ngIf="!layoutMecanico"></app-sidebar-cliente>
 
@@ -8,7 +8,7 @@
     <app-topbar *ngIf="layoutMecanico"></app-topbar>
     <app-topbar-cliente *ngIf="!layoutMecanico"></app-topbar-cliente>
 
-    <main class="flex-1 overflow-y-auto bg-slate-50 p-4 sm:p-6 lg:p-8">
+    <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
       <router-outlet></router-outlet>
     </main>
   </div>

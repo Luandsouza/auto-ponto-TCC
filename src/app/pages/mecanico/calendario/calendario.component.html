@@ -1,27 +1,33 @@
 <div class="calendario-container">
   <div class="header">
-    <h1>📅 Calendário de Eventos</h1>
-    <button class="btn-primary" (click)="novoEvento()">+ Novo Evento</button>
+    <h1 class="chart-title">
+      <span class="chart-mark is-warm" aria-hidden="true"></span>
+      <span class="chart-title-text">Calendário de Eventos</span>
+    </h1>
+    <button data-action="calendar" class="btn-primary icon-text" (click)="novoEvento()">
+      <span class="chart-action-icon" aria-hidden="true"></span>
+      Novo Evento
+    </button>
   </div>
 
   <div class="calendario-main">
     <!-- Sidebar de Controles -->
     <div class="sidebar">
       <div class="controles-mes">
-        <button class="btn-icon" (click)="mesAnterior()">◀</button>
+        <button data-action="previous" class="btn-icon" (click)="mesAnterior()" aria-label="Mês anterior"></button>
         <h2>{{ currentYear }} - {{ currentMonth + 1 | date:'MMMM' }}</h2>
-        <button class="btn-icon" (click)="proximoMes()">▶</button>
+        <button data-action="next" class="btn-icon" (click)="proximoMes()" aria-label="Próximo mês"></button>
       </div>
-      <button class="btn-hoje" (click)="voltarHoje()">Hoje</button>
+      <button data-action="calendar" class="btn-hoje" (click)="voltarHoje()">Hoje</button>
 
       <div class="filtros">
         <h3>Filtros</h3>
         <select [(ngModel)]="filtroTipo" (change)="generateCalendar()">
           <option value="todos">Todos os eventos</option>
-          <option value="servico">🔧 Serviços</option>
-          <option value="reuniao">👥 Reuniões</option>
-          <option value="lembrete">📝 Lembretes</option>
-          <option value="entrega">🚚 Entregas</option>
+          <option value="servico">Serviços</option>
+          <option value="reuniao">Reuniões</option>
+          <option value="lembrete">Lembretes</option>
+          <option value="entrega">Entregas</option>
         </select>
       </div>
 
@@ -79,8 +85,14 @@
       <!-- Eventos do Dia -->
       <div class="eventos-dia" *ngIf="selectedDate">
         <div class="eventos-header">
-          <h3>📋 Eventos - {{ selectedDate | date:'dd/MM/yyyy' }}</h3>
-          <button class="btn-add-small" (click)="novoEvento()">+ Adicionar</button>
+          <h3 class="chart-title">
+            <span class="chart-action-icon is-navy" aria-hidden="true"></span>
+            <span>Eventos - {{ selectedDate | date:'dd/MM/yyyy' }}</span>
+          </h3>
+          <button data-action="add" class="btn-add-small icon-text" (click)="novoEvento()">
+            <span class="chart-action-icon is-green" aria-hidden="true"></span>
+            Adicionar
+          </button>
         </div>
         
         <div class="eventos-list" *ngIf="eventsForSelectedDate.length > 0">
@@ -88,29 +100,36 @@
             <div class="evento-cor" [style.background]="event.color"></div>
             <div class="evento-content">
               <div class="evento-title">
-                <span class="evento-icon">{{ getTipoIcon(event.tipo || '') }}</span>
+                <span class="chart-action-icon evento-icon" [ngClass]="getTipoIconClass(event.tipo || '')" aria-hidden="true"></span>
                 <strong>{{ event.title }}</strong>
                 <span class="evento-tipo">{{ getTipoLabel(event.tipo || '') }}</span>
               </div>
               <div class="evento-details">
-                <span *ngIf="event.time">🕒 {{ event.time }}</span>
-                <span *ngIf="event.cliente">👤 {{ event.cliente }}</span>
-                <span *ngIf="event.veiculo">🚗 {{ event.veiculo }}</span>
+                <span *ngIf="event.time"><span class="field-icon is-navy" aria-hidden="true"></span>{{ event.time }}</span>
+                <span *ngIf="event.cliente"><span class="field-icon" aria-hidden="true"></span>{{ event.cliente }}</span>
+                <span *ngIf="event.veiculo"><span class="field-icon is-warm" aria-hidden="true"></span>{{ event.veiculo }}</span>
               </div>
               <div class="evento-desc" *ngIf="event.description">
-                📝 {{ event.description }}
+                <span class="field-icon is-green" aria-hidden="true"></span>{{ event.description }}
               </div>
             </div>
             <div class="evento-actions">
-              <button class="btn-edit-small" (click)="editarEvento(event)">✏️</button>
-              <button class="btn-delete-small" (click)="excluirEvento(event.id)">🗑️</button>
+              <button data-action="edit" class="btn-edit-small" (click)="editarEvento(event)" aria-label="Editar evento">
+                <span class="chart-action-icon" aria-hidden="true"></span>
+              </button>
+              <button data-action="delete" class="btn-delete-small" (click)="excluirEvento(event.id)" aria-label="Excluir evento">
+                <span class="chart-action-icon is-danger" aria-hidden="true"></span>
+              </button>
             </div>
           </div>
         </div>
         
         <div class="no-events" *ngIf="eventsForSelectedDate.length === 0">
-          <p>📭 Nenhum evento para este dia</p>
-          <button class="btn-primary" (click)="novoEvento()">Criar evento</button>
+          <p><span class="chart-mark" aria-hidden="true"></span>Nenhum evento para este dia</p>
+          <button data-action="add" class="btn-primary icon-text" (click)="novoEvento()">
+            <span class="chart-action-icon" aria-hidden="true"></span>
+            Criar evento
+          </button>
         </div>
       </div>
     </div>
@@ -119,7 +138,10 @@
   <!-- Modal Evento -->
   <div class="modal" *ngIf="modalAberto" (click)="fecharModal($event)">
     <div class="modal-content">
-      <h2>{{ editando ? '✏️ Editar Evento' : '➕ Novo Evento' }}</h2>
+      <h2 class="chart-title">
+        <span class="chart-mark" [ngClass]="editando ? 'is-warm' : 'is-green'" aria-hidden="true"></span>
+        <span>{{ editando ? 'Editar Evento' : 'Novo Evento' }}</span>
+      </h2>
       
       <form (ngSubmit)="salvarEvento()">
         <div class="form-group">
@@ -141,10 +163,10 @@
         <div class="form-group">
           <label>Tipo *</label>
           <select [(ngModel)]="eventAtual.tipo" name="tipo" required>
-            <option value="servico">🔧 Serviço</option>
-            <option value="reuniao">👥 Reunião</option>
-            <option value="lembrete">📝 Lembrete</option>
-            <option value="entrega">🚚 Entrega</option>
+            <option value="servico">Serviço</option>
+            <option value="reuniao">Reunião</option>
+            <option value="lembrete">Lembrete</option>
+            <option value="entrega">Entrega</option>
           </select>
         </div>
         
@@ -177,8 +199,8 @@
         </div>
         
         <div class="modal-actions">
-          <button type="submit" class="btn-primary">Salvar</button>
-          <button type="button" class="btn-secondary" (click)="fecharModal()">Cancelar</button>
+          <button type="submit" data-action="save" class="btn-primary">Salvar</button>
+          <button type="button" data-action="cancel" class="btn-secondary" (click)="fecharModal()">Cancelar</button>
         </div>
       </form>
     </div>

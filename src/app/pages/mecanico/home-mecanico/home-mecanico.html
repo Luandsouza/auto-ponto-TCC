@@ -9,8 +9,8 @@
     </div>
 
     <div class="flex flex-wrap gap-3">
-      <a routerLink="/servicos" class="hero-action hero-primary">Novo serviço</a>
-      <a routerLink="/financeiro" class="hero-action hero-secondary">Financeiro</a>
+      <a routerLink="/servicos" data-action="add" class="hero-action hero-primary">Novo serviço</a>
+      <a routerLink="/financeiro" data-action="money" class="hero-action hero-secondary">Financeiro</a>
     </div>
   </div>
 
@@ -66,7 +66,7 @@
     <section class="surface-card">
       <div class="flex items-center justify-between gap-3">
         <h3>Últimos serviços</h3>
-        <a routerLink="/servicos" class="text-sm font-black text-auto-blue">Ver todos</a>
+        <a routerLink="/servicos" data-action="view" class="text-sm font-black text-auto-blue">Ver todos</a>
       </div>
 
       <div class="mt-4 overflow-x-auto">

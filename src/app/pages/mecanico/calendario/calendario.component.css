@@ -479,3 +479,284 @@
     font-size: 8px;
   }
 }
+
+.calendario-container {
+  max-width: 1480px;
+  padding: 0;
+  font-family: inherit;
+}
+
+.header {
+  gap: 18px;
+  margin-bottom: 24px;
+  padding: 22px;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, rgba(17, 18, 74, 0.96), rgba(26, 167, 242, 0.78)),
+    #11124a;
+  box-shadow: 0 22px 54px rgba(15, 23, 42, 0.16);
+}
+
+.header h1 {
+  color: #ffffff;
+  font-size: clamp(1.45rem, 2.4vw, 2.25rem);
+  font-weight: 900;
+  letter-spacing: 0;
+}
+
+.calendario-main {
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.sidebar,
+.calendar,
+.eventos-dia,
+.modal-content {
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 18px 46px rgba(15, 23, 42, 0.08);
+}
+
+.sidebar {
+  width: min(290px, 100%);
+}
+
+.controles-mes {
+  gap: 10px;
+}
+
+.controles-mes h2,
+.filtros h3,
+.legenda h3,
+.eventos-header h3,
+.modal-content h2 {
+  color: #11124a;
+  font-weight: 900;
+  letter-spacing: 0;
+}
+
+.controles-mes h2 {
+  font-size: 1rem;
+  text-transform: capitalize;
+}
+
+.btn-primary,
+.btn-hoje,
+.btn-add-small,
+.btn-edit-small,
+.btn-delete-small,
+.btn-secondary {
+  min-height: 42px;
+  border: 0;
+  border-radius: 8px;
+  font-weight: 900;
+  letter-spacing: 0;
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.12);
+}
+
+.btn-primary,
+.btn-hoje {
+  background: linear-gradient(135deg, #1aa7f2, #15146f);
+}
+
+.btn-add-small {
+  background: linear-gradient(135deg, #0f766e, #1aa7f2);
+}
+
+.btn-secondary {
+  background: #64748b;
+}
+
+.btn-primary:hover,
+.btn-hoje:hover,
+.btn-add-small:hover,
+.btn-secondary:hover {
+  filter: brightness(0.96);
+  transform: translateY(-1px);
+}
+
+.btn-icon {
+  display: inline-flex;
+  width: 38px;
+  height: 38px;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid rgba(26, 167, 242, 0.2);
+  border-radius: 8px;
+  background: #eaf7ff;
+  color: #15146f;
+  font-size: 1.6rem;
+  font-weight: 900;
+}
+
+.btn-icon:hover {
+  background: #dff2ff;
+}
+
+.filtros select,
+.form-group input,
+.form-group select,
+.form-group textarea {
+  min-height: 42px;
+  border: 1px solid rgba(100, 116, 139, 0.24);
+  border-radius: 8px;
+  background: #ffffff;
+  color: #11124a;
+  font-weight: 700;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.filtros select:focus,
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: #1aa7f2;
+  box-shadow: 0 0 0 4px rgba(26, 167, 242, 0.14);
+}
+
+.weekday {
+  border-radius: 8px;
+  background: #eaf7ff;
+  color: #15146f;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+}
+
+.day {
+  min-height: 118px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 8px;
+  background: #f8fafc;
+}
+
+.day:hover {
+  background: #ffffff;
+  box-shadow: 0 16px 34px rgba(15, 23, 42, 0.1);
+  transform: translateY(-2px);
+}
+
+.day.today,
+.day.selected {
+  background: #eaf7ff;
+  border-color: #1aa7f2;
+}
+
+.day-number {
+  color: #11124a;
+}
+
+.event-badge {
+  border-radius: 999px;
+  padding: 4px 7px;
+  font-weight: 800;
+}
+
+.eventos-header {
+  border-bottom-color: rgba(148, 163, 184, 0.24);
+}
+
+.evento-card {
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 8px;
+  background: #f8fafc;
+}
+
+.evento-card:hover {
+  background: #ffffff;
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.08);
+  transform: translateY(-1px);
+}
+
+.evento-icon {
+  width: 1.55rem;
+  height: 1.55rem;
+}
+
+.evento-details span,
+.evento-desc {
+  color: #475569;
+  font-weight: 700;
+}
+
+.evento-tipo {
+  border-radius: 999px;
+  background: #fff3e9;
+  color: #b45309;
+  font-weight: 900;
+}
+
+.evento-actions {
+  align-items: center;
+}
+
+.btn-edit-small,
+.btn-delete-small {
+  display: inline-flex;
+  width: 36px;
+  height: 36px;
+  min-height: 36px;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.btn-edit-small {
+  background: #eaf7ff;
+}
+
+.btn-delete-small {
+  background: #fee2e2;
+}
+
+.no-events {
+  display: grid;
+  justify-items: center;
+  gap: 16px;
+}
+
+.no-events p {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: #64748b;
+  font-weight: 900;
+}
+
+.modal {
+  background: rgba(15, 23, 42, 0.52);
+  backdrop-filter: blur(6px);
+}
+
+.modal-content {
+  padding: 26px;
+}
+
+.form-group label {
+  color: #11124a;
+  font-weight: 900;
+}
+
+.color-option {
+  border-radius: 8px;
+}
+
+@media (max-width: 900px) {
+  .header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .header .btn-primary {
+    width: 100%;
+  }
+
+  .weekdays,
+  .days {
+    min-width: 760px;
+  }
+}
