@@ -54,7 +54,7 @@ export class CadastroVeiculosComponent implements OnInit {
   initForm(): void {
     this.veiculoForm = this.fb.group({
       placa: ['', [Validators.required, Validators.pattern(/^[A-Z]{3}[0-9][A-Z0-9][0-9]{2}$/)]],
-      renavam: ['', [Validators.required, Validators.pattern(/^\d{11}$/)]],
+      // renavam: ['', [Validators.required, Validators.pattern(/^\d{11}$/)]],
       modelo: ['', Validators.required],
       marca: ['', Validators.required],
       ano: ['', [Validators.required, Validators.min(1886), Validators.max(this.currentYear + 1)]],

@@ -1,0 +1,67 @@
+<div class="grid gap-6 md:grid-cols-2">
+
+  
+  <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-md">
+    <div class="flex items-center justify-between">
+      <div>
+        <h2 class="text-2xl font-black text-auto-navy">
+          Honda Civic
+        </h2>
+        <p class="text-sm text-slate-500">
+          Placa: ABC-1234
+        </p>
+      </div>
+
+      <span class="rounded-full bg-green-100 px-3 py-1 text-xs font-bold text-green-700">
+        Finalizado
+      </span>
+    </div>
+
+    <div class="mt-5 space-y-2 text-sm text-slate-700">
+      <p><strong>OS:</strong> OS-0001</p>
+      <p><strong>Serviço:</strong> Revisão Completa</p>
+      <p><strong>Valor:</strong> R$ 1.250,00</p>
+      <p><strong>Data:</strong> 04/07/2026</p>
+    </div>
+
+    <button
+      (click)="abrirModal()"
+      class="mt-6 w-full rounded-lg bg-auto-orange py-2 font-bold text-white hover:opacity-90"
+    >
+      Ver detalhes
+    </button>
+  </div>
+
+
+  <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-md">
+    <div class="flex items-center justify-between">
+      <div>
+        <h2 class="text-2xl font-black text-auto-navy">
+          Volkswagen Gol GTI
+        </h2>
+        <p class="text-sm text-slate-500">
+          Placa: XYZ-9876
+        </p>
+      </div>
+
+      <span class="rounded-full bg-green-100 px-3 py-1 text-xs font-bold text-green-700">
+        Finalizado
+      </span>
+    </div>
+
+    <div class="mt-5 space-y-2 text-sm text-slate-700">
+      <p><strong>OS:</strong> OS-0002</p>
+      <p><strong>Serviço:</strong> Troca de Embreagem</p>
+      <p><strong>Valor:</strong> R$ 2.480,00</p>
+      <p><strong>Data:</strong> 12/07/2026</p>
+    </div>
+
+    <button
+      (click)="abrirModal()"
+      class="mt-6 w-full rounded-lg bg-auto-orange py-2 font-bold text-white hover:opacity-90"
+    >
+      Ver detalhes
+    </button>
+  </div>
+
+</div>
