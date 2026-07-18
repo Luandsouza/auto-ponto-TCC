@@ -52,6 +52,74 @@
   }
 }
 
+/* Tema global: mantém o contraste também nas páginas que usam cores locais. */
+html.dark-theme,
+html.dark-theme body {
+  background: #070d19;
+  color: #e5e7eb;
+}
+
+html.dark-theme body {
+  background:
+    linear-gradient(135deg, rgba(26, 167, 242, 0.08), transparent 32%),
+    linear-gradient(315deg, rgba(255, 116, 24, 0.06), transparent 28%),
+    #070d19;
+}
+
+html.dark-theme .app-shell-surface {
+  background: #0b1220 !important;
+  color: #e5e7eb;
+}
+
+html.dark-theme main:not(.landing-page) {
+  color: #e5e7eb;
+}
+
+html.dark-theme :is(.bg-white, .bg-slate-50, .bg-gray-50) {
+  background-color: #111827 !important;
+}
+
+html.dark-theme :is(.text-slate-900, .text-gray-900, .text-slate-800, .text-gray-800) {
+  color: #f8fafc !important;
+}
+
+html.dark-theme :is(.text-slate-700, .text-gray-700, .text-slate-600, .text-gray-600) {
+  color: #cbd5e1 !important;
+}
+
+html.dark-theme :is(.border-slate-200, .border-gray-200, .border-slate-300) {
+  border-color: #334155 !important;
+}
+
+html.dark-theme :is(input, select, textarea) {
+  border-color: #475569;
+  background-color: #111827;
+  color: #f8fafc;
+}
+
+html.dark-theme :is(input, textarea)::placeholder { color: #94a3b8; }
+
+html.dark-theme :is(.card, .panel, .content-card, .summary-card, .stat-card, .table-card) {
+  border-color: #263449 !important;
+  background-color: #111827 !important;
+  color: #e5e7eb !important;
+}
+
+html.dark-theme :is(table, thead, tbody, tr, td, th) {
+  border-color: #334155;
+}
+
+html.dark-theme .login-modal {
+  border-color: #334155;
+  background: #0f172a;
+  color: #e5e7eb;
+}
+
+html.dark-theme .login-modal h3 { color: #f8fafc; }
+html.dark-theme .login-modal .modal-description,
+html.dark-theme .login-modal label { color: #cbd5e1; }
+html.dark-theme .modal-close { background: #1e293b; color: #e5e7eb; }
+
 @layer components {
   .app-shell-surface {
     background:

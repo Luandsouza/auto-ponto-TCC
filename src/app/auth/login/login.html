@@ -1,9 +1,7 @@
 <main class="landing-page">
-  <a
-    routerLink="/cliente"
+  <section
     class="landing-panel landing-panel-client"
     [style.backgroundImage]="'url(' + clienteImagem + ')'"
-    aria-label="Entrar na área do cliente"
   >
     <div class="landing-brand">
       <img src="/logo4.jpg" alt="Auto Ponto" />
@@ -13,19 +11,87 @@
       <p>Portal do cliente</p>
       <h1>Área do Cliente</h1>
       <span>Acompanhe agenda, histórico e status dos serviços do seu veículo.</span>
+      <button type="button" class="login-trigger" (click)="abrirModal('cliente')">
+        Login Cliente
+      </button>
     </div>
-  </a>
+  </section>
 
-  <a
-    routerLink="/mecanico"
+  <section
     class="landing-panel landing-panel-workshop"
     [style.backgroundImage]="'url(' + oficinaImagem + ')'"
-    aria-label="Entrar na área do mecânico"
   >
     <div class="landing-content">
       <p>Central do mecânico</p>
       <h2>Área do Mecânico</h2>
       <span>Gerencie serviços, estoque, financeiro, relatórios e operação mecânica.</span>
+      <button type="button" class="login-trigger login-trigger-workshop" (click)="abrirModal('mecanico')">
+        Login Mecânico
+      </button>
     </div>
-  </a>
+  </section>
 </main>
+
+@if (tipoLogin) {
+  <div class="modal-backdrop" (click)="fecharModal()">
+    <section
+      class="login-modal"
+      role="dialog"
+      aria-modal="true"
+      [attr.aria-labelledby]="'titulo-login-' + tipoLogin"
+      (click)="$event.stopPropagation()"
+    >
+      <button type="button" class="modal-close" aria-label="Fechar modal" (click)="fecharModal()">×</button>
+
+      <div class="modal-icon" aria-hidden="true">{{ tipoLogin === 'cliente' ? '👤' : '🔧' }}</div>
+      <p class="modal-eyebrow">Acesso seguro</p>
+      <h3 [id]="'titulo-login-' + tipoLogin">
+        Login {{ tipoLogin === 'cliente' ? 'Cliente' : 'Mecânico' }}
+      </h3>
+      <p class="modal-description">Informe seus dados para entrar no sistema.</p>
+
+      <form #loginForm="ngForm" (ngSubmit)="entrar(loginForm.valid)">
+        <label for="email">E-mail do usuário</label>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          autocomplete="email"
+          placeholder="nome@exemplo.com"
+          [(ngModel)]="email"
+          #emailCampo="ngModel"
+          required
+          email
+        />
+        @if (emailCampo.invalid && (emailCampo.touched || loginEnviado)) {
+          <small>Digite um e-mail válido.</small>
+        }
+
+        <label for="senha">Senha</label>
+        <div class="password-field">
+          <input
+            id="senha"
+            name="senha"
+            [type]="mostrarSenha ? 'text' : 'password'"
+            autocomplete="current-password"
+            placeholder="Digite sua senha"
+            [(ngModel)]="senha"
+            #senhaCampo="ngModel"
+            required
+            minlength="4"
+          />
+          <button type="button" (click)="mostrarSenha = !mostrarSenha">
+            {{ mostrarSenha ? 'Ocultar' : 'Mostrar' }}
+          </button>
+        </div>
+        @if (senhaCampo.invalid && (senhaCampo.touched || loginEnviado)) {
+          <small>A senha deve ter pelo menos 4 caracteres.</small>
+        }
+
+        <button type="submit" class="submit-login">
+          Entrar como {{ tipoLogin === 'cliente' ? 'cliente' : 'mecânico' }}
+        </button>
+      </form>
+    </section>
+  </div>
+}

@@ -26,8 +26,16 @@ import { ReactiveFormsModule } from '@angular/forms';
 export class App {
   protected readonly title = signal('auto-ponto-TCC');
   rotaAtual = '';
+  temaEscuro = false;
 
   constructor(private readonly router: Router) {
+    const armazenamento = this.obterArmazenamento();
+    const temaSalvo = armazenamento?.getItem('auto-ponto-tema');
+    this.temaEscuro = temaSalvo
+      ? temaSalvo === 'escuro'
+      : typeof window.matchMedia === 'function' && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    this.aplicarTema();
+
     this.rotaAtual = this.router.url;
 
     this.router.events.subscribe((event) => {
@@ -45,6 +53,25 @@ export class App {
     return ['/mecanica', '/servicos', '/estoque', '/financeiro', '/relatorios', '/equipes-mecanico', '/calendario', '/ordens-servico', '/os', '/checklist-os'].some((rota) =>
       this.rotaAtual.startsWith(rota),
     );
+  }
+
+  alternarTema(): void {
+    this.temaEscuro = !this.temaEscuro;
+    this.obterArmazenamento()?.setItem('auto-ponto-tema', this.temaEscuro ? 'escuro' : 'claro');
+    this.aplicarTema();
+  }
+
+  private obterArmazenamento(): Storage | null {
+    try {
+      return typeof localStorage === 'undefined' ? null : localStorage;
+    } catch {
+      return null;
+    }
+  }
+
+  private aplicarTema(): void {
+    document.documentElement.classList.toggle('dark-theme', this.temaEscuro);
+    document.documentElement.style.colorScheme = this.temaEscuro ? 'dark' : 'light';
   }
 
   
