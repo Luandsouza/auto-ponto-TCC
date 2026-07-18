@@ -87,6 +87,10 @@ export const routes: Routes = [
       loadComponent: () => import(`./pages/mecanico/checklist-os/checklist-os.component`).then(x => x.ChecklistOsComponent)
    },
    {
+      path: "historico",
+      loadComponent: () => import(`./pages/cliente/historico-cliente/historico-cliente`).then(x => x.HistoricoCliente)
+   },
+   {
       path: "**",
       redirectTo: ""
    },
