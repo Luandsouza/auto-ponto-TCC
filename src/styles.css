@@ -55,7 +55,13 @@
 /* Tema global: mantém o contraste também nas páginas que usam cores locais. */
 html.dark-theme,
 html.dark-theme body {
-  background: #070d19;
+  --dark-page: #141619;
+  --dark-surface: #1c1f24;
+  --dark-surface-raised: #24282f;
+  --dark-border: #3b414b;
+  --dark-text: #f3f4f6;
+  --dark-muted: #c4c9d1;
+  background: var(--dark-page);
   color: #e5e7eb;
 }
 
@@ -63,12 +69,12 @@ html.dark-theme body {
   background:
     linear-gradient(135deg, rgba(26, 167, 242, 0.08), transparent 32%),
     linear-gradient(315deg, rgba(255, 116, 24, 0.06), transparent 28%),
-    #070d19;
+    var(--dark-page);
 }
 
 html.dark-theme .app-shell-surface {
-  background: #0b1220 !important;
-  color: #e5e7eb;
+  background: var(--dark-page) !important;
+  color: var(--dark-text);
 }
 
 html.dark-theme main:not(.landing-page) {
@@ -119,6 +125,97 @@ html.dark-theme .login-modal h3 { color: #f8fafc; }
 html.dark-theme .login-modal .modal-description,
 html.dark-theme .login-modal label { color: #cbd5e1; }
 html.dark-theme .modal-close { background: #1e293b; color: #e5e7eb; }
+
+/* Superficies escuras opacas: nenhum gradiente deve esconder conteudo. */
+html.dark-theme :is(.mechanic-topbar, .client-topbar) {
+  isolation: isolate;
+  border-bottom-color: var(--dark-border) !important;
+  background: #191c21 !important;
+  color: var(--dark-text) !important;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.32) !important;
+  backdrop-filter: none;
+}
+
+html.dark-theme :is(.mechanic-topbar, .client-topbar) :is(h1, .text-auto-navy) {
+  color: #f8fafc !important;
+}
+
+html.dark-theme :is(.topbar-profile, .client-profile, .client-brand-icon) {
+  border-color: var(--dark-border) !important;
+  background: var(--dark-surface-raised) !important;
+  color: var(--dark-text) !important;
+}
+
+html.dark-theme :is(.topbar-chip, .client-chip) {
+  border-color: #2f6f4b !important;
+  background: #193326 !important;
+  color: #a7f3d0 !important;
+}
+
+html.dark-theme :is(.mechanic-topbar, .client-topbar) button.bg-white {
+  border-color: var(--dark-border) !important;
+  background: var(--dark-surface-raised) !important;
+  color: #f8fafc !important;
+}
+
+html.dark-theme :is(.text-auto-navy, .text-ink) { color: #f3f4f6 !important; }
+html.dark-theme .text-muted { color: var(--dark-muted) !important; }
+
+html.dark-theme main:not(.landing-page) :is(
+  .client-card, .client-content-card, .client-panel, .surface-card,
+  .metric-card, .form-card, .info-panel, .progress-panel, .upcoming-panel,
+  .schedule-card, .team-card, .os-card, .veiculo-card, .evento-card,
+  .modal-content, .calendario-content, .checklist-content, .table-wrap,
+  .chart-card
+) {
+  border-color: var(--dark-border) !important;
+  background: var(--dark-surface) !important;
+  color: var(--dark-text) !important;
+  background-image: none !important;
+}
+
+html.dark-theme main:not(.landing-page) :is(
+  .metric-card, .surface-card, .chart-card, .client-card, .client-content-card,
+  .client-panel, .form-card, .info-panel, .progress-panel, .upcoming-panel
+) :is(strong, h2, h3, h4, .chart-legend-item) {
+  color: var(--dark-text) !important;
+}
+
+html.dark-theme main:not(.landing-page) :is(
+  .metric-card, .surface-card, .chart-card, .client-card, .client-content-card,
+  .client-panel, .form-card, .info-panel, .progress-panel, .upcoming-panel
+) :is(p, small, .chart-heading p, .chart-legend-item strong) {
+  color: var(--dark-muted) !important;
+}
+
+html.dark-theme main:not(.landing-page) :is(h1, h2, h3, h4, legend, label) {
+  color: var(--dark-text);
+}
+
+html.dark-theme main:not(.landing-page) :is(p, small, .header-description, .summary-note) {
+  text-shadow: none;
+}
+
+html.dark-theme :is(thead, .table-toolbar, .card-header, .eventos-header) {
+  border-color: var(--dark-border) !important;
+  background-color: var(--dark-surface-raised) !important;
+  color: var(--dark-text) !important;
+}
+
+html.dark-theme :is(td, th) {
+  color: var(--dark-text);
+}
+
+html.dark-theme :is(select, input, textarea, .form-control) {
+  border-color: #505762 !important;
+  background: #22262c !important;
+  color: #f8fafc !important;
+}
+
+html.dark-theme :is(select, input, textarea, button, a):focus-visible {
+  outline: 3px solid #38bdf8;
+  outline-offset: 2px;
+}
 
 @layer components {
   .app-shell-surface {
